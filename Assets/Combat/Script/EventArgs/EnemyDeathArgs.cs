@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Assets.Script.Combat.EventArgs
 {
-    public struct KillArgs
+    public struct EnemyDeathArgs
     {
-        public bool AttackStarted { get; set; }
+        public bool IsStartedAttacking { get; set; }
     }
 }

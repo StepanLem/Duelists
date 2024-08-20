@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public bool IsStartAttacking = false;
-    public void Kill()
+    public bool IsStartedAttacking = false;
+    public void Die()
     {
-        EventBus.Trigger("EnemyKilled", new KillArgs() { AttackStarted = IsStartAttacking });
+        EventBus.Trigger("EnemyDied", new EnemyDeathArgs() { IsStartedAttacking = IsStartedAttacking });
     }
 }

@@ -11,12 +11,12 @@ public class MatchManager : MonoBehaviour
     public UnityEvent OnDefeat;
     void Start()
     {
-        EventBus.Register<KillArgs>("EnemyKilled", HandleKill);
+        EventBus.Register<EnemyDeathArgs>("EnemyDied", HandleDeath);
     }
 
-    public void HandleKill(KillArgs args)
+    public void HandleDeath(EnemyDeathArgs args)
     {
-        if (args.AttackStarted)
+        if (args.IsStartedAttacking)
         {
             OnVictory?.Invoke();
         }
