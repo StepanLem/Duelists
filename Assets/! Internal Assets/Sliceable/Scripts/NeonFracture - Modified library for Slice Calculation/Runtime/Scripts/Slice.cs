@@ -76,10 +76,7 @@ public class Slice : MonoBehaviour
             this.gameObject.SetActive(false);
 
             // Fire the completion callback
-            if (callbackOptions.onCompleted != null)
-            {
-                callbackOptions.onCompleted.Invoke();
-            }
+            callbackOptions.onCompleted?.Invoke();
 
             return fragments;
         }
