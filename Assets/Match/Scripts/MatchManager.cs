@@ -1,25 +1,33 @@
-using Assets.Script.Combat.EventArgs;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
-using R3;
+using Zenject;
 
 public class MatchManager : MonoBehaviour
 {
     public UnityEvent OnVictory;
     public UnityEvent OnDefeat;
 
-    private void Start()
+    private Enemy _enemy;
+
+    [Inject]
+    public void Construct(Enemy enemy)
     {
-        EventBus.Register<EnemyDeathArgs>("EnemyDied", HandleDeath);
+        _enemy = enemy;
     }
 
-    public void HandleDeath(EnemyDeathArgs args)
+    private void OnEnable()
     {
-        if (args.IsStartedAttacking)
+        _enemy.OnDeath += HandleEnemyDeath;
+    }
+
+    private void OnDisable()
+    {
+        _enemy.OnDeath -= HandleEnemyDeath;
+    }
+
+    public void HandleEnemyDeath()
+    {
+        if (_enemy.IsStartedAttacking)
         {
             OnVictory?.Invoke();
         }

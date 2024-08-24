@@ -59,8 +59,14 @@ public class Slice : MonoBehaviour
             //“о есть бъЄшь по телу => режетс€ в колен€х. »з-за расчЄта следующих полей в локальных координатах.
             //„тобы это исправить домножаем на размер родител€(не знаю как делать с множественными родител€ми, но с одним срабатывает).
             //»зменил на следующиее
-            var sliceNormalLocal = Vector3.Scale(this.transform.InverseTransformDirection(sliceNormalWorld), transform.parent.localScale);
-            var sliceOriginLocal = Vector3.Scale(this.transform.InverseTransformPoint(sliceOriginWorld), transform.parent.localScale);
+            var sliceNormalLocal = this.transform.InverseTransformDirection(sliceNormalWorld);
+            var sliceOriginLocal = this.transform.InverseTransformPoint(sliceOriginWorld);
+
+            if (transform.parent != null)//TODO: так надо пройтись по всем родител€м, а не по одному. „то может повли€ть на производительность.
+            {
+                sliceNormalLocal = Vector3.Scale(sliceNormalLocal, transform.parent.localScale);
+                sliceOriginLocal = Vector3.Scale(sliceOriginLocal, transform.parent.localScale);
+            }
 
             var fragments = Fragmenter.Slice(this.gameObject,
                              sliceNormalLocal,
