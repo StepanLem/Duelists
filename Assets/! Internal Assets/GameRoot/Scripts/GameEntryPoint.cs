@@ -2,29 +2,25 @@ using R3;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Utils;
 using Scenes;
 using Zenject;
-using Scenes.Gameplay.Params;
 using Scenes.Gameplay;
-using Scenes.MainMenu.Params;
 using Scenes.MainMenu;
 
 namespace GameRoot
 {
-    public class GameEntryPoint
+    public class GameEntryPoint : MonoBehaviour
     {
         private UIRootView _uiRoot;
-        private Coroutines _coroutines;
 
         [Inject]
-        public GameEntryPoint (UIRootView uiRoot)
+        public void Construct(UIRootView uiRoot)
         {
             _uiRoot = uiRoot;
+        }
 
-            _coroutines = new GameObject("[COROUTINES]").AddComponent<Coroutines>();
-            Object.DontDestroyOnLoad(_coroutines.gameObject);
-
+        private void Awake()
+        {
             RunGame();
         }
 
@@ -34,16 +30,15 @@ namespace GameRoot
             switch (sceneName) 
             {
                 case SceneNames.GAMEPLAY:
-                    GameplayEnterParams enterParams = new GameplayEnterParams();
-                    _coroutines.StartCoroutine(LoadAndStartGameplayScene(enterParams));
+                    StartCoroutine(LoadAndStartGameplayScene());
                     break;
                 default:
-                    _coroutines.StartCoroutine(LoadAndStartMainMenuScene());
+                    StartCoroutine(LoadAndStartMainMenuScene());
                     break;
             }
         }
 
-        private IEnumerator LoadAndStartGameplayScene(GameplayEnterParams enterParams)
+        private IEnumerator LoadAndStartGameplayScene()
         {
             _uiRoot.ShowLoadingScreen();
 
@@ -51,16 +46,16 @@ namespace GameRoot
 
             yield return LoadScene(SceneNames.GAMEPLAY);
 
-            GameplayEntryPoint sceneEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
-            sceneEntryPoint.Run(_uiRoot, enterParams).Subscribe(gameplayExitParams =>
+            GameplayEntryPoint sceneEntryPoint = FindFirstObjectByType<GameplayEntryPoint>();
+            sceneEntryPoint.Run(_uiRoot).Subscribe(_ =>
             {
-                _coroutines.StartCoroutine(LoadAndStartMainMenuScene(gameplayExitParams.MainMenuEnterParams));
+                StartCoroutine(LoadAndStartMainMenuScene());
             });
 
             _uiRoot.HideLoadingScreen();
         }
 
-        private IEnumerator LoadAndStartMainMenuScene(MainMenuEnterParams enterParams = null)
+        private IEnumerator LoadAndStartMainMenuScene()
         {
             _uiRoot.ShowLoadingScreen();
 
@@ -68,15 +63,10 @@ namespace GameRoot
 
             yield return LoadScene(SceneNames.MAIN_MENU);
 
-            MainMenuEntryPoint sceneEntryPoint = Object.FindFirstObjectByType<MainMenuEntryPoint>();
-            sceneEntryPoint.Run(_uiRoot, enterParams).Subscribe(mainMenuExitParams =>
+            MainMenuEntryPoint sceneEntryPoint = FindFirstObjectByType<MainMenuEntryPoint>();
+            sceneEntryPoint.Run(_uiRoot).Subscribe(_ =>
             {
-                string targetSceneName = mainMenuExitParams.TargetSceneEnterParams.SceneName;
-                if (targetSceneName == SceneNames.GAMEPLAY)
-                {
-                    GameplayEnterParams enterParams = mainMenuExitParams.TargetSceneEnterParams.As<GameplayEnterParams>();
-                    _coroutines.StartCoroutine(LoadAndStartGameplayScene(enterParams));
-                }
+                StartCoroutine(LoadAndStartGameplayScene());
             });
 
             _uiRoot.HideLoadingScreen();
