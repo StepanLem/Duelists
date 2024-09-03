@@ -1,7 +1,5 @@
 ﻿using GameRoot;
 using R3;
-using Scenes.Gameplay.Params;
-using Scenes.MainMenu.Params;
 using UnityEngine;
 
 namespace Scenes.Gameplay
@@ -10,7 +8,7 @@ namespace Scenes.Gameplay
     {
         [SerializeField] private UIGameplayRootBinder _sceneUIRootPrefab;
 
-        public Observable<GameplayExitParams> Run(UIRootView uiRoot, GameplayEnterParams enterParams)
+        public Observable<Unit> Run(UIRootView uiRoot)
         {
             UIGameplayRootBinder uiScene = Instantiate(_sceneUIRootPrefab);
             uiRoot.AttachSceneUI(uiScene.gameObject);
@@ -18,11 +16,7 @@ namespace Scenes.Gameplay
             Subject<Unit> exitSceneSignalSubj = new Subject<Unit>();
             uiScene.Bind(exitSceneSignalSubj);
 
-            MainMenuEnterParams mainMenuEnterParams = new MainMenuEnterParams("Done");
-            GameplayExitParams exitParams = new GameplayExitParams(mainMenuEnterParams);
-            Observable<GameplayExitParams> exitToMainMenuSceneSignal = exitSceneSignalSubj.Select(_ => exitParams);
-
-            return exitToMainMenuSceneSignal;
+            return exitSceneSignalSubj;
         }
     }
 }
