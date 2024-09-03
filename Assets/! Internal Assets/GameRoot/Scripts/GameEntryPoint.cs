@@ -1,5 +1,5 @@
 using R3;
-using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Scenes;
@@ -19,62 +19,64 @@ namespace GameRoot
             _uiRoot = uiRoot;
         }
 
-        private void Awake()
+        private async void Awake()
         {
-            RunGame();
+            await RunGameAsync();
         }
 
-        private void RunGame()
+        private async Task RunGameAsync()
         {
             string sceneName = SceneManager.GetActiveScene().name;
-            switch (sceneName) 
+            switch (sceneName)
             {
                 case SceneNames.GAMEPLAY:
-                    StartCoroutine(LoadAndStartGameplayScene());
+                    await LoadAndStartGameplaySceneAsync();
                     break;
                 default:
-                    StartCoroutine(LoadAndStartMainMenuScene());
+                    await LoadAndStartMainMenuSceneAsync();
                     break;
             }
         }
 
-        private IEnumerator LoadAndStartGameplayScene()
+        private async Task LoadAndStartGameplaySceneAsync()
         {
             _uiRoot.ShowLoadingScreen();
 
-            yield return LoadScene(SceneNames.BOOT);
-
-            yield return LoadScene(SceneNames.GAMEPLAY);
+            await LoadSceneAsync(SceneNames.BOOT);
+            await LoadSceneAsync(SceneNames.GAMEPLAY);
 
             GameplayEntryPoint sceneEntryPoint = FindFirstObjectByType<GameplayEntryPoint>();
-            sceneEntryPoint.Run(_uiRoot).Subscribe(_ =>
+            sceneEntryPoint.Run(_uiRoot).Subscribe(async _ =>
             {
-                StartCoroutine(LoadAndStartMainMenuScene());
+                await LoadAndStartMainMenuSceneAsync();
             });
 
             _uiRoot.HideLoadingScreen();
         }
 
-        private IEnumerator LoadAndStartMainMenuScene()
+        private async Task LoadAndStartMainMenuSceneAsync()
         {
             _uiRoot.ShowLoadingScreen();
 
-            yield return LoadScene(SceneNames.BOOT);
-
-            yield return LoadScene(SceneNames.MAIN_MENU);
+            await LoadSceneAsync(SceneNames.BOOT);
+            await LoadSceneAsync(SceneNames.MAIN_MENU);
 
             MainMenuEntryPoint sceneEntryPoint = FindFirstObjectByType<MainMenuEntryPoint>();
-            sceneEntryPoint.Run(_uiRoot).Subscribe(_ =>
+            sceneEntryPoint.Run(_uiRoot).Subscribe(async _ =>
             {
-                StartCoroutine(LoadAndStartGameplayScene());
+                await LoadAndStartGameplaySceneAsync();
             });
 
             _uiRoot.HideLoadingScreen();
         }
 
-        private IEnumerator LoadScene(string sceneName)
+        private async Task LoadSceneAsync(string sceneName)
         {
-            yield return SceneManager.LoadSceneAsync(sceneName);
+            var load = SceneManager.LoadSceneAsync(sceneName);
+            while (!load.isDone)
+            {
+                await Task.Yield();
+            }
         }
     }
 }
