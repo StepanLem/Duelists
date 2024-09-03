@@ -209,7 +209,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9000082857493670332}
-  - component: {fileID: 898322389498842936}
+  - component: {fileID: 6969755737870410600}
   m_Layer: 0
   m_Name: GameplayUI
   m_TagString: Untagged
@@ -239,7 +239,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &898322389498842936
+--- !u!114 &6969755737870410600
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -248,9 +248,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6187544875578235770}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c21bd37d9defb04395b6ba37ef376fb, type: 3}
+  m_Script: {fileID: 11500000, guid: 89a881c8d8bedd04f8b30ac9b8ffe92a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _exitSceneName: 1
 --- !u!1 &6429405648640064292
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,9 +373,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 898322389498842936}
-        m_TargetAssemblyTypeName: Scenes.Gameplay.UIGameplayRootBinder, Assembly-CSharp
-        m_MethodName: HandleGoToMainMenuButtonCkick
+      - m_Target: {fileID: 6969755737870410600}
+        m_TargetAssemblyTypeName: Scenes.UISceneRootBinder, Assembly-CSharp
+        m_MethodName: HandleGoToSceneButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

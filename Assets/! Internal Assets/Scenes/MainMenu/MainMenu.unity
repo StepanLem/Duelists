@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e1ebd22d89c0e441850f1b8993ca2bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneUIRootPrefab: {fileID: 633650785647963135, guid: 3a8ee95a746a427488432658048067e8,
+  _sceneUIRootPrefab: {fileID: 8907819893026228327, guid: 3a8ee95a746a427488432658048067e8,
     type: 3}
 --- !u!1 &244791754
 GameObject:
