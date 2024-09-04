@@ -8,12 +8,12 @@ namespace Scenes
     {
         [SerializeField] private UISceneRootBinder _sceneUIRootPrefab;
 
-        public Observable<SceneName> Run(UIRootView uiRoot)
+        public Observable<string> Run(UIRootView uiRoot)
         {
             UISceneRootBinder uiScene = Instantiate(_sceneUIRootPrefab);
             uiRoot.AttachSceneUI(uiScene.gameObject);
 
-            Subject<SceneName> _exitSignalSubj = new Subject<SceneName>();
+            Subject<string> _exitSignalSubj = new Subject<string>();
             uiScene.Bind(_exitSignalSubj);
 
             return _exitSignalSubj;
