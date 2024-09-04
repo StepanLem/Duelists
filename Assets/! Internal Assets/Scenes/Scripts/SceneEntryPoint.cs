@@ -6,15 +6,12 @@ namespace Scenes
 {
     public class SceneEntryPoint : MonoBehaviour
     {
-        [SerializeField] private UISceneRootBinder _sceneUIRootPrefab;
+        [SerializeField] private UISceneRootBinder _sceneUI;
 
         public Observable<string> Run(UIRootView uiRoot)
-        {
-            UISceneRootBinder uiScene = Instantiate(_sceneUIRootPrefab);
-            uiRoot.AttachSceneUI(uiScene.gameObject);
-
+        { 
             Subject<string> _exitSignalSubj = new Subject<string>();
-            uiScene.Bind(_exitSignalSubj);
+            _sceneUI.Bind(_exitSignalSubj);
 
             return _exitSignalSubj;
         }
