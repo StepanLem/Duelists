@@ -5,21 +5,21 @@ namespace Scenes
 {
     public class UISceneRootBinder : MonoBehaviour
     {
-        [SerializeField] private SceneName _exitSceneName;
+        private Subject<string> _exitSceneSignalSubj;
 
-        private Subject<SceneName> _exitSceneSignalSubj;
-
-        public void HandleGoToSceneButtonClick()
+        public void HandleGoToSceneButtonClick(string sceneName)
         {
-            _exitSceneSignalSubj?.OnNext(_exitSceneName);
+            if (SceneName.IsCorrectName(sceneName))
+            {
+                _exitSceneSignalSubj?.OnNext(sceneName);
+            }
+            else
+            {
+                Debug.LogError($"WRONG SCENE NAME: {sceneName}");
+            }
         }
 
-        public void HandleGoToSceneButtonClick(SceneName sceneName)
-        {
-            _exitSceneSignalSubj?.OnNext(sceneName);
-        }
-
-        public void Bind(Subject<SceneName> exitSceneSignalSubj)
+        public void Bind(Subject<string> exitSceneSignalSubj)
         {
             _exitSceneSignalSubj = exitSceneSignalSubj;
         }

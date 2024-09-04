@@ -25,26 +25,22 @@ namespace GameRoot
 
         private async Task RunGameAsync()
         {
-            string sceneNameStr = SceneManager.GetActiveScene().name;
-            if (Enum.TryParse(sceneNameStr, out SceneName sceneName)) 
+            string sceneName = SceneManager.GetActiveScene().name;
+            if (sceneName != SceneName.BOOT)
             {
-                if (sceneName != SceneName.Boot)
-                {
-                    await LoadAndStartSceneAsync(sceneName);
-                }
-                else
-                {
-                    await LoadAndStartSceneAsync(SceneName.MainMenu);
-                }
+                await LoadAndStartSceneAsync(sceneName);
             }
-            
+            else
+            {
+                await LoadAndStartSceneAsync(SceneName.MAIN_MENU);
+            }
         }
 
-        private async Task LoadAndStartSceneAsync(SceneName sceneName)
+        private async Task LoadAndStartSceneAsync(string sceneName)
         {
             _uiRoot.ShowLoadingScreen();
 
-            await LoadSceneAsync(SceneName.Boot);
+            await LoadSceneAsync(SceneName.BOOT);
             await LoadSceneAsync(sceneName);
 
             SceneEntryPoint sceneEntryPoint = FindFirstObjectByType<SceneEntryPoint>();
@@ -56,9 +52,9 @@ namespace GameRoot
             _uiRoot.HideLoadingScreen();
         }
 
-        private async Task LoadSceneAsync(SceneName sceneName)
+        private async Task LoadSceneAsync(string sceneName)
         {
-            var load = SceneManager.LoadSceneAsync(sceneName.ToString());
+            AsyncOperation load = SceneManager.LoadSceneAsync(sceneName);
             while (!load.isDone)
             {
                 await Task.Yield();
