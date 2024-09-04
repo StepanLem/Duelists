@@ -1,27 +1,24 @@
 ﻿using R3;
 using UnityEngine;
 
-namespace Scenes
+public class UISceneRootBinder : MonoBehaviour
 {
-    public class UISceneRootBinder : MonoBehaviour
+    private Subject<string> _exitSceneSignalSubj;
+
+    public void HandleGoToSceneButtonClick(string sceneName)
     {
-        private Subject<string> _exitSceneSignalSubj;
-
-        public void HandleGoToSceneButtonClick(string sceneName)
+        if (SceneName.IsCorrectName(sceneName))
         {
-            if (SceneName.IsCorrectName(sceneName))
-            {
-                _exitSceneSignalSubj?.OnNext(sceneName);
-            }
-            else
-            {
-                Debug.LogError($"WRONG SCENE NAME: {sceneName}");
-            }
+            _exitSceneSignalSubj?.OnNext(sceneName);
         }
-
-        public void Bind(Subject<string> exitSceneSignalSubj)
+        else
         {
-            _exitSceneSignalSubj = exitSceneSignalSubj;
+            Debug.LogError($"WRONG SCENE NAME: {sceneName}");
         }
+    }
+
+    public void Bind(Subject<string> exitSceneSignalSubj)
+    {
+        _exitSceneSignalSubj = exitSceneSignalSubj;
     }
 }

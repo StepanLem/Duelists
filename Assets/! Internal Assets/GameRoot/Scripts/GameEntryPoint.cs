@@ -2,63 +2,59 @@ using R3;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Scenes;
 using Zenject;
-using System;
 
-namespace GameRoot
+public class GameEntryPoint : MonoBehaviour
 {
-    public class GameEntryPoint : MonoBehaviour
+    private UIRootView _uiRoot;
+
+    [Inject]
+    public void Construct(UIRootView uiRoot)
     {
-        private UIRootView _uiRoot;
+        _uiRoot = uiRoot;
+    }
 
-        [Inject]
-        public void Construct(UIRootView uiRoot)
+    private async void Awake()
+    {
+        await RunGameAsync();
+    }
+
+    private async Task RunGameAsync()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName != SceneName.BOOT)
         {
-            _uiRoot = uiRoot;
+            await LoadAndStartSceneAsync(sceneName);
         }
-
-        private async void Awake()
+        else
         {
-            await RunGameAsync();
+            await LoadAndStartSceneAsync(SceneName.MAIN_MENU);
         }
+    }
 
-        private async Task RunGameAsync()
+    private async Task LoadAndStartSceneAsync(string sceneName)
+    {
+        _uiRoot.ShowLoadingScreen();
+
+        await LoadSceneAsync(SceneName.BOOT);
+        await LoadSceneAsync(sceneName);
+
+        SceneEntryPoint sceneEntryPoint = FindFirstObjectByType<SceneEntryPoint>();
+        sceneEntryPoint.Run(_uiRoot).Subscribe(async sceneName =>
         {
-            string sceneName = SceneManager.GetActiveScene().name;
-            if (sceneName != SceneName.BOOT)
-            {
-                await LoadAndStartSceneAsync(sceneName);
-            }
-            else
-            {
-                await LoadAndStartSceneAsync(SceneName.MAIN_MENU);
-            }
-        }
+            await LoadAndStartSceneAsync(sceneName);
+        });
 
-        private async Task LoadAndStartSceneAsync(string sceneName)
+        _uiRoot.HideLoadingScreen();
+    }
+
+    private async Task LoadSceneAsync(string sceneName)
+    {
+        AsyncOperation load = SceneManager.LoadSceneAsync(sceneName);
+        while (!load.isDone)
         {
-            _uiRoot.ShowLoadingScreen();
-
-            await LoadSceneAsync(SceneName.BOOT);
-            await LoadSceneAsync(sceneName);
-
-            SceneEntryPoint sceneEntryPoint = FindFirstObjectByType<SceneEntryPoint>();
-            sceneEntryPoint.Run(_uiRoot).Subscribe(async sceneName =>
-            {
-                await LoadAndStartSceneAsync(sceneName);
-            });
-
-            _uiRoot.HideLoadingScreen();
-        }
-
-        private async Task LoadSceneAsync(string sceneName)
-        {
-            AsyncOperation load = SceneManager.LoadSceneAsync(sceneName);
-            while (!load.isDone)
-            {
-                await Task.Yield();
-            }
+            await Task.Yield();
         }
     }
 }
+
