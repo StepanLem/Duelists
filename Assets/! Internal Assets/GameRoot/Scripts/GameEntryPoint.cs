@@ -16,7 +16,7 @@ public class GameEntryPoint : MonoBehaviour
         string sceneName = SceneManager.GetActiveScene().name;
         if (sceneName != SceneName.BOOTSTRAP && sceneName != SceneName.LOADING)
         {
-            await LoadAndStartSceneAsync(sceneName);
+            SetupScene();
         }
         else
         {
@@ -29,6 +29,11 @@ public class GameEntryPoint : MonoBehaviour
         await LoadSceneAsync(SceneName.LOADING);
         await LoadSceneAsync(sceneName);
 
+        SetupScene();
+    }
+
+    private void SetupScene()
+    {
         SceneEntryPoint sceneEntryPoint = FindFirstObjectByType<SceneEntryPoint>();
         sceneEntryPoint.Run().Subscribe(async sceneName =>
         {

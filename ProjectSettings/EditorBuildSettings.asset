@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/! Internal Assets/Scenes/Bootstrap.unity
     guid: 05236479283c39a49bf3dd5cfa730616
   - enabled: 1
-    path: Assets/! Internal Assets/Scenes/LoadingScreen.unity
+    path: Assets/! Internal Assets/Scenes/LoadingScene.unity
     guid: 3c787f70ae5b43648b499363d858713b
   - enabled: 1
     path: Assets/! Internal Assets/Scenes/MainMenu/MainMenu.unity
