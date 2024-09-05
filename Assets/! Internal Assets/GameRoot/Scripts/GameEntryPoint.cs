@@ -6,14 +6,6 @@ using Zenject;
 
 public class GameEntryPoint : MonoBehaviour
 {
-    private UIRootView _uiRoot;
-
-    [Inject]
-    public void Construct(UIRootView uiRoot)
-    {
-        _uiRoot = uiRoot;
-    }
-
     private async void Awake()
     {
         await RunGameAsync();
@@ -34,17 +26,14 @@ public class GameEntryPoint : MonoBehaviour
 
     private async Task LoadAndStartSceneAsync(string sceneName)
     {
-        _uiRoot.ShowLoadingScreen();
         await LoadSceneAsync(SceneName.LOADING);
         await LoadSceneAsync(sceneName);
 
         SceneEntryPoint sceneEntryPoint = FindFirstObjectByType<SceneEntryPoint>();
-        sceneEntryPoint.Run(_uiRoot).Subscribe(async sceneName =>
+        sceneEntryPoint.Run().Subscribe(async sceneName =>
         {
             await LoadAndStartSceneAsync(sceneName);
         });
-
-        _uiRoot.HideLoadingScreen();
     }
 
     private async Task LoadSceneAsync(string sceneName)
