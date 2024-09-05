@@ -22,7 +22,7 @@ public class GameEntryPoint : MonoBehaviour
     private async Task RunGameAsync()
     {
         string sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName != SceneName.BOOT)
+        if (sceneName != SceneName.BOOTSTRAP)
         {
             await LoadAndStartSceneAsync(sceneName);
         }
@@ -36,7 +36,7 @@ public class GameEntryPoint : MonoBehaviour
     {
         _uiRoot.ShowLoadingScreen();
 
-        await LoadSceneAsync(SceneName.BOOT);
+        await LoadSceneAsync(SceneName.BOOTSTRAP);
         await LoadSceneAsync(sceneName);
 
         SceneEntryPoint sceneEntryPoint = FindFirstObjectByType<SceneEntryPoint>();
