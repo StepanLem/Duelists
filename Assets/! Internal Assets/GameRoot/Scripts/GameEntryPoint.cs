@@ -1,15 +1,50 @@
 using R3;
 using System.Threading.Tasks;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
 
 public class GameEntryPoint : MonoBehaviour
 {
-    private async void Awake()
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    public static void OnGameStart()
+    {
+#if UNITY_EDITOR
+        LoadImportantScenes();
+#endif
+    }
+
+    private static void LoadImportantScenes()
+    {
+        var isBootstrapLoaded = false;
+
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            var scene = SceneManager.GetSceneAt(i);
+
+            //мб можно более красиво сделать через ScriptableObject
+            //со всеми сценами в него перенесёнными с помощью sceneField.
+            //Чтобы не обновлять константы вручную + проблемы с возможными опечатками не будет.
+            //Вопрос в том насколько некрасиво получать данные из такого объекта.
+            //TODO: Надо попробовать и узнать.
+            if (scene.name == SceneName.Bootstrap)
+                isBootstrapLoaded = true;
+
+            //TODO: то же самое со сценой игрока. В зависимости от того, подключён ли шлем.
+
+        }
+
+        if (!isBootstrapLoaded)
+            SceneManager.LoadSceneAsync(SceneName.Bootstrap, LoadSceneMode.Additive);
+    }
+
+
+    /*private async void Awake()
     {
         await RunGameAsync();
-    }
+    }*/
 
     private async Task RunGameAsync()
     {
