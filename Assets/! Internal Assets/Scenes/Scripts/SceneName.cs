@@ -1,15 +1,15 @@
 ﻿public static class SceneName
 {
-    public const string BOOTSTRAP = "Bootstrap";
-    public const string MAIN_MENU = "MainMenu";
-    public const string GAMEPLAY = "Gameplay";
-    public const string LOADING = "LoadingScene";
+    public const string Bootstrap = "Bootstrap";
+    public const string MainMenu = "MainMenu";
+    public const string Gameplay = "Gameplay";
+    public const string Loading = "LoadingScene";
 
     public static bool IsCorrectName(string name)
     {
-        return name == BOOTSTRAP ||
-               name == MAIN_MENU ||
-               name == GAMEPLAY || 
-               name == LOADING;
+        return name == Bootstrap ||
+               name == MainMenu ||
+               name == Gameplay || 
+               name == Loading;
     }
 }

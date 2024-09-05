@@ -14,19 +14,19 @@ public class GameEntryPoint : MonoBehaviour
     private async Task RunGameAsync()
     {
         string sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName != SceneName.BOOTSTRAP && sceneName != SceneName.LOADING)
+        if (sceneName != SceneName.Bootstrap && sceneName != SceneName.Loading)
         {
             SetupScene();
         }
         else
         {
-            await LoadAndStartSceneAsync(SceneName.MAIN_MENU);
+            await LoadAndStartSceneAsync(SceneName.MainMenu);
         }
     }
 
     private async Task LoadAndStartSceneAsync(string sceneName)
     {
-        await LoadSceneAsync(SceneName.LOADING);
+        await LoadSceneAsync(SceneName.Loading);
         await LoadSceneAsync(sceneName);
 
         SetupScene();
