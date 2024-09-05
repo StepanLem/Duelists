@@ -1,18 +1,17 @@
 using R3;
 using System.Threading.Tasks;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Zenject;
 
 public class GameEntryPoint : MonoBehaviour
 {
-
+    //Запускается при старте игры с любой из сцен. В не зависимости есть ли объект с этим скриптом на сцене.
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void OnGameStart()
     {
-#if UNITY_EDITOR
-        LoadImportantScenes();
+#if UNITY_EDITOR && TEST
+        if(SceneManager.GetSceneByName(SceneName.Bootstrap) != SceneManager.GetActiveScene()) //Если игру запускают с Bootstrap, то ожидается обычный запуск
+            LoadImportantScenes();
 #endif
     }
 
