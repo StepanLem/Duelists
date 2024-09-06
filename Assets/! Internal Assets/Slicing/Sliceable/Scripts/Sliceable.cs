@@ -5,8 +5,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Sliceable : MonoBehaviour
 {
-    [SerializeField]
-    private SliceLogicBase _sliceLogic;
+    [SerializeField] private SliceLogicBase _sliceLogic;
 
     public bool TrySlice(Vector3 sliceNormal, Vector3 sliceOrigin)
     {

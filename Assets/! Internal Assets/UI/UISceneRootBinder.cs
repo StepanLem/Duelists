@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class UISceneRootBinder : MonoBehaviour
 {
-    public void HandleStartButtonClick(SceneFieldRef sceneRef)
+    public void HandleStartButtonClick(SceneFieldReference sceneRef)
     {
         SceneManager.LoadScene(sceneRef.SceneField.BuildIndex);
     }
