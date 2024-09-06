@@ -12,20 +12,23 @@ namespace Assets.Script.UI
     {
         public UnityEvent OnShow;
         public UnityEvent OnHide;
-        [field: SerializeField] private bool ShowOnStart { get; set; } = false; 
+        [SerializeField] private bool _showOnStart = false; 
+
         public void Show()
         {
             gameObject.SetActive(true);
             OnShow.Invoke();
         }
+
         public void Hide()
         {
             OnHide.Invoke();
             gameObject.SetActive(false);
         }
+
         public void Start()
         {
-            if (!ShowOnStart)
+            if (!_showOnStart)
             {
                 Hide();
             }
