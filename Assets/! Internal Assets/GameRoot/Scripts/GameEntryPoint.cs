@@ -7,7 +7,7 @@ public class GameEntryPoint : MonoBehaviour
 {
     //Запускается при старте игры с любой из сцен. В не зависимости есть ли объект с этим скриптом на сцене.
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    public static void OnGameStart()
+    public static void BeforeGameStart()
     {
 #if UNITY_EDITOR && TEST
         if(SceneManager.GetSceneByName(SceneName.Bootstrap) != SceneManager.GetActiveScene()) //Если игру запускают с Bootstrap, то ожидается обычный запуск
