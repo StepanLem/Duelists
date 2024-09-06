@@ -151,18 +151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90ff4a936c89d444eaf4cab77c167145, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Bootstrap:
-    sceneAsset: {fileID: 102900000, guid: 4bbf8b6c407dfe84a82c29b5bc6ad134, type: 3}
-    required: 0
-    buildIndex: 4
-  VRPlayer:
-    sceneAsset: {fileID: 102900000, guid: 4bbf8b6c407dfe84a82c29b5bc6ad134, type: 3}
-    required: 0
-    buildIndex: 4
-  Menu:
-    sceneAsset: {fileID: 102900000, guid: c1897cb99875e8041afe13cdaab2bd31, type: 3}
-    required: 0
-    buildIndex: 2
 --- !u!4 &6517037608278246025
 Transform:
   m_ObjectHideFlags: 0

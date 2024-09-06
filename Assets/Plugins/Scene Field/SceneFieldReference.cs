@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Trisibo;
 using UnityEngine;
 
-public class SceneFieldRef : MonoBehaviour
+public class SceneFieldReference : MonoBehaviour
 {
     [field: SerializeField] public SceneField SceneField;
 
