@@ -6,13 +6,16 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/! Internal Assets/Scenes/Boot.unity
+    path: Assets/! Internal Assets/Scenes/Bootstrap.unity
     guid: 05236479283c39a49bf3dd5cfa730616
   - enabled: 1
-    path: Assets/! Internal Assets/Scenes/MainMenu.unity
+    path: Assets/! Internal Assets/Scenes/LoadingScene.unity
+    guid: 3c787f70ae5b43648b499363d858713b
+  - enabled: 1
+    path: Assets/! Internal Assets/Scenes/MainMenu/MainMenu.unity
     guid: c1897cb99875e8041afe13cdaab2bd31
   - enabled: 1
-    path: Assets/! Internal Assets/Scenes/Gameplay.unity
+    path: Assets/! Internal Assets/Scenes/Gameplay/Gameplay.unity
     guid: 823580dbe87edb94ab80216a8ca1aad5
   - enabled: 1
     path: Assets/Scenes/VR Player Scene.unity

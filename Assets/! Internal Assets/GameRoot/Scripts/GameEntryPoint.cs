@@ -2,50 +2,77 @@ using R3;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Zenject;
 
 public class GameEntryPoint : MonoBehaviour
 {
-    private UIRootView _uiRoot;
-
-    [Inject]
-    public void Construct(UIRootView uiRoot)
+    //Запускается при старте игры с любой из сцен. В не зависимости есть ли объект с этим скриптом на сцене.
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    public static void BeforeGameStart()
     {
-        _uiRoot = uiRoot;
+#if UNITY_EDITOR && TEST
+        if(SceneManager.GetSceneByName(SceneName.Bootstrap) != SceneManager.GetActiveScene()) //Если игру запускают с Bootstrap, то ожидается обычный запуск
+            LoadImportantScenes();
+#endif
     }
 
-    private async void Awake()
+    private static void LoadImportantScenes()
+    {
+        var isBootstrapLoaded = false;
+
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            var scene = SceneManager.GetSceneAt(i);
+
+            //мб можно более красиво сделать через ScriptableObject
+            //со всеми сценами в него перенесёнными с помощью sceneField.
+            //Чтобы не обновлять константы вручную + проблемы с возможными опечатками не будет.
+            //Вопрос в том насколько некрасиво получать данные из SO.
+            //TODO: Надо попробовать и узнать.
+            if (scene.name == SceneName.Bootstrap)
+                isBootstrapLoaded = true;
+
+            //TODO: то же самое со сценой игрока. В зависимости от того, подключён ли шлем.
+
+        }
+
+        if (!isBootstrapLoaded)
+            SceneManager.LoadSceneAsync(SceneName.Bootstrap, LoadSceneMode.Additive);
+    }
+
+
+    /*private async void Awake()
     {
         await RunGameAsync();
-    }
+    }*/
 
     private async Task RunGameAsync()
     {
         string sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName != SceneName.BOOT)
+        if (sceneName != SceneName.Bootstrap && sceneName != SceneName.Loading)
         {
-            await LoadAndStartSceneAsync(sceneName);
+            SetupScene();
         }
         else
         {
-            await LoadAndStartSceneAsync(SceneName.MAIN_MENU);
+            await LoadAndStartSceneAsync(SceneName.MainMenu);
         }
     }
 
     private async Task LoadAndStartSceneAsync(string sceneName)
     {
-        _uiRoot.ShowLoadingScreen();
-
-        await LoadSceneAsync(SceneName.BOOT);
+        await LoadSceneAsync(SceneName.Loading);
         await LoadSceneAsync(sceneName);
 
+        SetupScene();
+    }
+
+    private void SetupScene()
+    {
         SceneEntryPoint sceneEntryPoint = FindFirstObjectByType<SceneEntryPoint>();
-        sceneEntryPoint.Run(_uiRoot).Subscribe(async sceneName =>
+        sceneEntryPoint.Run().Subscribe(async sceneName =>
         {
             await LoadAndStartSceneAsync(sceneName);
         });
-
-        _uiRoot.HideLoadingScreen();
     }
 
     private async Task LoadSceneAsync(string sceneName)
