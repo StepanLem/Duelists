@@ -13,18 +13,26 @@ MonoBehaviour:
   m_Name: SceneRegistry
   m_EditorClassIdentifier: 
   _playerVRScene:
-    sceneAsset: {fileID: 102900000, guid: 6c1591a86210dc440a38734a0941a235, type: 3}
+    sceneAsset: {fileID: 102900000, guid: 4bbf8b6c407dfe84a82c29b5bc6ad134, type: 3}
     required: 1
-    buildIndex: 6
-  _bootstrap:
+    buildIndex: 1
+  _playerFlatScene:
+    sceneAsset: {fileID: 102900000, guid: 8aadb3a4314bc6c458f2e7367aa2b9e3, type: 3}
+    required: 1
+    buildIndex: 2
+  _bootstrapScene:
     sceneAsset: {fileID: 102900000, guid: 05236479283c39a49bf3dd5cfa730616, type: 3}
     required: 1
     buildIndex: 0
-  _mainMenu:
+  _mainMenuScene:
     sceneAsset: {fileID: 102900000, guid: c1897cb99875e8041afe13cdaab2bd31, type: 3}
     required: 1
-    buildIndex: 2
-  _loading:
+    buildIndex: 4
+  _loadingScene:
     sceneAsset: {fileID: 102900000, guid: 3c787f70ae5b43648b499363d858713b, type: 3}
     required: 1
-    buildIndex: 1
+    buildIndex: 3
+  _gameplayScene:
+    sceneAsset: {fileID: 102900000, guid: 823580dbe87edb94ab80216a8ca1aad5, type: 3}
+    required: 1
+    buildIndex: 5
