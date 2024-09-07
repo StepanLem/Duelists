@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class GameEntryPoint : MonoBehaviour
 {
     /// <summary>
-    /// Запускается при старте игры с любой из сцен. Вне зависимости есть ли объект с этим скриптом на сцене.
+    /// Р—Р°РїСѓСЃРєР°РµС‚СЃСЏ РїСЂРё СЃС‚Р°СЂС‚Рµ РёРіСЂС‹ СЃ Р»СЋР±РѕР№ РёР· СЃС†РµРЅ. Р’РЅРµ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РµСЃС‚СЊ Р»Рё РѕР±СЉРµРєС‚ СЃ СЌС‚РёРј СЃРєСЂРёРїС‚РѕРј РЅР° СЃС†РµРЅРµ.
     /// </summary>
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void BeforeGameStart()
@@ -17,11 +17,11 @@ public class GameEntryPoint : MonoBehaviour
 #if UNITY_EDITOR && TEST
         int currentSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
 
-        //если игра запускается с Bootstrap, то запуск должен идти как ожидается.
+        //РµСЃР»Рё РёРіСЂР° Р·Р°РїСѓСЃРєР°РµС‚СЃСЏ СЃ Bootstrap, С‚Рѕ Р·Р°РїСѓСЃРє РґРѕР»Р¶РµРЅ РёРґС‚Рё РєР°Рє РѕР¶РёРґР°РµС‚СЃСЏ.
         if (currentSceneBuildIndex == SceneRegistry.BootstrapScene.BuildIndex)
             return;
 
-        //TODO: Загрузка VR/nonVR сцены с игроком в зависимости от подключённого шлема.
+        //TODO: Р—Р°РіСЂСѓР·РєР° VR/nonVR СЃС†РµРЅС‹ СЃ РёРіСЂРѕРєРѕРј РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РїРѕРґРєР»СЋС‡С‘РЅРЅРѕРіРѕ С€Р»РµРјР°.
 #endif
 
 
@@ -31,7 +31,7 @@ public class GameEntryPoint : MonoBehaviour
     private void Awake()
     {
         SceneManager.LoadScene(SceneRegistry.PlayerVRScene.BuildIndex);
-        SceneManager.LoadScene(SceneRegistry.MainMenuScene.BuildIndex, LoadSceneMode.Additive);//TODO сделать это через сцену загрузки.
+        SceneManager.LoadScene(SceneRegistry.MainMenuScene.BuildIndex, LoadSceneMode.Additive);//TODO СЃРґРµР»Р°С‚СЊ СЌС‚Рѕ С‡РµСЂРµР· СЃС†РµРЅСѓ Р·Р°РіСЂСѓР·РєРё.
     }
 }
 
