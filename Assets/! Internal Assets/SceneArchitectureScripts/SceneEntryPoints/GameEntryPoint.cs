@@ -1,8 +1,13 @@
+using System.Collections;
+using Trisibo;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameEntryPoint : MonoBehaviour
 {
+    public static int CurrentSceneBuildIndex;
+
     //Запускается при старте игры с любой из сцен. В не зависимости есть ли объект с этим скриптом на сцене.
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void BeforeGameStart()
@@ -10,12 +15,21 @@ public class GameEntryPoint : MonoBehaviour
         SceneRegistry.InitializeFromScriptableObject();
 
 #if UNITY_EDITOR && TEST
-        if (SceneRegistry.Bootstrap.BuildIndex == SceneManager.GetActiveScene().buildIndex) //Если игру запускают с Bootstrap, то ожидается обычный запуск
-            return;
-
-        
-        LoadImportantScenes();
+        int currentSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
+        if (currentSceneBuildIndex != SceneRegistry.PlayerVRScene.BuildIndex)
+        {
+            SceneManager.LoadScene(SceneRegistry.PlayerVRScene.BuildIndex);
+        }
+        if (currentSceneBuildIndex != SceneRegistry.Bootstrap.BuildIndex)
+        {
+            SceneManager.LoadScene(currentSceneBuildIndex, LoadSceneMode.Additive);
+            CurrentSceneBuildIndex = currentSceneBuildIndex;
+        }
 #endif
+
+        SceneManager.LoadScene(SceneRegistry.PlayerVRScene.BuildIndex);
+        SceneManager.LoadScene(SceneRegistry.MainMenu.BuildIndex, LoadSceneMode.Additive);
+        CurrentSceneBuildIndex = SceneRegistry.MainMenu.BuildIndex;
     }
 
     private static void LoadImportantScenes()
