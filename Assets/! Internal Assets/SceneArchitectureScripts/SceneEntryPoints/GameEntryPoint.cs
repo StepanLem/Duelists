@@ -31,7 +31,9 @@ public class GameEntryPoint : MonoBehaviour
     private void Awake()
     {
         SceneManager.LoadScene(SceneRegistry.PlayerVRScene.BuildIndex);
-        SceneManager.LoadScene(SceneRegistry.MainMenuScene.BuildIndex, LoadSceneMode.Additive);//TODO сделать это через сцену загрузки.
+
+        LoadingScreenController.AddSceneToLoadOnNextLoadingScreen(SceneRegistry.MainMenuScene);
+        LoadingScreenController.InvokeLoadingScreen(SceneRegistry.MainMenuScene);
     }
 }
 
