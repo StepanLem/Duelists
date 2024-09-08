@@ -5,67 +5,60 @@ using Trisibo;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
-public class LoadingScreenScene : MonoBehaviour
+public static class LoadingScreenController
 {
-    public event Action<float> OnLoadProgressChange;
-
-    //TODO: мб можно заменить статики на инициализацию через инжект. И/или всё время держать сцену загрузки в памяти.
-    public static List<AsyncOperation> currentOperations = new();
-    public static List<SceneField> ScenesToLoad = new();
-    public static List<SceneField> ScenesToUnload = new();
+    private static readonly List<AsyncOperation> _currentOperations = new();
+    private static readonly List<SceneField> _scenesToLoad = new();
+    private static readonly List<SceneField> _scenesToUnload = new();
     private static SceneField _sceneToSetActiveNext;
+
+    public static event Action<float> OnLoadProgressChange;
 
     public static void AddSceneToLoadOnNextLoadingScreen(SceneField scene)
     {
-        ScenesToLoad.Add(scene);
+        _scenesToLoad.Add(scene);
     }
 
     public static void AddSceneToUnloadOnNextLoadingScreen(SceneField scene)
     {
-        ScenesToUnload.Add(scene);
+        _scenesToUnload.Add(scene);
     }
 
     /// <summary>
-    /// Загружает сцену "LoadingScreenScene". На ней происходят соотвествующие действия со ScenesToLoad и ScenesToUnload
+    /// Загружает сцену "LoadingScreenScene". 
+    /// Во время её существования происходят соотвествующие действия со ScenesToLoad и ScenesToUnload
     /// </summary>
     /// <param name="sceneToSetActiveNext">Сцена, которую надо сделать активной после LoadingScreenScene</param>
-    public static void LoadAsync(SceneField sceneToSetActiveNext)
+    public static void InvokeLoadingScreen(SceneField sceneToSetActiveNext)
     {
         //TODO: сделать проверку на ошибки: sceneToSetActiveNext == null or sceneToSetActiveNext in ScenesToUnload
-
         _sceneToSetActiveNext = sceneToSetActiveNext;
+
+        SceneManager.sceneLoaded += OnLoadingSceneLoaded;
 
         SceneManager.LoadSceneAsync(SceneRegistry.LoadingScene.BuildIndex, LoadSceneMode.Additive);
     }
 
-    private void Start()
+    private static void OnLoadingSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
+        SceneManager.sceneLoaded -= OnLoadingSceneLoaded;
+
+
         SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(SceneRegistry.LoadingScene.BuildIndex));
 
-        foreach (var scene in ScenesToUnload)
-        {
-            currentOperations.Add(SceneManager.UnloadSceneAsync(scene.BuildIndex));
-        }
-        ScenesToUnload.Clear();
+        UnloadScenesToUndloadAsync();
+        LoadScenesToLoadAsync();
 
-        foreach (var scene in ScenesToLoad)
-        {
-            currentOperations.Add(SceneManager.LoadSceneAsync(scene.BuildIndex, LoadSceneMode.Additive));
-        }
-        ScenesToLoad.Clear();        
-
-        StartCoroutine(nameof(CheckOperationsProgressRoutine));
+        AsyncProcessor.StartRoutine(CheckOperationsProgressRoutine());
     }
 
     private static readonly WaitForSeconds WaiterBetweenChecks = new(0.2f);
-
-    private IEnumerator CheckOperationsProgressRoutine()
+    private static IEnumerator CheckOperationsProgressRoutine()
     {
         //TODO: запретить автоматически включаться сценам, когда их загрузка дошла до 0.9
         //А то они будут вклиниваться в сцену загрузки.
 
-        var currentOperationsCount = currentOperations.Count;
+        var currentOperationsCount = _currentOperations.Count;
 
         float resultProgress = 0;
 
@@ -74,7 +67,7 @@ public class LoadingScreenScene : MonoBehaviour
             float summaryProgress = 0;
             for (int i = 0; i < currentOperationsCount; i++)
             {
-                summaryProgress += currentOperations[i].progress;
+                summaryProgress += _currentOperations[i].progress;
             }
 
             resultProgress = summaryProgress / currentOperationsCount;
@@ -90,10 +83,27 @@ public class LoadingScreenScene : MonoBehaviour
 
         //TODO: когда всё полностью загружено: разрешать показываться сценам;(мб после разрешения надо прождать ещё один кадр)
 
-        currentOperations.Clear();
+        _currentOperations.Clear();
 
         SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(_sceneToSetActiveNext.BuildIndex));
         SceneManager.UnloadSceneAsync(SceneRegistry.LoadingScene.BuildIndex);
     }
 
+    public static void UnloadScenesToUndloadAsync()
+    {
+        foreach (var scene in _scenesToUnload)
+        {
+            _currentOperations.Add(SceneManager.UnloadSceneAsync(scene.BuildIndex));
+        }
+        _scenesToUnload.Clear();
+    }
+
+    public static void LoadScenesToLoadAsync()
+    {
+        foreach (var scene in _scenesToLoad)
+        {
+            _currentOperations.Add(SceneManager.LoadSceneAsync(scene.BuildIndex, LoadSceneMode.Additive));
+        }
+        _scenesToLoad.Clear();
+    }
 }

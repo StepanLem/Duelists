@@ -7,8 +7,8 @@ public class GameplayExitGameButton : MonoBehaviour
 {
     public void ExitGameplay()
     {
-        LoadingScreenScene.AddSceneToLoadOnNextLoadingScreen(SceneRegistry.MainMenuScene);
-        LoadingScreenScene.AddSceneToUnloadOnNextLoadingScreen(SceneRegistry.GameplayScene);
-        LoadingScreenScene.LoadAsync(SceneRegistry.MainMenuScene);
+        LoadingScreenController.AddSceneToLoadOnNextLoadingScreen(SceneRegistry.MainMenuScene);
+        LoadingScreenController.AddSceneToUnloadOnNextLoadingScreen(SceneRegistry.GameplayScene);
+        LoadingScreenController.InvokeLoadingScreen(SceneRegistry.MainMenuScene);
     }
 }
