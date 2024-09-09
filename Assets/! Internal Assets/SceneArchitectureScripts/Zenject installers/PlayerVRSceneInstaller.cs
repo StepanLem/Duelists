@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class VRPlayerSceneInstaller : MonoInstaller
+public class PlayerVRSceneInstaller : MonoInstaller
 {
     
 }

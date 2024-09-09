@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class GameEntryPoint : MonoBehaviour
 {
-    public static int CurrentSceneBuildIndex;
-
-    //Запускается при старте игры с любой из сцен. В не зависимости есть ли объект с этим скриптом на сцене.
+    /// <summary>
+    /// Р—Р°РїСѓСЃРєР°РµС‚СЃСЏ РїСЂРё СЃС‚Р°СЂС‚Рµ РёРіСЂС‹ СЃ Р»СЋР±РѕР№ РёР· СЃС†РµРЅ. Р’РЅРµ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РµСЃС‚СЊ Р»Рё РѕР±СЉРµРєС‚ СЃ СЌС‚РёРј СЃРєСЂРёРїС‚РѕРј РЅР° СЃС†РµРЅРµ.
+    /// </summary>
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void BeforeGameStart()
     {
@@ -16,38 +16,24 @@ public class GameEntryPoint : MonoBehaviour
 
 #if UNITY_EDITOR && TEST
         int currentSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
-        if (currentSceneBuildIndex != SceneRegistry.PlayerVRScene.BuildIndex)
-        {
-            SceneManager.LoadScene(SceneRegistry.PlayerVRScene.BuildIndex);
-        }
-        if (currentSceneBuildIndex != SceneRegistry.Bootstrap.BuildIndex)
-        {
-            SceneManager.LoadScene(currentSceneBuildIndex, LoadSceneMode.Additive);
-            CurrentSceneBuildIndex = currentSceneBuildIndex;
-        }
+
+        //РµСЃР»Рё РёРіСЂР° Р·Р°РїСѓСЃРєР°РµС‚СЃСЏ СЃ Bootstrap, С‚Рѕ Р·Р°РїСѓСЃРє РґРѕР»Р¶РµРЅ РёРґС‚Рё РєР°Рє РѕР¶РёРґР°РµС‚СЃСЏ.
+        if (currentSceneBuildIndex == SceneRegistry.BootstrapScene.BuildIndex)
+            return;
+
+        //TODO: Р—Р°РіСЂСѓР·РєР° VR/nonVR СЃС†РµРЅС‹ СЃ РёРіСЂРѕРєРѕРј РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РїРѕРґРєР»СЋС‡С‘РЅРЅРѕРіРѕ С€Р»РµРјР°.
 #endif
 
-        SceneManager.LoadScene(SceneRegistry.PlayerVRScene.BuildIndex);
-        SceneManager.LoadScene(SceneRegistry.MainMenu.BuildIndex, LoadSceneMode.Additive);
-        CurrentSceneBuildIndex = SceneRegistry.MainMenu.BuildIndex;
+
     }
 
-    private static void LoadImportantScenes()
+
+    private void Awake()
     {
-        var isBootstrapLoaded = false;
+        SceneManager.LoadScene(SceneRegistry.PlayerVRScene.BuildIndex);
 
-        for (int i = 0; i < SceneManager.sceneCount; i++)
-        {
-            var scene = SceneManager.GetSceneAt(i);
-
-            if (scene.buildIndex == SceneRegistry.Bootstrap.BuildIndex)
-                isBootstrapLoaded = true;
-
-            //TODO: то же самое со сценой игрока. В зависимости от того, подключён ли шлем.
-        }
-
-        if (!isBootstrapLoaded)
-            SceneManager.LoadSceneAsync(SceneRegistry.Bootstrap.BuildIndex, LoadSceneMode.Additive);
+        LoadingScreenController.AddSceneToLoadOnNextLoadingScreen(SceneRegistry.MainMenuScene);
+        LoadingScreenController.InvokeLoadingScreen(SceneRegistry.MainMenuScene);
     }
 }
 
