@@ -31,7 +31,11 @@ public static class LoadingScreenController
     /// <param name="sceneToSetActiveNext">Сцена, которую надо сделать активной после LoadingScreenScene</param>
     public static void InvokeLoadingScreen(SceneField sceneToSetActiveNext)
     {
-        //TODO: сделать проверку на ошибки: sceneToSetActiveNext == null or sceneToSetActiveNext in ScenesToUnload
+        if (sceneToSetActiveNext == null || _scenesToUnload.Contains(sceneToSetActiveNext))
+        {
+            Debug.LogError("Ошибка: сцена не может стать активной.");
+            return;
+        }
         _sceneToSetActiveNext = sceneToSetActiveNext;
 
         SceneManager.sceneLoaded += OnLoadingSceneLoaded;
@@ -41,10 +45,14 @@ public static class LoadingScreenController
 
     private static void OnLoadingSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
+        Scene loadingScene = SceneManager.GetSceneByBuildIndex(SceneRegistry.LoadingScene.BuildIndex);
+
+        if (scene != loadingScene)
+            return;
+
         SceneManager.sceneLoaded -= OnLoadingSceneLoaded;
 
-
-        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(SceneRegistry.LoadingScene.BuildIndex));
+        SceneManager.SetActiveScene(loadingScene);
 
         UnloadScenesToUndloadAsync();
         LoadScenesToLoadAsync();
