@@ -1,18 +1,30 @@
-using System;
 using UnityEngine;
 
 public class Fader : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
 
+    private static Fader _instance;
+    public static Fader Instance
+    {
+        get
+        {
+            if (!_instance)
+            {
+                GameObject prefab = Resources.Load<GameObject>(FaderPath);
+                _instance = Instantiate(prefab).GetComponentInChildren<Fader>();
+                DontDestroyOnLoad(_instance);
+            }
+            return _instance;
+        }
+    }
+
     public bool IsFading { get; private set; }
 
-    private Action _fadedInCallback;
-    private Action _fadedOutCallback;
-
+    private const string FaderPath = "Fader";
     private const string isFaded = "faded";
 
-    public void FadeIn(Action fadedInCallback)
+    public void FadeIn()
     {
         if (IsFading)
         {
@@ -20,11 +32,10 @@ public class Fader : MonoBehaviour
         }
 
         IsFading = true;
-        _fadedInCallback = fadedInCallback;
         _animator.SetBool(isFaded, true);
     }
 
-    public void FadeOut(Action fadedOutCallback)
+    public void FadeOut()
     {
         if (IsFading)
         {
@@ -32,21 +43,16 @@ public class Fader : MonoBehaviour
         }
 
         IsFading = true;
-        _fadedOutCallback = fadedOutCallback;
         _animator.SetBool(isFaded, false);
     }
 
     private void Handle_FadeInAnimationOver()
     {
-        _fadedInCallback?.Invoke();
-        _fadedInCallback = null;
         IsFading = false;
     }
 
     private void Handle_FadeOutAnimationOver()
     {
-        _fadedOutCallback?.Invoke();
-        _fadedOutCallback = null;
         IsFading = false;
     }
 }
