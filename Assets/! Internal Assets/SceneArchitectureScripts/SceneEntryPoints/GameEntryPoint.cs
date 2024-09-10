@@ -22,6 +22,11 @@ public class GameEntryPoint : MonoBehaviour
             return;
 
         //TODO: Загрузка VR/nonVR сцены с игроком в зависимости от подключённого шлема.
+        SceneField currentScene = SceneRegistry.FindSceneByBuildIndex(SceneManager.GetActiveScene().buildIndex);
+        LoadingScreenController.AddSceneToLoadOnNextLoadingScreen(currentScene);
+
+        SceneManager.LoadScene(SceneRegistry.PlayerVRScene.BuildIndex);
+        LoadingScreenController.InvokeLoadingScreen(currentScene);
 #endif
 
 

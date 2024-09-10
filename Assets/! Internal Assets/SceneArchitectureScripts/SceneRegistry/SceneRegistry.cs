@@ -11,8 +11,6 @@ public class SceneRegistry
     public static SceneField LoadingScene {  get; private set; }
     public static SceneField GameplayScene {  get; private set; }
 
-
-
     public static void InitializeFromScriptableObject()
     {
         var initParams = Resources.Load<SceneRegistrySO>("SceneRegistry");
@@ -25,5 +23,18 @@ public class SceneRegistry
         GameplayScene = initParams.GameplayScene;
 
         Resources.UnloadAsset(initParams);
+    }
+
+    public static SceneField FindSceneByBuildIndex(int buildIndex)
+    {
+        SceneField[] sceneFields = new SceneField[] { PlayerVRScene, PlayerFlatScene, MainMenuScene, GameplayScene };
+        foreach (SceneField sceneField in sceneFields) 
+        { 
+            if (buildIndex == sceneField.BuildIndex)
+            {
+                return sceneField;
+            }
+        }
+        return MainMenuScene;
     }
 }
