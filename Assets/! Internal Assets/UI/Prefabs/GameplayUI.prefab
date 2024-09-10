@@ -263,6 +263,7 @@ GameObject:
   - component: {fileID: 3988898405693453172}
   - component: {fileID: 2897412428550102815}
   - component: {fileID: 6470036165499898965}
+  - component: {fileID: 5813693175743430587}
   m_Layer: 0
   m_Name: ButtonExitGame
   m_TagString: Untagged
@@ -372,18 +373,34 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6969755737870410600}
-        m_TargetAssemblyTypeName: Scenes.UISceneRootBinder, Assembly-CSharp
-        m_MethodName: HandleGoToSceneButtonClick
-        m_Mode: 5
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: Assets.__Internal_Assets.SceneLoader, Assembly-CSharp
+        m_MethodName: LoadScene
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 5813693175743430587}
+          m_ObjectArgumentAssemblyTypeName: SceneFieldReference, Assembly-CSharp-firstpass
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: MainMenu
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5813693175743430587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6429405648640064292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae24c7d01a94e84fbe6fb6f45bd76ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SceneField:
+    sceneAsset: {fileID: 102900000, guid: c1897cb99875e8041afe13cdaab2bd31, type: 3}
+    required: 1
+    buildIndex: 2
 --- !u!1 &6953715334086759750
 GameObject:
   m_ObjectHideFlags: 0
