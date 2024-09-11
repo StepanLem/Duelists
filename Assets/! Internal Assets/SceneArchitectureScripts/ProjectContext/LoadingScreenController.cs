@@ -95,6 +95,8 @@ public static class LoadingScreenController
 
         SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(_sceneToSetActiveNext.BuildIndex));
         SceneManager.UnloadSceneAsync(SceneRegistry.LoadingScene.BuildIndex);
+
+        Fader.Instance.FadeOut();
     }
 
     public static void UnloadScenesToUndloadAsync()

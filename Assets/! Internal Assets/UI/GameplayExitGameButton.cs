@@ -12,11 +12,8 @@ public class GameplayExitGameButton : MonoBehaviour
 
     private IEnumerator ExitGameplayRoutine()
     {
-        Fader.Instance.FadeOut();
-        while (Fader.Instance.IsFading)
-        {
-            yield return new WaitUntil(() => !Fader.Instance.IsFading);
-        }
+        Fader.Instance.FadeIn();
+        yield return new WaitUntil(() => !Fader.Instance.IsFading);
 
         LoadingScreenController.AddSceneToLoadOnNextLoadingScreen(SceneRegistry.MainMenuScene);
         LoadingScreenController.AddSceneToUnloadOnNextLoadingScreen(SceneRegistry.GameplayScene);

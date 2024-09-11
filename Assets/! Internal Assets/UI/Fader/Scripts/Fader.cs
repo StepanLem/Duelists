@@ -13,7 +13,12 @@ public class Fader : MonoBehaviour
             {
                 GameObject prefab = Resources.Load<GameObject>(FaderPath);
                 _instance = Instantiate(prefab).GetComponentInChildren<Fader>();
-                DontDestroyOnLoad(_instance);
+                Transform parent = _instance.transform.parent;
+                while (parent.parent != null) 
+                { 
+                    parent = parent.parent;
+                }
+                DontDestroyOnLoad(parent);
             }
             return _instance;
         }
@@ -24,34 +29,29 @@ public class Fader : MonoBehaviour
     private const string FaderPath = "Fader";
     private const string isFaded = "faded";
 
+    [ContextMenu("FadeIn")]
     public void FadeIn()
     {
         if (IsFading)
         {
             return;
         }
-
         IsFading = true;
         _animator.SetBool(isFaded, true);
     }
 
+    [ContextMenu("FadeOut")]
     public void FadeOut()
     {
         if (IsFading)
         {
             return;
         }
-
         IsFading = true;
         _animator.SetBool(isFaded, false);
     }
 
-    private void Handle_FadeInAnimationOver()
-    {
-        IsFading = false;
-    }
-
-    private void Handle_FadeOutAnimationOver()
+    private void Handle_OnCompleteFadingAnim()
     {
         IsFading = false;
     }
