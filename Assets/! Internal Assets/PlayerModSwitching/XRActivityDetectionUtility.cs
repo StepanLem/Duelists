@@ -20,7 +20,7 @@ public static class XRActivityDetectionUtility
     }
 
     /// <summary>
-    /// Определяет, запущена ли XR subsystem(В случае ПК: выходил ли XR-шлем из спящего режима с момента активации подсистемы).
+    /// Определяет, запущена ли XR subsystem(В случае ПК: выходил ли XR-шлем из спящего режима с момента подключения подсистемы).
     /// </summary>
     /// <returns>Возвращает true, если подключена и активна XR subsystem</returns>
     public static bool IsSubsystemRunning()
