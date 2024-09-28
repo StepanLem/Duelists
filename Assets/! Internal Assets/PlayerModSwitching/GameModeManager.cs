@@ -1,8 +1,12 @@
-﻿public class GameModeManager
-{
-    public bool IsXRModeActive { get; private set; }
+﻿using System;
 
-    public bool TryActivateXRMode()
+public static class GameModeManager
+{
+    public static bool IsXRModeActive { get; private set; }
+
+    public static event Action OnXRModeActivated;
+
+    public static bool TryActivateXRMode()
     {
         if (XRDisplayDetectionUtility.IsSubsystemConnected())
         {
@@ -12,9 +16,9 @@
         else return false;
     }
 
-    private void ActivateXRMode()
+    private static void ActivateXRMode()
     {
         IsXRModeActive = true;
-        //event?.invoke();
+        OnXRModeActivated?.Invoke();
     }
 }
