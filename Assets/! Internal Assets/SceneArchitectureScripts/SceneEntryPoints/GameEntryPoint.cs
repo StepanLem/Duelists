@@ -1,8 +1,5 @@
-using System.Collections;
-using Trisibo;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class GameEntryPoint : MonoBehaviour
 {
@@ -20,17 +17,16 @@ public class GameEntryPoint : MonoBehaviour
         //если игра запускается с Bootstrap, то запуск должен идти как ожидается.
         if (currentSceneBuildIndex == SceneRegistry.BootstrapScene.BuildIndex)
             return;
-
-        //TODO: Загрузка VR/nonVR сцены с игроком в зависимости от подключённого шлема.
 #endif
-
-
     }
-
 
     private void Awake()
     {
-        SceneManager.LoadScene(SceneRegistry.PlayerVRScene.BuildIndex);
+        if (XRActivityDetectionUtility.IsSubsystemConnected())
+            SceneManager.LoadScene(SceneRegistry.PlayerVRScene.BuildIndex);
+        else
+            SceneManager.LoadScene(SceneRegistry.PlayerFlatScene.BuildIndex);
+
 
         LoadingScreenController.AddSceneToLoadOnNextLoadingScreen(SceneRegistry.MainMenuScene);
         LoadingScreenController.InvokeLoadingScreen(SceneRegistry.MainMenuScene);
