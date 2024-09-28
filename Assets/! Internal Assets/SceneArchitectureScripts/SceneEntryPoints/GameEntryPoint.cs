@@ -22,7 +22,7 @@ public class GameEntryPoint : MonoBehaviour
 
     private void Awake()
     {
-        if (XRActivityDetectionUtility.IsSubsystemConnected())
+        if (XRDisplayDetectionUtility.IsSubsystemConnected())
             SceneManager.LoadScene(SceneRegistry.PlayerVRScene.BuildIndex);
         else
             SceneManager.LoadScene(SceneRegistry.PlayerFlatScene.BuildIndex);
