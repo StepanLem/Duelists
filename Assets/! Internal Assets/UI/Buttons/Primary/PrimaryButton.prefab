@@ -222,7 +222,7 @@ GameObject:
   - component: {fileID: 5468928032893284810}
   - component: {fileID: 2371381270753708026}
   - component: {fileID: 4816550115413643316}
-  - component: {fileID: 1341303769419029940}
+  - component: {fileID: 2482243283138502570}
   m_Layer: 5
   m_Name: PrimaryButton
   m_TagString: Untagged
@@ -359,7 +359,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!95 &1341303769419029940
+--- !u!95 &2482243283138502570
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -369,7 +369,7 @@ Animator:
   m_GameObject: {fileID: 8613225505607825952}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 33b3953a21ae0854782ed270b5cbc34f, type: 2}
+  m_Controller: {fileID: 9100000, guid: 9bcd01bd7f97df7469901c8f5bbbdeec, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
