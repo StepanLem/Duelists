@@ -1,38 +1,27 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.XR.CoreUtils.Collections;
+п»їusing System.Collections.Generic;
 using UnityEngine;
 
 public class RecordableTarget : MonoBehaviour
 {
-    [Tooltip("Провайдеры значений, значения которых записываются по их ID при каждом тике (TODO: +'их'+) тикера")]
     [SerializeField] private List<RecordableValue> _recordableValues;
+
+    [Tooltip("РќСѓР¶РµРЅ РґР»СЏ РїСЂРёРІСЏР·РєРё Р·Р°РїРёСЃРё Рє РѕР±СЉРµРєС‚Сѓ РІРѕ РІСЂРµРјСЏ РµРіРѕ СЃРµСЂРёР°Р»РёР·Р°С†РёРё/РґРµСЃРµСЂРёР°Р»РёР·Р°С†РёРё.")]
+    public int TargetDataID;
 
     [Tooltip("if null, use RecordingSystem._defaultTicker")]
     [SerializeField] private MonoTicker _defaultTicker;
+    private bool _usedDefaultTicker;
 
-    /// <summary>
-    /// ID нужен для привязки записи к объекту во время его сериализации/десериализации.
-    /// </summary>
-    public int InstanceID;
-
-    private RecordingSystem _recordingSystem;
-
-    private RecordedTargetData _currentRecordingTargetData;
-
-    public void StartRecording(RecordingSystem recordingSystem, RecordedGameData currentRecordOfGame)
+    public void StartRecording(RecordedGameData currentRecordedGameData, MonoTicker defaultTicker, IRecordingDurationProvider recordingDurationProvider)
     {
-        _currentRecordingTargetData = new RecordedTargetData();
-        currentRecordOfGame.AddRecordedTargetDataByInstanceID(_currentRecordingTargetData, InstanceID);
+        var currentRecordedTargetData = new RecordedTargetData();
+        currentRecordedGameData.AddRecordedTargetDataByInstanceID(currentRecordedTargetData, TargetDataID);
 
-        _recordingSystem = recordingSystem;
-        if (_defaultTicker == null) _defaultTicker = recordingSystem.DefaultTicker;
+        if (_defaultTicker == null) { _defaultTicker = defaultTicker; _usedDefaultTicker = true;  }
 
         foreach (var recordableValue in _recordableValues)
         {
-            recordableValue.StartRecording(_currentRecordingTargetData, _defaultTicker, recordingSystem);
+            recordableValue.StartRecording(currentRecordedTargetData, _defaultTicker, recordingDurationProvider);
         }
     }
 
@@ -42,5 +31,7 @@ public class RecordableTarget : MonoBehaviour
         {
             recordableValue.StopRecording();
         }
+
+        if (_usedDefaultTicker) { _defaultTicker = null; _usedDefaultTicker = false; }
     }
 }

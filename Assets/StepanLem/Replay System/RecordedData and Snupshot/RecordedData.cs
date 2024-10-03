@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using UnityEngine;
+п»їusing System.Collections.Generic;
 
 public class RecordedGameData
 {
@@ -10,8 +8,8 @@ public class RecordedGameData
 
     public void AddRecordedTargetDataByInstanceID(RecordedTargetData targetRecord, int instanceID)
     {
-        //Если здесь высрет ошибку то:
-        //"Было наслаивание инстансов для target. Они где-то повторяются? Работа продолжилась, но в ячейке остались только последние данные"
+        //Р•СЃР»Рё Р·РґРµСЃСЊ РІС‹СЃСЂРµС‚ РѕС€РёР±РєСѓ С‚Рѕ:
+        //"Р‘С‹Р»Рѕ РЅР°СЃР»Р°РёРІР°РЅРёРµ РёРЅСЃС‚Р°РЅСЃРѕРІ РґР»СЏ target. РћРЅРё РіРґРµ-С‚Рѕ РїРѕРІС‚РѕСЂСЏСЋС‚СЃСЏ? Р Р°Р±РѕС‚Р° РїСЂРѕРґРѕР»Р¶РёР»Р°СЃСЊ, РЅРѕ РІ СЏС‡РµР№РєРµ РѕСЃС‚Р°Р»РёСЃСЊ С‚РѕР»СЊРєРѕ РїРѕСЃР»РµРґРЅРёРµ РґР°РЅРЅС‹Рµ"
         RecordedTargetsByInstanceID.AddAtIndexWithExpand(targetRecord, instanceID);
     }
 
@@ -23,12 +21,12 @@ public class RecordedGameData
 
 public class RecordedTargetData
 {
-    public List<RecordedValueData> RecordedValuesByInstanceID = new(); //поменять на словарь? а как делают сохранения в больших играх c тысячами сохраняемых объектов? В чём они всё хранят? По чему находят?
+    public List<RecordedValueData> RecordedValuesByInstanceID = new(); //РїРѕРјРµРЅСЏС‚СЊ РЅР° СЃР»РѕРІР°СЂСЊ? Р° РєР°Рє РґРµР»Р°СЋС‚ СЃРѕС…СЂР°РЅРµРЅРёСЏ РІ Р±РѕР»СЊС€РёС… РёРіСЂР°С… c С‚С‹СЃСЏС‡Р°РјРё СЃРѕС…СЂР°РЅСЏРµРјС‹С… РѕР±СЉРµРєС‚РѕРІ? Р’ С‡С‘Рј РѕРЅРё РІСЃС‘ С…СЂР°РЅСЏС‚? РџРѕ С‡РµРјСѓ РЅР°С…РѕРґСЏС‚?
 
     internal void AddRecordedValueDataByInstanceID(RecordedValueData valueRecord, int instanceID)
     {
-        //Если здесь высрет ошибку то:
-        //"Было наслаивание инстансов для target. Они где-то повторяются? Работа продолжилась, но в ячейке остались только последние данные"
+        //Р•СЃР»Рё Р·РґРµСЃСЊ РІС‹СЃСЂРµС‚ РѕС€РёР±РєСѓ С‚Рѕ:
+        //"Р‘С‹Р»Рѕ РЅР°СЃР»Р°РёРІР°РЅРёРµ РёРЅСЃС‚Р°РЅСЃРѕРІ РґР»СЏ target. РћРЅРё РіРґРµ-С‚Рѕ РїРѕРІС‚РѕСЂСЏСЋС‚СЃСЏ? Р Р°Р±РѕС‚Р° РїСЂРѕРґРѕР»Р¶РёР»Р°СЃСЊ, РЅРѕ РІ СЏС‡РµР№РєРµ РѕСЃС‚Р°Р»РёСЃСЊ С‚РѕР»СЊРєРѕ РїРѕСЃР»РµРґРЅРёРµ РґР°РЅРЅС‹Рµ"
         RecordedValuesByInstanceID.AddAtIndexWithExpand(valueRecord, instanceID);
     }
 

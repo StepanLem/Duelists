@@ -1,30 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class PlaybackableTarget : MonoBehaviour
 {
     [SerializeField] private List<PlaybackableValue> _playbackableValues;
 
+    [Tooltip("Нужен для привязки записи к объекту во время его сериализации/десериализации.")]
+    public int TargetDataID;
+
+    [Tooltip("if null, use PlaybackingSystem._defaultTicker")]
     [SerializeField] private MonoTicker _defaultTicker;
-
-    /// <summary>
-    /// ID нужен для привязки записи к объекту во время его сериализации/десериализации.
-    /// </summary>
-    public int InstanceID;
-
-    private RecordedTargetData _currentPlaybackingTargetData;
+    private bool _usedDefaultTicker;
 
     public event Action OnPlaybackCompleted;
 
-    private int _countOfEndedPlaybackValues;
+    private int _completedValuePlaybacksCount;
 
     public void StartPlaybacking(RecordedGameData recordedGameData, MonoTicker defaultTicker)
     {
-        _currentPlaybackingTargetData = recordedGameData.GetRecordedTargetDataByInstanceID(InstanceID);
+        var currentPlaybackingTargetData = recordedGameData.GetRecordedTargetDataByInstanceID(TargetDataID);
 
-        if (_currentPlaybackingTargetData == null)
+        if (currentPlaybackingTargetData == null)
         {
             //Debug.Log("В RecordedData нет записи о объекте");
             OnPlaybackCompleted?.Invoke();
@@ -38,20 +35,20 @@ public class PlaybackableTarget : MonoBehaviour
             return;
         }
 
-        if (_defaultTicker == null) _defaultTicker = defaultTicker;
-        _countOfEndedPlaybackValues = 0;
-
+        _completedValuePlaybacksCount = 0;
+        if (_defaultTicker == null) { _defaultTicker = defaultTicker; _usedDefaultTicker = true; }
+        
         foreach (var playbackableValue in _playbackableValues)
         {
-            playbackableValue.StartPlaybacking(_currentPlaybackingTargetData, _defaultTicker);
-            playbackableValue.OnPlaybackCompleted += OnValuePlaybackCompleted;
+            playbackableValue.OnPlaybackCompleted += OnValuePlaybackingCompleted;
+            playbackableValue.StartPlaybacking(currentPlaybackingTargetData, _defaultTicker);
         }
     }
 
-    private void OnValuePlaybackCompleted()
+    private void OnValuePlaybackingCompleted()
     {
-        _countOfEndedPlaybackValues++;
-        if (_countOfEndedPlaybackValues == _playbackableValues.Count)
+        _completedValuePlaybacksCount++;
+        if (_completedValuePlaybacksCount == _playbackableValues.Count)
             FinishPlaybacking();
     }
 
@@ -59,8 +56,10 @@ public class PlaybackableTarget : MonoBehaviour
     {
         foreach (var playbackableValue in _playbackableValues)
         {
-            playbackableValue.OnPlaybackCompleted -= OnValuePlaybackCompleted;
+            playbackableValue.OnPlaybackCompleted -= OnValuePlaybackingCompleted;
         }
+
+        if (_usedDefaultTicker) { _defaultTicker = null; _usedDefaultTicker = false; }
 
         OnPlaybackCompleted?.Invoke();
     }

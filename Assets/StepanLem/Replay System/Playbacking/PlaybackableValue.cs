@@ -1,32 +1,31 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+п»їusing System;
 using UnityEngine;
 
 public class PlaybackableValue : MonoBehaviour
 {
+    [Tooltip("РџРµСЂРµРґР°С‘С‚ Р·РЅР°С‡РµРЅРёРµ РґР»СЏ Р·Р°РїРёСЃРё РІ РЅРµРіРѕ РґР°РЅРЅС‹С… РёР· RecordedData РїРѕ ValueDataID.")]
     [SerializeField] private IValueProvider _valueProvider;
 
+    [Tooltip("РќСѓР¶РµРЅ РґР»СЏ РїСЂРёРІСЏР·РєРё Р·Р°РїРёСЃРё Рє РѕР±СЉРµРєС‚Сѓ РІРѕ РІСЂРµРјСЏ РµРіРѕ СЃРµСЂРёР°Р»РёР·Р°С†РёРё/РґРµСЃРµСЂРёР°Р»РёР·Р°С†РёРё.")]
+    public int ValueDataID;
+
+    [Tooltip("If null, use defaultTicker")]
     [SerializeField] private MonoTicker _ticker;
+    private bool _usedDefaultTicker;
+
+    public event Action OnPlaybackCompleted;
 
     private RecordedValueData _currentPlaybackingValueData;
     private int _maxIndexInRecord;
     private int _currentIndexInRecord;
 
-    public event Action OnPlaybackCompleted;
-
-    /// <summary>
-    /// ID нужен для привязки записи к объекту во время его сериализации/десериализации.
-    /// </summary>
-    public int InstanceID;
-
     public void StartPlaybacking(RecordedTargetData recordedTargetData, MonoTicker defaultTicker)
     {
-        _currentPlaybackingValueData = recordedTargetData.GetRecordedValueDataByInstanceID(InstanceID);
+        _currentPlaybackingValueData = recordedTargetData.GetRecordedValueDataByInstanceID(ValueDataID);
 
         if(_currentPlaybackingValueData == null)
         {
-            //Debug.Log("В RecordedData нет записи о объекте");
+            //Debug.Log("Р’ RecordedData РЅРµС‚ Р·Р°РїРёСЃРё Рѕ РѕР±СЉРµРєС‚Рµ");
             OnPlaybackCompleted?.Invoke();
             return;
         }
@@ -43,6 +42,9 @@ public class PlaybackableValue : MonoBehaviour
     {
         _ticker.Fire -= SetSnupshotValue;
 
+        _currentPlaybackingValueData = null;
+        if (_usedDefaultTicker) { _ticker = null; _usedDefaultTicker = false; }
+
         OnPlaybackCompleted?.Invoke();
     }
 
@@ -54,7 +56,7 @@ public class PlaybackableValue : MonoBehaviour
             return;
         }
 
-        _valueProvider.SetValue(_currentPlaybackingValueData.Snapshots[_currentIndexInRecord + 1].Value);//TODO: передавать по ссылке для оптимизации?
+        _valueProvider.SetValue(_currentPlaybackingValueData.Snapshots[_currentIndexInRecord + 1].Value);//TODO: РїРµСЂРµРґР°РІР°С‚СЊ РїРѕ СЃСЃС‹Р»РєРµ РґР»СЏ РѕРїС‚РёРјРёР·Р°С†РёРё?
                                                                                                          //TODO: SetValueWithIntropolation()
         _currentIndexInRecord++;
     }

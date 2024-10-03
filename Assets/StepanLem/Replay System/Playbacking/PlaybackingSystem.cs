@@ -1,5 +1,4 @@
-using System;
-using System.Collections;
+п»їusing System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,27 +6,37 @@ public class PlaybackingSystem : MonoBehaviour
 {
     [SerializeField] private List<PlaybackableTarget> _playbackableTargets;
 
-    public MonoTicker DefaultTicker;
-
-    public event Action OnPlaybackingCompleted;
+    [SerializeField] private MonoTicker _defaultTicker;
 
     public bool IsPlaybacking { get; private set; }
+    public event Action OnPlaybackingCompleted;
+
+    private int _completedTargetPlaybacksCount;
 
     public void StartPlaybacking(RecordedGameData recordedGameData)
     {
         if (IsPlaybacking)
         {
-            Debug.LogWarning("Проигрывание уже идёт");
+            Debug.LogWarning("РџСЂРѕРёРіСЂС‹РІР°РЅРёРµ СѓР¶Рµ РёРґС‘С‚");
             return;
         }
 
+        IsPlaybacking = true;
+
+        _completedTargetPlaybacksCount = 0;
+
         foreach (var playbackableTarget in _playbackableTargets)
         {
-            playbackableTarget.StartPlaybacking(recordedGameData, DefaultTicker);
-            playbackableTarget.OnPlaybackCompleted += FinishPlaybacking;
+            playbackableTarget.OnPlaybackCompleted += OnTargetPlaybackingCompleted;
+            playbackableTarget.StartPlaybacking(recordedGameData, _defaultTicker);
         }
+    }
 
-        IsPlaybacking = true;
+    private void OnTargetPlaybackingCompleted()
+    {
+        _completedTargetPlaybacksCount++;
+        if (_completedTargetPlaybacksCount == _playbackableTargets.Count)
+            FinishPlaybacking();
     }
 
     private void FinishPlaybacking()
@@ -37,10 +46,9 @@ public class PlaybackingSystem : MonoBehaviour
             playbackableTarget.OnPlaybackCompleted -= FinishPlaybacking;
         }
 
-        IsPlaybacking = false;
-
         OnPlaybackingCompleted?.Invoke();
 
-        Debug.LogWarning("Проигрывание завершено");
+        IsPlaybacking = false;
+        Debug.LogWarning("РџСЂРѕРёРіСЂС‹РІР°РЅРёРµ Р·Р°РІРµСЂС€РµРЅРѕ");
     }
 }

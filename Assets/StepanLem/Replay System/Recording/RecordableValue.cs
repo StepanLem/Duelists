@@ -1,30 +1,28 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+п»їusing UnityEngine;
 
 public class RecordableValue : MonoBehaviour
 {
+    [Tooltip("РџРµСЂРµРґР°С‘С‚ Р·РЅР°С‡РµРЅРёРµ РґР»СЏ Р·Р°РїРёСЃРё РµРіРѕ РґР°РЅРЅС‹С… РІ RecordedData РїРѕ ValueDataID.")]
     [SerializeField] private IValueProvider _valueProvider;
 
-    [Tooltip("if null, use RecordableTarget._defaultTicker")]
+    [Tooltip("РќСѓР¶РµРЅ РґР»СЏ РїСЂРёРІСЏР·РєРё Р·Р°РїРёСЃРё Рє РѕР±СЉРµРєС‚Сѓ РІРѕ РІСЂРµРјСЏ РµРіРѕ СЃРµСЂРёР°Р»РёР·Р°С†РёРё/РґРµСЃРµСЂРёР°Р»РёР·Р°С†РёРё.")]
+    public int ValueDataID;
+
+    [Tooltip("If null, use defaultTicker")]
     [SerializeField] private MonoTicker _ticker;
+    private bool _usedDefaultTicker;
 
-    /// <summary>
-    /// ID нужен для привязки записи к объекту во время его сериализации/десериализации.
-    /// </summary>
-    public int InstanceID;
+    private RecordedValueData _currentRecordedValueData;
+    private IRecordingDurationProvider _recordingDurationProvider;
 
-    private RecordedValueData _currentRecordingValueData;
-    private RecordingSystem _recordingSystem;
-
-    public void StartRecording(RecordedTargetData _currentRecordingTargetData, MonoTicker defaultTicker, RecordingSystem recordingSystem)
+    public void StartRecording(RecordedTargetData _currentRecordedTargetData, MonoTicker defaultTicker, IRecordingDurationProvider recordingDurationProvider)
     {
-        _currentRecordingValueData = new RecordedValueData();
-        _currentRecordingTargetData.AddRecordedValueDataByInstanceID(_currentRecordingValueData, InstanceID);
+        _currentRecordedValueData = new RecordedValueData();
+        _currentRecordedTargetData.AddRecordedValueDataByInstanceID(_currentRecordedValueData, ValueDataID);
 
-        if (_ticker == null) _ticker = defaultTicker;
-        _recordingSystem = recordingSystem;
+        if (_ticker == null) { _ticker = defaultTicker; _usedDefaultTicker = true;  }
+
+        _recordingDurationProvider = recordingDurationProvider;
 
         _ticker.Fire += MakeSnapshot;
     }
@@ -32,11 +30,14 @@ public class RecordableValue : MonoBehaviour
     public void StopRecording()
     {
         _ticker.Fire -= MakeSnapshot;
+
+        _currentRecordedValueData = null;
+        if (_usedDefaultTicker) { _ticker = null; _usedDefaultTicker = false; }
+        _recordingDurationProvider = null;
     }
 
     public void MakeSnapshot()
     {
-        SnapshotOfValue snapshot = new(_valueProvider.GetValue(), _recordingSystem.GetTimeFromRecordingStart());
-        _currentRecordingValueData.Snapshots.Add(snapshot);
+        _currentRecordedValueData.Snapshots.Add(new SnapshotOfValue(_valueProvider.GetValue(), _recordingDurationProvider.GetCurrentRecordingDuration()));
     }
 }

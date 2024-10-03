@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public readonly struct SnapshotOfValue
 {
     public SnapshotOfValue(IValue value, float timeOfCreatingFromRecordStart)

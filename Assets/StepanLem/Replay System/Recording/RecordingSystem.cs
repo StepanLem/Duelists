@@ -1,49 +1,52 @@
-using System;
-using System.Collections;
+п»їusing System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
-public class RecordingSystem : MonoBehaviour
+public interface IRecordingDurationProvider
+{
+    public float GetCurrentRecordingDuration();
+}
+
+public class RecordingSystem : MonoBehaviour, IRecordingDurationProvider
 {
     [SerializeField] private List<RecordableTarget> _recordableTargets;
 
-    public MonoTicker DefaultTicker;
+    [SerializeField] private MonoTicker _defaultTicker;
 
-    public RecordedGameData currentRecordingData;
-
+    public bool IsRecording { get; private set; }
     public event Action<RecordedGameData> OnRecordingCompleted;
+
+    private RecordedGameData _currentRecordedGameData;
 
     [Tooltip("Last Recording Start Time in seconds relative to Game Start Time")]
     private float _lastRecordingStartTime;
-    public float GetTimeFromRecordingStart() => Time.realtimeSinceStartup - _lastRecordingStartTime;
-
-    public bool IsRecording { get; private set; }
 
     public void StartRecording()
     {
         if (IsRecording)
         {
-            Debug.LogWarning("Запись уже идёт");
+            Debug.LogWarning("Р—Р°РїРёСЃСЊ СѓР¶Рµ РёРґС‘С‚");
             return;
         }
 
-        currentRecordingData = new();
+        IsRecording = true;
+
+        _currentRecordedGameData = new();
         _lastRecordingStartTime = Time.realtimeSinceStartup;
 
         foreach (var recordableTarget in _recordableTargets)
         {
-            recordableTarget.StartRecording(this, currentRecordingData);
+            recordableTarget.StartRecording(_currentRecordedGameData, _defaultTicker, this);
         }
-
-        IsRecording = true;
     }
+
+    public float GetCurrentRecordingDuration() => Time.realtimeSinceStartup - _lastRecordingStartTime;
 
     public void StopRecording()
     {
         if (!IsRecording)
         {
-            Debug.LogWarning("Запись не велась");
+            Debug.LogWarning("Р—Р°РїРёСЃСЊ РЅРµ РІРµР»Р°СЃСЊ");
             return;
         }
 
@@ -52,9 +55,11 @@ public class RecordingSystem : MonoBehaviour
             recordableTarget.StopRecording();
         }
 
-        IsRecording = false;
-        currentRecordingData.Duration = GetTimeFromRecordingStart();
+        _currentRecordedGameData.Duration = GetCurrentRecordingDuration();
 
-        OnRecordingCompleted?.Invoke(currentRecordingData);
+        OnRecordingCompleted?.Invoke(_currentRecordedGameData);
+
+        _currentRecordedGameData=null;
+        IsRecording = false;
     }
 }
