@@ -6,7 +6,7 @@ public class CanvasRenderModeSwitcher : MonoBehaviour, IGameModeSwitchable
 
     private void Awake()
     {
-        if (GameModeManager.IsXRModeActive)
+        if (FlatOrXRGameModeManager.IsXRModeActive)
             InitializeForXRMode();
         else
             InitializeForFlatMode();

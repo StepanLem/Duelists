@@ -1,6 +1,6 @@
 ﻿using System;
 
-public static class GameModeManager
+public static class FlatOrXRGameModeManager
 {
     public static bool IsXRModeActive { get; private set; }
 
@@ -8,12 +8,12 @@ public static class GameModeManager
 
     public static bool TryActivateXRMode()
     {
-        if (XRDisplayDetectionUtility.IsSubsystemConnected())
-        {
-            ActivateXRMode();
-            return true;
-        }
-        else return false;
+        if (!XRDisplayDetectionUtility.IsSubsystemConnected())
+            return false;
+
+        ActivateXRMode();
+        return true;
+
     }
 
     private static void ActivateXRMode()
