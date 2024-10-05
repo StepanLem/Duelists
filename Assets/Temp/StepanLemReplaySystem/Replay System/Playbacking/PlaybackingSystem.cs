@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class PlaybackingSystem : MonoBehaviour
 {
-    [SerializeField] private List<PlaybackableTarget> _playbackableTargets;
+    [SerializeField] private List<PlaybackableEntity> _playbackableEntities;
 
     [SerializeField] private MonoTicker _defaultTicker;
 
     public bool IsPlaybacking { get; private set; }
     public event Action OnPlaybackingCompleted;
 
-    private int _completedTargetPlaybacksCount;
+    private int _completedEntityPlaybacksCount;
 
-    public void StartPlaybacking(RecordedGameData recordedGameData)
+    public void StartPlaybacking(GameRecord recordedGameData)
     {
         if (IsPlaybacking)
         {
@@ -23,27 +23,27 @@ public class PlaybackingSystem : MonoBehaviour
 
         IsPlaybacking = true;
 
-        _completedTargetPlaybacksCount = 0;
+        _completedEntityPlaybacksCount = 0;
 
-        foreach (var playbackableTarget in _playbackableTargets)
+        foreach (var playbackableEntity in _playbackableEntities)
         {
-            playbackableTarget.OnPlaybackCompleted += OnTargetPlaybackingCompleted;
-            playbackableTarget.StartPlaybacking(recordedGameData, _defaultTicker);
+            playbackableEntity.OnPlaybackCompleted += OnEntityPlaybackCompleted;
+            playbackableEntity.StartPlaybacking(recordedGameData, _defaultTicker);
         }
     }
 
-    private void OnTargetPlaybackingCompleted()
+    private void OnEntityPlaybackCompleted()
     {
-        _completedTargetPlaybacksCount++;
-        if (_completedTargetPlaybacksCount == _playbackableTargets.Count)
+        _completedEntityPlaybacksCount++;
+        if (_completedEntityPlaybacksCount == _playbackableEntities.Count)
             FinishPlaybacking();
     }
 
     private void FinishPlaybacking()
     {
-        foreach (var playbackableTarget in _playbackableTargets)
+        foreach (var playbackableEntity in _playbackableEntities)
         {
-            playbackableTarget.OnPlaybackCompleted -= FinishPlaybacking;
+            playbackableEntity.OnPlaybackCompleted -= FinishPlaybacking;
         }
 
         OnPlaybackingCompleted?.Invoke();

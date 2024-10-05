@@ -10,41 +10,44 @@
 
 Зависимости:
 Utilities => Tickers
-Utilities => ValueProviders
 Utilities => ListExtensions
+Packages => Unity-Interface-Support https://github.com/TheDudeFromCI/Unity-Interface-Support  
 
 Настройка в проекте:
 1.Создаётся ReplayController
 2.Создаются RecordingSystem и PlaybackingSystem и пробрасываются в ReplayController
-3.На сцене у объекта(Пример:игрока) создаётся RecordableTarget(и/или PlaybackableTarget если нужно проигрывание(проигрывание может быть у другого объекта)).
+3.На сцене у объекта(Пример:игрока) создаётся RecordableEntity(и/или PlaybackableEntity если нужно проигрывание(note: проигрывание может быть у другого объекта)).
 4.Выставляется TargetDataID, по которому записывается объект.
-(таким образом при одинаковом ID PlaybackableTarget и RecordableTarget берут и записывают данные из одной и той же ячейки)
-5.Для каждого желаемого записанного значения у цели(Игрока) создаётся RecordableValue, каждый их которых имеет ссылку на свой IValueProvider
-(То есть если хотим записать PositionAndRotation, то в RecordableValue.IValueProvider прокидываем PositionAndRotationValueProvider)
-Это RecordableValue добавляется в RecordableTarget._recordableValues
+(таким образом при одинаковом ID PlaybackableEntity и RecordableEntity берут и записывают данные из одной и той же ячейки)
+5.Для каждого желаемого записанного значения у цели(Пример:игрока) создаётся RecorderComponent. 
+и каждый RecorderComponent имеет ссылку на свою FactoryOfRecorderWithDataGetter(или сеттером, если это PlaybackerComponent)
+(То есть если хотим записать PositionAndRotation, то в RecorderComponent._factoryOfRecorderWithGetter прокидываем PositionAndRotationProvidingFactory).
+Все классы фабрик для каждого из значений можно создать по аналогии PositionAndRotationProvidingFactory.
+6.В конце этот RecorderComponent добавляется в RecordableEntity._recorders
 
 Работа:
 У ReplayController надо вызвать метод StartRecording() =>
-Надо изменить отслеживаемые значения у Recordable объекта => 
+Надо изменить отслеживаемые значения у RecordableEntity => 
 ReplayController.StopRecording() =>
 ReplayController.StartPlaybacking() =>
-Наблюдать за повторением изменения записанных значений Playbackable объекта.
+Наблюдать за повторением изменения записанных значений PlaybackableEntity
 
 
 
 TODO
 {
-Проверки на null. Пояснение: Если RecordableSystem или RecordableTarget или RecordableValue получает null в StartRecord() - логика этого не обработана.
+Проверки на null. Пояснение: Если RecordableSystem или RecordableEntity или RecorderComponent получает null в StartRecord() - логика этого не обработана.
 
 Оптимизация производительности:
 {==
 2.1 Сделать систему instanceID на словарях для экономии памяти.
 2.2 Остлеживать когда значения меняются, а когда нет. И в промежутки бездействия не записывать данные.
-2.3 (impossible for me)Сейчас происходит boxing/unboxing при передачи структур через интерфейс. Понять как этого избежать.
-2.4 Прекращать запись при Destroy(отгрузке или удалении) элемента
+2.3 Прекращать запись при Destroy(отгрузке или удалении) элемента
 ==}
 
 Сделать возможность добавлять recordable/playbackable элементы даже после начала записи/проигрывания.(для того чтобы подгруженные во время записи объекты тоже проигрывались)
+
+Автоподтягивание recordable/playbackable components к их Entity при добавлении их в иерархии(OnReset())
 
 Пробрасывать RecodableTarget в RecordingSystem через инжект автоматически при появлении объекта.
 
@@ -52,13 +55,13 @@ TODO
 
 Добавить возможность BreakPlaybacking. Крч выйти из повтора преждевременно.
 
-С помощью наследования и полиморфизма уменьшить количество ctrl+c, ctrl+v. И прибраться в порядке полей в классах.
+С помощью наследования и полиморфизма уменьшить количество ctrl+c, ctrl+v.
 
 PlaybackableValue.SetValueWithEnterpolation();
 
-Добавить возможность пробрасывать в интерфейсы в unity. И после этого IValueProvider поменять из абстрактного класса обратно на интерфейс.
-
 Когда-нибудь дойдём до ошибки переполнения стека или листа. Это надо отслеживать.
+
+Подсвечивние красным незаполненных полей в инспекторе.
 
 Сериализация и десерилизация записей.
 }

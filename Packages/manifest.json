@@ -14,6 +14,7 @@
     "com.unity.xr.interaction.toolkit": "2.6.3",
     "com.unity.xr.management": "4.5.0",
     "com.unity.xr.openxr": "1.11.0",
+    "net.wraithavengames.unityinterfacesupport": "https://github.com/TheDudeFromCI/Unity-Interface-Support.git?path=/Packages/net.wraithavengames.unityinterfacesupport",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",

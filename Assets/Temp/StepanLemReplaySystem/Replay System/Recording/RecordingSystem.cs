@@ -2,26 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IRecordingDurationProvider
+public class RecordingSystem : MonoBehaviour
 {
-    public float GetCurrentRecordingDuration();
-}
-
-public class RecordingSystem : MonoBehaviour, IRecordingDurationProvider
-{
-    [SerializeField] private List<RecordableTarget> _recordableTargets;
+    [SerializeField] private List<RecordableEntity> _recordableEntities;
 
     [SerializeField] private MonoTicker _defaultTicker;
 
     public bool IsRecording { get; private set; }
-    public event Action<RecordedGameData> OnRecordingCompleted;
+    public event Action<GameRecord> OnRecordingCompleted;
 
-    private RecordedGameData _currentRecordedGameData;
+    private GameRecord _currentGameRecord;
 
     [Tooltip("Last Recording Start Time in seconds relative to Game Start Time")]
     private float _lastRecordingStartTime;
 
-    public void StartRecording()
+    public void StartRecording(GameRecord gameRecord)
     {
         if (IsRecording)
         {
@@ -31,16 +26,16 @@ public class RecordingSystem : MonoBehaviour, IRecordingDurationProvider
 
         IsRecording = true;
 
-        _currentRecordedGameData = new();
+        _currentGameRecord = gameRecord;
         _lastRecordingStartTime = Time.realtimeSinceStartup;
 
-        foreach (var recordableTarget in _recordableTargets)
+        foreach (var recordableTarget in _recordableEntities)
         {
-            recordableTarget.StartRecording(_currentRecordedGameData, _defaultTicker, this);
+            recordableTarget.StartRecording(_currentGameRecord, _defaultTicker, GetCurrendRecordingTime);
         }
     }
 
-    public float GetCurrentRecordingDuration() => Time.realtimeSinceStartup - _lastRecordingStartTime;
+    public float GetCurrendRecordingTime() => Time.realtimeSinceStartup - _lastRecordingStartTime;
 
     public void StopRecording()
     {
@@ -50,16 +45,18 @@ public class RecordingSystem : MonoBehaviour, IRecordingDurationProvider
             return;
         }
 
-        foreach (var recordableTarget in _recordableTargets)
+        foreach (var recordableTarget in _recordableEntities)
         {
             recordableTarget.StopRecording();
         }
 
-        _currentRecordedGameData.Duration = GetCurrentRecordingDuration();
+        //_currentReplayRecording.SetRecordParameters()
+        //_currentReplayRecording.SetRecordHeader(GetCurrendRecordingTime()):
+        _currentGameRecord.Duration = GetCurrendRecordingTime();
 
-        OnRecordingCompleted?.Invoke(_currentRecordedGameData);
+        OnRecordingCompleted?.Invoke(_currentGameRecord);
 
-        _currentRecordedGameData=null;
+        _currentGameRecord=null;
         IsRecording = false;
     }
 }

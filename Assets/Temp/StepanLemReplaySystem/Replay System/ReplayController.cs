@@ -6,17 +6,19 @@ public class ReplayController : MonoBehaviour
     public RecordingSystem RecordingSystem;
     public PlaybackingSystem PlaybackingSystem;
 
-    public List<RecordedGameData> Replays = new();
+    public List<GameRecord> Replays = new();
 
     [Tooltip("Index of choosen replay in Replays")]
     public int ChoosenReplayIndex;
+
+    private GameRecord _currentReplayRecording;
 
     public void OnEnable()
     {
         RecordingSystem.OnRecordingCompleted += SaveReplay;
     }
 
-    private void SaveReplay(RecordedGameData replay)
+    private void SaveReplay(GameRecord replay)
     {
         Replays.Add(replay);
     }
@@ -29,7 +31,10 @@ public class ReplayController : MonoBehaviour
     [ContextMenu("Start Recording")]
     public void StartRecording()
     {
-        RecordingSystem.StartRecording();
+        _currentReplayRecording = new GameRecord();
+        Replays.Add(_currentReplayRecording);
+
+        RecordingSystem.StartRecording(_currentReplayRecording);
     }
 
     [ContextMenu("Stop Recording")]
