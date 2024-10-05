@@ -2,7 +2,7 @@
 using UnityEngine.XR;
 using UnityEngine;
 
-public static class XRActivityDetectionUtility
+public static class XRDisplayDetectionUtility
 {
     /// <summary>
     /// Определяет, подключена ли XR subsystem(В случае ПК: подключён ли XR-шлем).
