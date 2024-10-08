@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/! Internal Assets/UI/ConcreteUIElementMaterials.meta
 guid: 6a08676a7ee19a94e8b382a18de6fbf2
+========
+guid: 8c7cca1f45dba704bac5c6848b24ec48
+>>>>>>>> da22e16 (Create UIToolkit folder):Assets/! Internal Assets/UI/UIToolkit.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
