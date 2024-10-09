@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/! Internal Assets/UI/UIToolkit/Buttons/Default/Large/LargeDefaultButton.prefab.meta
 guid: 05b3682a286a4094a8ab10f87e45cd77
+========
+guid: 442c4d2d31ffe624d931ea6b7e0d55e9
+>>>>>>>> da22e16 (Create UIToolkit folder):Assets/! Internal Assets/UI/UIToolkit/PlayerLine/PlayerLine.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 
