@@ -8,5 +8,7 @@ public class Sword : MonoBehaviour
 
     public Transform EndSwordPointTransform;
 
+    public SphereCollider EndSwordTrigger;//for test
+
     public Rigidbody Rigidbody;
 }
