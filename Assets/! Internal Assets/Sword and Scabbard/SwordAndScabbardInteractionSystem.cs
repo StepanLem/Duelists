@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,11 +6,13 @@ using UnityEngine;
 /// 
 /// </summary>
 ///
-//TODO: добавить что при установке нового keyframe он устанавливался автоматически между подходящими значениями.
-//TODO: + keyframe должны всегда быть в порядке возрастания по fillAmount.
-//TODO: keyframe.fillamount может быть 0 только у 0-ого элемента. Если в инспекторе это не так, должно сразу выводить ошибку в консоль.(+ если филэмаунты равны тоже)
+//TODO: keyframe.fillamount может быть 0 только у 0-ого элемента. Если в инспекторе это не так, должно сразу выводить ошибку в консоль.(+ если филамаунты равны тоже)
+
+
 public class SwordAndScabbardInteractionSystem : MonoBehaviour
 {
+    public const string SwordEndTag = "SwordEnd";
+
     [Range(0.0f, 1.0f)]
     public float FillAmount;
 
@@ -25,9 +26,9 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
 
     public Collider[] scabbardColliders;
 
-    [SerializeField] private Sword _swordComponent;
+    private Sword _swordComponent;
 
-    public SphereCollider EndSwordTrigger;//for test
+    public OnTriggerComponent OnTriggerExitChecker;
 
     [SerializeField] private Transform _scabbardStart;
     [SerializeField] private Transform _scabbardEnd;
@@ -35,8 +36,8 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
     [SerializeField] private ConfigurableJoint _jointScabbardEndCosplayer;
     [SerializeField] private ConfigurableJoint _jointScabbardSidesCosplayer;//это может быть дочерний кинематик. Так что не обязательно родителю это вешать.
 
-    public bool isSwordEntering;
-    public bool isSwordFullyInside;
+    public bool IsSwordInside => _swordComponent == null;
+    private bool isSwordFullyInside;
 
     /// <summary>
     /// Объект с которого списываются кейфрэймы меча в ножнах. Должен быть напрямую дочерним объектом ножен.
@@ -51,41 +52,68 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
 
     public void Awake()
     {
-        if (Keyframes.Count < 0) { Debug.LogError("Нет ключевых кадров"); return; }
+        OnTriggerExitChecker.OnEnter += OnScabbardExitTriggerEnter;
 
         _firstSwordPosition = Keyframes[0].SwordPosition;
         _lastSwordPosition = Keyframes[^1].SwordPosition;
         _lastSwordPositionRelativeToFirstPosition = _lastSwordPosition - _firstSwordPosition;
     }
 
+    private void OnScabbardExitTriggerEnter(Collider collider)
+    {
+        if (!collider.CompareTag(SwordEndTag))
+            return;
+
+        Sword swordComponent;
+        if (!collider.transform.parent.parent.TryGetComponent<Sword>(out swordComponent))
+            return;
+
+        if (_swordComponent == null)
+        {
+            StartEnteringInScabbard(swordComponent); 
+        }
+        else
+        {
+            if (_swordComponent == swordComponent)
+                SwordExitScabbard();
+        }
+    }
+
     [ContextMenu("MakeKeyframe")]
     public void MakeKeyframe()
     {
+        if (Keyframes == null) Keyframes = new();
+
+        float fillAmount;
+        if (Keyframes.Count == 0) fillAmount = 0f;
+        else if (Keyframes.Count == 1) fillAmount = 1f;
+        else
+        {
+            var currentSwordPositionRelativeToFirstPosition = SwordTransformForKeyframes.localPosition - Keyframes[0].SwordPosition;
+            fillAmount = Vector3.Magnitude(currentSwordPositionRelativeToFirstPosition) / Vector3.Magnitude(Keyframes[^1].SwordPosition - Keyframes[0].SwordPosition);
+        }
+
         SwordInScabbardKeyframe newKeyframe = new()
         {
             SwordPosition = SwordTransformForKeyframes.localPosition,
+            SwordRotation = SwordTransformForKeyframes.localRotation,
+            FillAmount = fillAmount
         };
 
         Keyframes.Add(newKeyframe);
+
+        Keyframes.Sort((a, b) => a.FillAmount.CompareTo(b.FillAmount));
     }
 
-    [ContextMenu("StartEnteringInScabbard")]
-    public void StartEnteringInScabbard(/*Transform swordTransform*/)
+    public void StartEnteringInScabbard(Sword swordComponent)
     {
-        if (_swordComponent != null)
-        {
-            Debug.Log("Ножны уже заняты мечом");
-            return;
-        }
-
-        if (Keyframes.Count == 0)
+        if (Keyframes == null || Keyframes.Count == 0)
         {
             Debug.LogError("Не установлены ключевые кадры");
             return;
         }
 
-        var swordEndTrigger = EndSwordTrigger;//в место этого получает его из OnTriggerEnter; (ps: и этот метод тоже оттуда вызывать)
-        _swordComponent = swordEndTrigger.GetComponentInParent<Sword>();//интересно есть ли какая-то выгода если идти через parent.TryGetComponent();
+        _swordComponent = swordComponent;
 
         //отключаем коллизии между мечом и ножнами
         foreach (Collider swordCollider in _swordComponent.swordColliders)
@@ -100,16 +128,15 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
         SetCurrentKeyframe(0);
 
         SetupScabbardEndJoint();
-
         SetupScabbardSidesJoint();
-        StartCoroutine(nameof(PerformeKeyframeSwitchingAndLogic));
 
-        isSwordEntering = true;
+        StartCoroutine(nameof(PerformeKeyframeSwitchingAndLogic));
     }
 
     /// <summary>
     /// Настраивает джоинт, не дающий мечу вывалиться из конца ножен.
     /// </summary>
+    //TODO: по сути здесь надо отталикиваться просто от последнего кейфрэйма и всё. Расположить в начале, а дистанцию до последнего сделать.
     private void SetupScabbardEndJoint()
     {
         //Прикрепляем джоинт к концу меча.
@@ -133,15 +160,14 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
     /// </summary>
     private void SetupScabbardSidesJoint()
     {
-        //Настраиваем якоря. Крч я в инспекторе всё настроил: у мечя - на конце меча; у ножен - на начале ножен. Или якоря можно просто занулить?
-        _jointScabbardSidesCosplayer.anchor = _jointScabbardSidesCosplayer.transform.InverseTransformPoint(_scabbardStart.position);
+        _jointScabbardSidesCosplayer.anchor = Vector3.zero;
 
         _jointScabbardSidesCosplayer.connectedAnchor = _swordComponent.transform.InverseTransformPoint(_swordComponent.EndSwordPointTransform.position);
 
         //нужные значения делать Limited и изменять интерполированно.
         _jointScabbardSidesCosplayer.xMotion = ConfigurableJointMotion.Locked;
         _jointScabbardSidesCosplayer.yMotion = ConfigurableJointMotion.Locked;
-        _jointScabbardSidesCosplayer.zMotion = ConfigurableJointMotion.Free; //свободно, потому что контролируется другим джоинтом
+        _jointScabbardSidesCosplayer.zMotion = ConfigurableJointMotion.Free; //свободно, потому что ограничивается другим джоинтом
         _jointScabbardSidesCosplayer.angularYMotion = ConfigurableJointMotion.Locked;
         _jointScabbardSidesCosplayer.angularXMotion = ConfigurableJointMotion.Locked;
         _jointScabbardSidesCosplayer.angularZMotion = ConfigurableJointMotion.Locked;
@@ -150,13 +176,10 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
         _jointScabbardSidesCosplayer.connectedBody = _swordComponent.Rigidbody;
     }
 
-    private IEnumerator PerformeKeyframeSwitchingAndLogic() //можно просто через тикер то же самое делать. и можно разделить на фиксед и обычный апдейт если нужно.
+    private IEnumerator PerformeKeyframeSwitchingAndLogic()
     {
-
         while (true)
         {
-            yield return null;
-
             UpdateFillAmount();
 
             //if (FillAmount < 0) { SwordExitScabbard(); return; }
@@ -164,7 +187,9 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
             TrySwitchKeyframe();
 
             if (nextKeyframe != null)
-                LerpConfigurationBetweenKeyframes();
+                LerpConfigurationBetweenKeyframes(currentKeyframe, nextKeyframe);
+
+            yield return null;
         }
     }
 
@@ -184,22 +209,6 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
             nextKeyframe = null; // Или какое-то по другому это помечать
     }
 
-   /* private void Update()
-    {
-        if (!isSwordEntering)//вместо этого можно запускать и останавливать корутину.
-            return;
-
-        UpdateFillAmount();
-
-        //if (FillAmount < 0) { SwordExitScabbard(); return; }
-
-
-        TrySwitchKeyframe();
-
-        if (nextKeyframe != null)
-            LerpConfigurationBetweenKeyframes();
-    }*/
-
     private void UpdateFillAmount()
     {
         //вместо этого может лучше делать проекцию на прямую?
@@ -211,11 +220,11 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
     {
         while (true)
         {
-            if (previousKeyframe != null && FillAmount < currentKeyframe.StartFillAmount)
+            if (previousKeyframe != null && FillAmount < currentKeyframe.FillAmount)
             {
                 SetCurrentKeyframe(currentKeyframeIndex - 1);
             }
-            else if (nextKeyframe != null && FillAmount >= nextKeyframe.StartFillAmount)
+            else if (nextKeyframe != null && FillAmount >= nextKeyframe.FillAmount)
             {
                 SetCurrentKeyframe(currentKeyframeIndex + 1);
             }
@@ -223,22 +232,15 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
         }
     }
 
-    private void LerpConfigurationBetweenKeyframes()
+    private void LerpConfigurationBetweenKeyframes(in SwordInScabbardKeyframe currentKeyframe, in SwordInScabbardKeyframe nextKeyframe)
     {
-        var distanceBetweenCurrentFillAmountAndCurrentKeyframeStartFillAmount = FillAmount - currentKeyframe.StartFillAmount;
-        var distanceBetweenKeyframesFillAmount = nextKeyframe.StartFillAmount - currentKeyframe.StartFillAmount;
+        var distanceBetweenCurrentFillAmountAndCurrentKeyframeStartFillAmount = FillAmount - currentKeyframe.FillAmount;
+        var distanceBetweenKeyframesFillAmount = nextKeyframe.FillAmount - currentKeyframe.FillAmount;
         var stepBetweenKeyframes = distanceBetweenCurrentFillAmountAndCurrentKeyframeStartFillAmount / distanceBetweenKeyframesFillAmount;
 
-        //TODO:  Как я думаю сейчас: всё это делается через поворот и перемещение объекта держателя джоинта.(видимо джоинт у третей позиции тоже надо будет перенести на этот объект и его тут же обновлять)
-        //1.позиция 100% всегда. Её ключевые кадры будут всегда!
-        //Пока что сделать возможным изменение позиции только в двух осях.
-
-        //2.Поворот, когда катана. Так что видимо для этого будет отдельный метод у наследника. Но пока что тоже 100%.
-        //Пока что сделать поворот только по одной оси.
-
-        //_swordComponent.transform.localPosition = Vector3.Lerp(currentKeyframe.SwordPosition, nextKeyframe.SwordPosition, stepBetweenKeyframes);
-        //rotation
-        //joint config
+        _jointScabbardSidesCosplayer.transform.localPosition = Vector3.Lerp(currentKeyframe.SwordPosition, nextKeyframe.SwordPosition, stepBetweenKeyframes);
+        //Почему не работает? Записанные значения не выставляются корректно. Надо отдебажить.
+        //_jointScabbardSidesCosplayer.transform.localRotation = Quaternion.Lerp(currentKeyframe.SwordRotation, nextKeyframe.SwordRotation, stepBetweenKeyframes);
     }
 
     private void SwordExitScabbard()
@@ -262,18 +264,21 @@ public class SwordInScabbardKeyframe
     /// С какого значения заполнения начинают учитываться параметры этого ключегого кадра. 0 - меч не зашёл в ножны. 1 - меч полностью в ножнах
     /// </summary>
     [Range(0.0f, 1.0f)]
-    public float StartFillAmount;
+    public float FillAmount;
 
 
     //relative to scabbard;
     public Vector3 SwordPosition;
 
+    //relative to scabbard;
+    public Quaternion SwordRotation;
+
     //public JointConfiguration JointConfiguration;
 }
 
-[System.Serializable]
+/*[System.Serializable]
 public class JointConfiguration
 {
     public int XandZAngleLimit;
 
-}
+}*/
