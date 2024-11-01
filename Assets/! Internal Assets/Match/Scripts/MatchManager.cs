@@ -1,39 +1,53 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
-using Zenject;
 
 public class MatchManager : MonoBehaviour
 {
-    public UnityEvent OnVictory;
-    public UnityEvent OnDefeat;
+    [SerializeField] private Enemy[] _enemies;
+    [SerializeField] private RoundSO _roundData;
 
-    private Enemy _enemy;
+    private int _roundsCount;
+    private int _currentRound;
 
-    [Inject]
-    public void Construct(Enemy enemy)
+    public Action StartNextRound;
+    public Action EndMatch;
+
+    public int RoundNum => _currentRound;
+    public Enemy Enemy => _enemies[_currentRound];
+    public RoundSO RoundData => _roundData;
+
+    private void Awake()
     {
-        _enemy = enemy;
+        //_roundCount = _enemies.Length;
+        _roundsCount = 0;
     }
 
-    private void OnEnable()
+    public void StartMatch(Enemy[] enemies, RoundSO roundData)
     {
-        _enemy.OnDeath += HandleEnemyDeath;
+        _enemies = enemies;
+        _roundsCount = enemies.Length; 
+        _roundData = roundData;
     }
 
-    private void OnDisable()
+    public void StarMatch(int roundsCount, RoundSO roundData)
     {
-        _enemy.OnDeath -= HandleEnemyDeath;
+        Debug.Log("Start 0 Round");
+        _roundsCount = roundsCount;
+        _roundData = roundData;
     }
 
-    public void HandleEnemyDeath()
+    public void EndRound()
     {
-        if (_enemy.IsStartedAttacking)
+        _currentRound++;
+        if (_currentRound < _roundsCount)
         {
-            OnVictory?.Invoke();
+            Debug.Log($"Start {_currentRound} Round");
+            StartNextRound?.Invoke();
         }
         else
         {
-            OnDefeat?.Invoke();
+            Debug.Log($"End Match");
+            EndMatch?.Invoke();
         }
     }
 }
