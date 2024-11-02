@@ -59,6 +59,16 @@ public class MatchManager : MonoBehaviour
         }
     }
 
+    public void ReloadMatch()
+    {
+        _currentRound = 0;
+
+        _playerScore = 0; 
+        _enemyScore = 0;
+
+        OnStartNextRound();
+    }
+
     private void OnUpdateScore(bool isPlayerWin)
     {
         if (isPlayerWin)
