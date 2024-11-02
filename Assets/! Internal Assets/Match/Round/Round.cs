@@ -22,11 +22,18 @@ public class Round : MonoBehaviour
         _matchManager = matchManager;
     }
 
-    public void PlayerWinRound()
+    public void StopRound(bool isPlayerWin)
     {
         StopAllCoroutines();
-        Debug.Log("You WIN!");
-        StartCoroutine(StopRoundRoutine());
+        if (isPlayerWin)
+        {
+            Debug.Log("You WIN!");
+        }
+        else
+        {
+            Debug.Log("You LOSE!");
+        }
+        StartCoroutine(StopRoundRoutine(isPlayerWin));
     }
 
     private void Start()
@@ -56,9 +63,9 @@ public class Round : MonoBehaviour
         //Debug.Log($"{nameof(afterRoundAction)}");
     }
 
-    private IEnumerator StopRoundRoutine()
+    private IEnumerator StopRoundRoutine(bool isPlayerWin)
     {
-        _matchManager.EndRound(true);
+        _matchManager.EndRound(isPlayerWin);
         EndRound?.Invoke();
         yield return new WaitForSeconds(_matchManager.RoundData.AfterAttackTime);
         _matchManager.OnStartNextRound();

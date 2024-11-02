@@ -30,7 +30,7 @@ public class InGameScreen : MonoBehaviour
         UpdateScore(_matchManager.GetScore());
         _matchManager.UpdateScore += ((int, int) score) => UpdateScore(score);
 
-        _attackButton.onClick.AddListener(() => _round.PlayerWinRound());
+        _attackButton.onClick.AddListener(() => _round.StopRound(true));
         _round.StartAttackRoundTime += () => _attackButton.gameObject.SetActive(true);
         _round.EndAttackRoundTime += () => _attackButton.gameObject.SetActive(false);
         _round.EndRound += () => _attackButton.gameObject.SetActive(false);
