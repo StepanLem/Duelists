@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
-public class DifficultySystem : MonoBehaviour
+public static class DifficultySystem
 {
-    [SerializeField] private RoundSO _easyRound;
-    [SerializeField] private RoundSO _mediumRound;
-    [SerializeField] private RoundSO _hardRound;
+    private static RoundSO _easyRound = Resources.Load<RoundSO>("1. Easy");
+    private static RoundSO _mediumRound = Resources.Load<RoundSO>("2. Medium");
+    private static RoundSO _hardRound = Resources.Load<RoundSO>("3. Hard");
 
-    public RoundSO GetRoundByDifficulty(string difficultyTag)
+    public static RoundSO GetRoundByDifficulty(string difficultyTag)
     {
         return difficultyTag switch
         {

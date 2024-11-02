@@ -10,19 +10,17 @@ public class StartSoloGameScreen : MonoBehaviour
     [SerializeField] private Button _chooseEnemyTypesButton;
 
     private MatchManager _matchManager;
-    private DifficultySystem _difficultySystem;
 
     [Inject]
-    public void Construct(MatchManager matchManager, DifficultySystem difficultySystem)
+    public void Construct(MatchManager matchManager)
     {
         _matchManager = matchManager;
-        _difficultySystem = difficultySystem;
     }
 
     public void StartMatch()
     {
         int roundsCound = int.Parse(_roundsCountButton.Value);
-        RoundSO roundData = _difficultySystem.GetRoundByDifficulty(_difficultyButton.Value);
+        RoundSO roundData = DifficultySystem.GetRoundByDifficulty(_difficultyButton.Value);
         _matchManager.StarMatch(roundsCound, roundData);
     }
 
