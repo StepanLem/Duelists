@@ -22,6 +22,13 @@ public class Round : MonoBehaviour
         _matchManager = matchManager;
     }
 
+    public void PlayerWinRound()
+    {
+        StopAllCoroutines();
+        Debug.Log("You WIN!");
+        StartCoroutine(StopRoundRoutine());
+    }
+
     private void Start()
     {
         //SPAWN ENEMY
@@ -33,9 +40,11 @@ public class Round : MonoBehaviour
         StartRound?.Invoke();
         yield return StartCoroutine(RoundTimeRoutine(round.BeforeAttackTime, StartBeforeAttackRoundTime, EndBeforeAttackRoundTime));
         yield return StartCoroutine(RoundTimeRoutine(round.AttackTime, StartAttackRoundTime, EndAttackRoundTime));
-        yield return StartCoroutine(RoundTimeRoutine(round.AfterAttackTime, StartAfterAttackRoundTime, EndAfterAttackRoundTime));
+        Debug.Log("You LOSE!");
+        _matchManager.EndRound(false);
         EndRound?.Invoke();
-        _matchManager.EndRound();
+        yield return StartCoroutine(RoundTimeRoutine(round.AfterAttackTime, StartAfterAttackRoundTime, EndAfterAttackRoundTime));
+        _matchManager.OnStartNextRound();
     }
 
     private IEnumerator RoundTimeRoutine(float roundTime, Action beforeRoundAction, Action afterRoundAction)
@@ -47,15 +56,11 @@ public class Round : MonoBehaviour
         //Debug.Log($"{nameof(afterRoundAction)}");
     }
 
-    private void StopRound()
-    {
-        StartCoroutine(StopRoundRoutine());
-    }
-
     private IEnumerator StopRoundRoutine()
     {
-        yield return new WaitForSeconds(_matchManager.RoundData.AfterAttackTime);
+        _matchManager.EndRound(true);
         EndRound?.Invoke();
-        _matchManager.EndRound();
+        yield return new WaitForSeconds(_matchManager.RoundData.AfterAttackTime);
+        _matchManager.OnStartNextRound();
     }
 }
