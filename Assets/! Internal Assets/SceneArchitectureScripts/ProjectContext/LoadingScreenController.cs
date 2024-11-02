@@ -19,6 +19,11 @@ public static class LoadingScreenController
         _scenesToLoad.Add(scene);
     }
 
+    public static void AddSceneToUnloadOnNextLoadingScreen(int buildIndex)
+    {
+        AddSceneToUnloadOnNextLoadingScreen(SceneRegistry.GetSceneFieldByBuildIndex(buildIndex));
+    }
+
     public static void AddSceneToUnloadOnNextLoadingScreen(SceneField scene)
     {
         _scenesToUnload.Add(scene);
@@ -31,6 +36,7 @@ public static class LoadingScreenController
     /// <param name="sceneToSetActiveNext">Сцена, которую надо сделать активной после LoadingScreenScene</param>
     public static void InvokeLoadingScreen(SceneField sceneToSetActiveNext)
     {
+        Time.timeScale = 0f;
         if (sceneToSetActiveNext == null || _scenesToUnload.Contains(sceneToSetActiveNext))
         {
             Debug.LogError("Ошибка: сцена не может стать активной.");
@@ -41,6 +47,7 @@ public static class LoadingScreenController
         SceneManager.sceneLoaded += OnLoadingSceneLoaded;
 
         SceneManager.LoadSceneAsync(SceneRegistry.LoadingScene.BuildIndex, LoadSceneMode.Additive);
+        Time.timeScale = 1f;
     }
 
     private static void OnLoadingSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
