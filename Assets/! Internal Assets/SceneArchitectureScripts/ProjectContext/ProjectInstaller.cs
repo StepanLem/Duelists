@@ -6,13 +6,7 @@ public class ProjectInstaller : MonoInstaller
     {
         Container
             .Bind<MatchManager>()
-            .FromNewComponentOnNewGameObject()
-            .WithGameObjectName(nameof(MatchManager))
-            .AsSingle();
-
-        Container
-            .Bind<DifficultySystem>()
-            .FromComponentInNewPrefabResource(nameof(DifficultySystem))
+            .FromComponentInNewPrefabResource(nameof(MatchManager))
             .AsSingle();
     }
 }
