@@ -7,14 +7,14 @@ public class Round : MonoBehaviour
 {
     private MatchManager _matchManager;
 
-    public Action StartRound;
-    public Action StartBeforeAttackRoundTime;
-    public Action EndBeforeAttackRoundTime;
-    public Action StartAttackRoundTime;
-    public Action EndAttackRoundTime;
-    public Action StartAfterAttackRoundTime;
-    public Action EndAfterAttackRoundTime;
-    public Action EndRound;
+    public event Action OnStartRound;
+    public event Action OnStartBeforeAttackRoundTime;
+    public event Action OnEndBeforeAttackRoundTime;
+    public event Action OnStartAttackRoundTime;
+    public event Action OnEndAttackRoundTime;
+    public event Action OnStartAfterAttackRoundTime;
+    public event Action OnEndAfterAttackRoundTime;
+    public event Action OnEndRound;
 
     [Inject]
     public void Construct(MatchManager matchManager)

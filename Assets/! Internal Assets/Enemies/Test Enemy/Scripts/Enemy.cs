@@ -22,19 +22,19 @@ public class Enemy : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
 
-        _round.StartBeforeAttackRoundTime += () => _animator.SetBool(FakeAttackBool, true);
-        _round.EndBeforeAttackRoundTime += () => _animator.SetBool(FakeAttackBool, false);
-        _round.StartAfterAttackRoundTime += () => _animator.SetTrigger(AttackTrigger);
-        _round.EndRound += () => _animator.SetBool(FakeAttackBool, false);
+        _round.OnStartBeforeAttackRoundTime += () => _animator.SetBool(FakeAttackBool, true);
+        _round.OnEndBeforeAttackRoundTime += () => _animator.SetBool(FakeAttackBool, false);
+        _round.OnStartAfterAttackRoundTime += () => _animator.SetTrigger(AttackTrigger);
+        _round.OnEndRound += () => _animator.SetBool(FakeAttackBool, false);
 
-        _round.StartAttackRoundTime += () => _canBeAttacked = true;
-        _round.EndAttackRoundTime += () => _canBeAttacked = false;
+        _round.OnStartAttackRoundTime += () => _canBeAttacked = true;
+        _round.OnEndAttackRoundTime += () => _canBeAttacked = false;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         //Check if it was player collision
 
-        _round.StopRound(_canBeAttacked);
+        _round.EndRound(_canBeAttacked);
     }
 }
