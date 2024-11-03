@@ -4,7 +4,6 @@ using UnityEngine;
 public class MatchManager : MonoBehaviour
 {
     [SerializeField] private Enemy[] _enemies;
-    [SerializeField] private RoundSO _roundData;
 
     private int _roundsCount;
     private int _currentRound;
@@ -18,25 +17,22 @@ public class MatchManager : MonoBehaviour
 
     public int RoundNum => _currentRound;
     public Enemy Enemy => _enemies[_currentRound];
-    public RoundSO RoundData => _roundData;
 
     public (int, int) GetScore()
     {
         return (_playerScore, _enemyScore);
     }
 
-    public void StartMatch(Enemy[] enemies, RoundSO roundData)
+    public void StartMatch(Enemy[] enemies)
     {
         _enemies = enemies;
-        _roundsCount = enemies.Length; 
-        _roundData = roundData;
+        _roundsCount = enemies.Length;
     }
 
-    public void StarMatch(int roundsCount, RoundSO roundData)
+    public void StarMatch(int roundsCount)
     {
         Debug.Log("Start 0 Round");
         _roundsCount = roundsCount;
-        _roundData = roundData;
     }
 
     public void EndRound(bool isPlayerWin)

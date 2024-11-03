@@ -20,8 +20,7 @@ public class StartSoloGameScreen : MonoBehaviour
     public void StartMatch()
     {
         int roundsCound = int.Parse(_roundsCountButton.Value);
-        RoundSO roundData = DifficultySystem.GetRoundByDifficulty(_difficultyButton.Value);
-        _matchManager.StarMatch(roundsCound, roundData);
+        _matchManager.StarMatch(roundsCound);
     }
 
     private void Start()

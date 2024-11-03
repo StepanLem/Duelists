@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Timeline;
 using Zenject;
 
 public class Round : MonoBehaviour
 {
     private MatchManager _matchManager;
+
+    private bool _isRoundFinished;
 
     public event Action OnStartRound;
     public event Action OnStartBeforeAttackRoundTime;
@@ -22,9 +25,49 @@ public class Round : MonoBehaviour
         _matchManager = matchManager;
     }
 
-    public void StopRound(bool isPlayerWin)
+    public void StartRound()
     {
-        StopAllCoroutines();
+        OnStartRound?.Invoke();
+    }
+
+    public void StartBeforeAttackRoundTime()
+    {
+        OnStartBeforeAttackRoundTime?.Invoke();
+    }
+
+    public void EndBeforeAttackRoundTime()
+    {
+        OnEndBeforeAttackRoundTime?.Invoke();
+    }
+
+    public void StartAttackRoundTime()
+    {
+        OnStartAttackRoundTime?.Invoke();
+    }
+
+    public void EndAttackRoundTime()
+    {
+        OnEndAttackRoundTime?.Invoke();
+    }
+
+    public void StartAfterAttackRoundTime()
+    {
+        OnStartAfterAttackRoundTime?.Invoke();
+    }
+
+    public void EndAfterAttackRoundTime()
+    {
+        OnEndAfterAttackRoundTime?.Invoke();
+    }
+
+    public void EndRound(bool isPlayerWin)
+    {
+        if (_isRoundFinished)
+        {
+            return;
+        }
+        _isRoundFinished = true;
+
         if (isPlayerWin)
         {
             Debug.Log("You WIN!");
@@ -36,38 +79,12 @@ public class Round : MonoBehaviour
         StartCoroutine(StopRoundRoutine(isPlayerWin));
     }
 
-    private void Start()
-    {
-        //SPAWN ENEMY
-        StartCoroutine(RoundRountine(_matchManager.RoundData));
-    }
-
-    private IEnumerator RoundRountine(RoundSO round)
-    {
-        StartRound?.Invoke();
-        yield return StartCoroutine(RoundTimeRoutine(round.BeforeAttackTime, StartBeforeAttackRoundTime, EndBeforeAttackRoundTime));
-        yield return StartCoroutine(RoundTimeRoutine(round.AttackTime, StartAttackRoundTime, EndAttackRoundTime));
-        Debug.Log("You LOSE!");
-        _matchManager.EndRound(false);
-        EndRound?.Invoke();
-        yield return StartCoroutine(RoundTimeRoutine(round.AfterAttackTime, StartAfterAttackRoundTime, EndAfterAttackRoundTime));
-        _matchManager.OnStartNextRound();
-    }
-
-    private IEnumerator RoundTimeRoutine(float roundTime, Action beforeRoundAction, Action afterRoundAction)
-    {
-        beforeRoundAction?.Invoke();
-        //Debug.Log($"{nameof(beforeRoundAction)}");
-        yield return new WaitForSeconds(roundTime);
-        afterRoundAction?.Invoke();
-        //Debug.Log($"{nameof(afterRoundAction)}");
-    }
 
     private IEnumerator StopRoundRoutine(bool isPlayerWin)
     {
         _matchManager.EndRound(isPlayerWin);
-        EndRound?.Invoke();
-        yield return new WaitForSeconds(_matchManager.RoundData.AfterAttackTime);
+        OnEndRound?.Invoke();
+        yield return new WaitForSeconds(3f);
         _matchManager.OnStartNextRound();
     }
 }
