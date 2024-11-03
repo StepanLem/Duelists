@@ -6,8 +6,7 @@ public class GameplaySceneInstaller : MonoInstaller
     {
         Container
             .Bind<Round>()
-            .FromNewComponentOnNewGameObject()
-            .WithGameObjectName(nameof(Round))
+            .FromInstance(GetComponent<Round>())
             .AsSingle();
     }
 }
