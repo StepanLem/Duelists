@@ -4,33 +4,22 @@ using Zenject;
 
 public class StartSoloGameScreen : MonoBehaviour
 {
-    [SerializeField] private SegmentedButton _difficultyButton;
-    [SerializeField] private SegmentedButton _roundsCountButton;
-    [SerializeField] private SegmentedButton _enemyTypeButton;
-    [SerializeField] private Button _chooseEnemyTypesButton;
+    [SerializeField] private Button[] _levelButtons;
 
+    private UISceneRootBinder _uiSceneRootBinder;
     private MatchManager _matchManager;
 
     [Inject]
-    public void Construct(MatchManager matchManager)
+    public void Construct(UISceneRootBinder uiSceneRootBinder, MatchManager matchManager)
     {
+        _uiSceneRootBinder = uiSceneRootBinder;
         _matchManager = matchManager;
     }
 
-    public void StartMatch()
+    public void StartMatch(int matchNum)
     {
-        int roundsCound = int.Parse(_roundsCountButton.Value);
-        _matchManager.StarMatch(roundsCound);
-    }
-
-    private void Start()
-    {
-        _chooseEnemyTypesButton.interactable = _enemyTypeButton.Value == "Manual";
-        _enemyTypeButton.SelectSegment += EnemyTypeButton_SelectSegment;
-    }
-
-    private void EnemyTypeButton_SelectSegment(string value)
-    {
-        _chooseEnemyTypesButton.interactable = value == "Manual";
+        int matchsCound = _levelButtons.Length;
+        _matchManager.StartMatch(matchNum, matchsCound);
+        _uiSceneRootBinder.LoadScene(SceneRegistry.GameplayScene);
     }
 }
