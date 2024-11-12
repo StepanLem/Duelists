@@ -8,9 +8,6 @@ public class MatchManager : MonoBehaviour
     private int _currentMatch;
     private int _matchsCount;
 
-    public Action OnStartNextMatch;
-    public Action OnEndMatch;
-
     public int MatchNum => _currentMatch;
     public bool IsLastLevel => _currentMatch == _matchsCount - 1;
     public Enemy Enemy => _enemies[_currentMatch];
