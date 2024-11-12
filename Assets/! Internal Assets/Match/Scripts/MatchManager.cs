@@ -5,76 +5,36 @@ public class MatchManager : MonoBehaviour
 {
     [SerializeField] private Enemy[] _enemies;
 
-    private int _roundsCount;
-    private int _currentRound;
+    private int _currentMatch;
+    private int _matchsCount;
 
-    private int _playerScore;
-    private int _enemyScore;
+    public Action OnStartNextMatch;
+    public Action OnEndMatch;
 
-    public Action StartNextRound;
-    public Action EndMatch;
-    public Action<(int, int)> UpdateScore;
+    public int MatchNum => _currentMatch;
+    public bool IsLastLevel => _currentMatch == _matchsCount - 1;
+    public Enemy Enemy => _enemies[_currentMatch];
 
-    public int RoundNum => _currentRound;
-    public Enemy Enemy => _enemies[_currentRound];
-
-    public (int, int) GetScore()
-    {
-        return (_playerScore, _enemyScore);
-    }
-
-    public void StartMatch(Enemy[] enemies)
+    public void StartMatch(int matchNum, Enemy[] enemies)
     {
         _enemies = enemies;
-        _roundsCount = enemies.Length;
+        _matchsCount = enemies.Length;
+        StartMatch(matchNum);
     }
 
-    public void StarMatch(int roundsCount)
+    public void StartMatch(int matchNum, int matchsCount)
     {
-        Debug.Log("Start 0 Round");
-        _roundsCount = roundsCount;
+        _matchsCount = matchsCount;
+        StartMatch(matchNum);
     }
 
-    public void EndRound(bool isPlayerWin)
+    private void StartMatch(int matchNum)
     {
-        _currentRound++;
-        OnUpdateScore(isPlayerWin);
+        _currentMatch = matchNum;
     }
 
-    public void OnStartNextRound()
+    public void StartNextMatch()
     {
-        if (_currentRound < _roundsCount)
-        {
-            Debug.Log($"Start {_currentRound} Round");
-            StartNextRound?.Invoke();
-        }
-        else
-        {
-            Debug.Log($"End Match");
-            EndMatch?.Invoke();
-        }
-    }
-
-    public void ReloadMatch()
-    {
-        _currentRound = 0;
-
-        _playerScore = 0; 
-        _enemyScore = 0;
-
-        OnStartNextRound();
-    }
-
-    private void OnUpdateScore(bool isPlayerWin)
-    {
-        if (isPlayerWin)
-        {
-            _playerScore++;
-        }
-        else
-        {
-            _enemyScore++;
-        }
-        UpdateScore?.Invoke((_playerScore, _enemyScore));
+        _currentMatch++;
     }
 }

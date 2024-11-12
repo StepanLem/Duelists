@@ -5,7 +5,7 @@ public class Enemy : MonoBehaviour
 {
     private Animator _animator;
 
-    private Round _round;
+    private Match _match;
 
     private bool _canBeAttacked;
 
@@ -13,28 +13,28 @@ public class Enemy : MonoBehaviour
     private const string AttackTrigger = "Attack";
 
     [Inject]
-    public void Construct(Round round)
+    public void Construct(Match match)
     {
-        _round = round;
+        _match = match;
     }
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
 
-        _round.OnStartBeforeAttackRoundTime += () => _animator.SetBool(FakeAttackBool, true);
-        _round.OnEndBeforeAttackRoundTime += () => _animator.SetBool(FakeAttackBool, false);
-        _round.OnStartAfterAttackRoundTime += () => _animator.SetTrigger(AttackTrigger);
-        _round.OnEndRound += () => _animator.SetBool(FakeAttackBool, false);
+        _match.OnMatchStart += () => _animator.SetBool(FakeAttackBool, true);
+        _match.OnAttackStart += () => _animator.SetBool(FakeAttackBool, false);
+        _match.OnAttackEnd += () => _animator.SetTrigger(AttackTrigger);
+        _match.OnMatchEnd += (bool isPlayerWin) => _animator.SetBool(FakeAttackBool, false);
 
-        _round.OnStartAttackRoundTime += () => _canBeAttacked = true;
-        _round.OnEndAttackRoundTime += () => _canBeAttacked = false;
+        _match.OnAttackStart += () => _canBeAttacked = true;
+        _match.OnAttackEnd += () => _canBeAttacked = false;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         //Check if it was player collision
 
-        _round.EndRound(_canBeAttacked);
+        _match.EndMatch(_canBeAttacked);
     }
 }

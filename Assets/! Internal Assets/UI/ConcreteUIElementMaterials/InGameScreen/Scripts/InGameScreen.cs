@@ -1,23 +1,19 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
 public class InGameScreen : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _playerScore;
-    [SerializeField] private TextMeshProUGUI _enemyScore;
-
     [SerializeField] private Button _attackButton;
 
     private MatchManager _matchManager;
-    private Round _round;
+    private Match _match;
 
     [Inject]
-    public void Construct(MatchManager matchManager, Round round)
+    public void Construct(MatchManager matchManager, Match match)
     {
         _matchManager = matchManager;
-        _round = round;
+        _match = match;
     }
 
     private void Awake()
@@ -27,18 +23,9 @@ public class InGameScreen : MonoBehaviour
 
     private void Start()
     {
-        UpdateScore(_matchManager.GetScore());
-        _matchManager.UpdateScore += ((int, int) score) => UpdateScore(score);
-
-        _attackButton.onClick.AddListener(() => _round.EndRound(true));
-        _round.OnStartAttackRoundTime += () => _attackButton.gameObject.SetActive(true);
-        _round.OnEndAttackRoundTime += () => _attackButton.gameObject.SetActive(false);
-        _round.OnEndRound += () => _attackButton.gameObject.SetActive(false);
-    }
-
-    private void UpdateScore((int, int) score)
-    {
-        _playerScore.text = score.Item1.ToString();
-        _enemyScore.text = score.Item2.ToString();
+        _attackButton.onClick.AddListener(() => _match.EndMatch(true));
+        _match.OnAttackStart += () => _attackButton.gameObject.SetActive(true);
+        _match.OnAttackEnd += () => _attackButton.gameObject.SetActive(false);
+        _match.OnMatchEnd += (bool isPlayerWin) => _attackButton.gameObject.SetActive(false);
     }
 }
