@@ -86,4 +86,9 @@ public class SoloGameResultScreen : MonoBehaviour
             _continueButton.onClick.AddListener(() => _uiSceneRootBinder.LoadScene(SceneRegistry.GameplayScene));
         }
     }
+
+    private void OnDestroy()
+    {
+        _match.OnMatchEnd -= (bool isPlayerWin) => Setup(isPlayerWin);
+    }
 }

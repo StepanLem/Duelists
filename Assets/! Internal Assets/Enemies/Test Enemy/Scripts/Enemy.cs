@@ -37,4 +37,15 @@ public class Enemy : MonoBehaviour
 
         _match.EndMatch(_canBeAttacked);
     }
+
+    private void OnDestroy()
+    {
+        _match.OnMatchStart -= () => _animator.SetBool(FakeAttackBool, true);
+        _match.OnAttackStart -= () => _animator.SetBool(FakeAttackBool, false);
+        _match.OnAttackEnd -= () => _animator.SetTrigger(AttackTrigger);
+        _match.OnMatchEnd -= (bool isPlayerWin) => _animator.SetBool(FakeAttackBool, false);
+
+        _match.OnAttackStart -= () => _canBeAttacked = true;
+        _match.OnAttackEnd -= () => _canBeAttacked = false;
+    }
 }

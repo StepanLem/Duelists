@@ -28,4 +28,11 @@ public class InGameScreen : MonoBehaviour
         _match.OnAttackEnd += () => _attackButton.gameObject.SetActive(false);
         _match.OnMatchEnd += (bool isPlayerWin) => _attackButton.gameObject.SetActive(false);
     }
+
+    private void OnDestroy()
+    {
+        _match.OnAttackStart -= () => _attackButton.gameObject.SetActive(true);
+        _match.OnAttackEnd -= () => _attackButton.gameObject.SetActive(false);
+        _match.OnMatchEnd -= (bool isPlayerWin) => _attackButton.gameObject.SetActive(false);
+    }
 }
