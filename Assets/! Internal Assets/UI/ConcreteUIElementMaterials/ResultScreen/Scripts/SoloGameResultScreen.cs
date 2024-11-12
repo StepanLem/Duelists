@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -35,7 +36,12 @@ public class SoloGameResultScreen : MonoBehaviour
 
     private void Start()
     {
-        _match.OnMatchEnd += (bool isPlayerWin) => Setup(isPlayerWin);
+        _match.OnMatchEnd += Match_OnMatchEnd;
+    }
+
+    private void Match_OnMatchEnd(bool isPlayerWin)
+    {
+        Setup(isPlayerWin);
     }
 
     private void Setup(bool isPlayerWin)
@@ -89,6 +95,6 @@ public class SoloGameResultScreen : MonoBehaviour
 
     private void OnDestroy()
     {
-        _match.OnMatchEnd -= (bool isPlayerWin) => Setup(isPlayerWin);
+        _match.OnMatchEnd -= Match_OnMatchEnd;
     }
 }

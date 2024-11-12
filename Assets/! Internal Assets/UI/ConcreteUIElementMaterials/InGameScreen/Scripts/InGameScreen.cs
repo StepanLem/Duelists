@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -24,15 +25,36 @@ public class InGameScreen : MonoBehaviour
     private void Start()
     {
         _attackButton.onClick.AddListener(() => _match.EndMatch(true));
-        _match.OnAttackStart += () => _attackButton.gameObject.SetActive(true);
-        _match.OnAttackEnd += () => _attackButton.gameObject.SetActive(false);
-        _match.OnMatchEnd += (bool isPlayerWin) => _attackButton.gameObject.SetActive(false);
+
+        _match.OnAttackStart += Match_OnAttackStart;
+        _match.OnAttackEnd += Match_OnAttackEnd;
+        _match.OnMatchEnd += Match_OnMatchEnd;
+    }
+
+    private void Match_OnAttackStart()
+    {
+        SetAttackButtonState(true);
+    }
+
+    private void Match_OnAttackEnd()
+    {
+        SetAttackButtonState(false);
+    }
+
+    private void Match_OnMatchEnd(bool isPlayerWin)
+    {
+        SetAttackButtonState(false);
+    }
+
+    private void SetAttackButtonState(bool state)
+    {
+        _attackButton.gameObject.SetActive(state);
     }
 
     private void OnDestroy()
     {
-        _match.OnAttackStart -= () => _attackButton.gameObject.SetActive(true);
-        _match.OnAttackEnd -= () => _attackButton.gameObject.SetActive(false);
-        _match.OnMatchEnd -= (bool isPlayerWin) => _attackButton.gameObject.SetActive(false);
+        _match.OnAttackStart -= Match_OnAttackStart;
+        _match.OnAttackEnd -= Match_OnAttackEnd;
+        _match.OnMatchEnd -= Match_OnMatchEnd;
     }
 }

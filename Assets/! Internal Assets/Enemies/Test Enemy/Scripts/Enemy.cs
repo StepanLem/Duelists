@@ -1,16 +1,12 @@
+using System;
 using UnityEngine;
 using Zenject;
 
 public class Enemy : MonoBehaviour
 {
-    private Animator _animator;
-
     private Match _match;
 
     private bool _canBeAttacked;
-
-    private const string FakeAttackBool = "FakeAttack";
-    private const string AttackTrigger = "Attack";
 
     [Inject]
     public void Construct(Match match)
@@ -20,15 +16,23 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
+        _match.OnAttackStart += Match_OnAttackStart;
+        _match.OnAttackEnd += Match_OnAttackEnd;
+    }
 
-        _match.OnMatchStart += () => _animator.SetBool(FakeAttackBool, true);
-        _match.OnAttackStart += () => _animator.SetBool(FakeAttackBool, false);
-        _match.OnAttackEnd += () => _animator.SetTrigger(AttackTrigger);
-        _match.OnMatchEnd += (bool isPlayerWin) => _animator.SetBool(FakeAttackBool, false);
+    private void Match_OnAttackStart()
+    {
+        SetCanBeAttackedState(true);
+    }
 
-        _match.OnAttackStart += () => _canBeAttacked = true;
-        _match.OnAttackEnd += () => _canBeAttacked = false;
+    private void Match_OnAttackEnd()
+    {
+        SetCanBeAttackedState(false);
+    }
+
+    private void SetCanBeAttackedState(bool state)
+    {
+        _canBeAttacked = state;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -40,12 +44,7 @@ public class Enemy : MonoBehaviour
 
     private void OnDestroy()
     {
-        _match.OnMatchStart -= () => _animator.SetBool(FakeAttackBool, true);
-        _match.OnAttackStart -= () => _animator.SetBool(FakeAttackBool, false);
-        _match.OnAttackEnd -= () => _animator.SetTrigger(AttackTrigger);
-        _match.OnMatchEnd -= (bool isPlayerWin) => _animator.SetBool(FakeAttackBool, false);
-
-        _match.OnAttackStart -= () => _canBeAttacked = true;
-        _match.OnAttackEnd -= () => _canBeAttacked = false;
+        _match.OnAttackStart -= Match_OnAttackStart;
+        _match.OnAttackEnd -= Match_OnAttackEnd;
     }
 }
