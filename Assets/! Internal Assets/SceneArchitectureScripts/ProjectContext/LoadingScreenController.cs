@@ -37,7 +37,8 @@ public static class LoadingScreenController
     public static void InvokeLoadingScreen(SceneField sceneToSetActiveNext)
     {
         Time.timeScale = 0f;
-        if (sceneToSetActiveNext == null)
+        if (sceneToSetActiveNext == null ||
+            (_scenesToUnload.Contains(sceneToSetActiveNext) && !_scenesToLoad.Contains(sceneToSetActiveNext)))
         {
             Debug.LogError("Ошибка: сцена не может стать активной.");
             return;
