@@ -70,14 +70,15 @@ public static class LoadingScreenController
     private static readonly WaitForSeconds WaiterBetweenChecks = new(0.2f);
     private static IEnumerator CheckOperationsProgressRoutine()
     {
-        //TODO: запретить автоматически включаться сценам, когда их загрузка дошла до 0.9
-        //А то они будут вклиниваться в сцену загрузки.
-
         var currentOperationsCount = _currentOperations.Count;
+
+        //Запрещаем сценам автоматически включаться, когда те загружены
+        foreach (var operation in _currentOperations)
+            operation.allowSceneActivation = false;
 
         float resultProgress = 0;
 
-        while (resultProgress != 1)//TODO: могу ошибаться, но во время запрета на автовключение максимальный уровень загрузки: 0.9 
+        while (resultProgress < 0.9f)//Во время запрета на активацию максимальный уровень загрузки: 0.9 
         {
             float summaryProgress = 0;
             for (int i = 0; i < currentOperationsCount; i++)
@@ -96,7 +97,11 @@ public static class LoadingScreenController
             yield return WaiterBetweenChecks;
         }
 
-        //TODO: когда всё полностью загружено: разрешать показываться сценам;(мб после разрешения надо прождать ещё один кадр)
+        //TODO: когда всё полностью загружено: разрешать автоматически включаться сценам;
+        foreach (var operation in _currentOperations)
+            operation.allowSceneActivation = true;
+        //Ждём один кадр, чтобы дать время сценам активироваться.
+        yield return null;
 
         _currentOperations.Clear();
 
