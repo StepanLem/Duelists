@@ -1,13 +1,17 @@
-﻿using R3;
-using System;
-using Trisibo;
+﻿using Trisibo;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class UISceneRootBinder : MonoBehaviour
 {
-    public void HandleStartButtonClick(SceneFieldReference sceneRef)
+    public void LoadScene(SceneFieldReference sceneRef)
     {
-        SceneManager.LoadScene(sceneRef.SceneField.BuildIndex);
+        SceneField nextScene = sceneRef.SceneField;
+        LoadScene(nextScene);
+    }
+
+    public void LoadScene(SceneField nextScene)
+    {
+        LoadingScreenController.LoadScene(nextScene);
     }
 }

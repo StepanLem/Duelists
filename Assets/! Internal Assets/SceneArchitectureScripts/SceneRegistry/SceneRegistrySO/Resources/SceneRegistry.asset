@@ -25,7 +25,7 @@ MonoBehaviour:
     required: 1
     buildIndex: 0
   _mainMenuScene:
-    sceneAsset: {fileID: 102900000, guid: c1897cb99875e8041afe13cdaab2bd31, type: 3}
+    sceneAsset: {fileID: 102900000, guid: 065d0dbb5c99fc641a0c959e2742e46d, type: 3}
     required: 1
     buildIndex: 4
   _loadingScene:
@@ -33,6 +33,6 @@ MonoBehaviour:
     required: 1
     buildIndex: 3
   _gameplayScene:
-    sceneAsset: {fileID: 102900000, guid: 823580dbe87edb94ab80216a8ca1aad5, type: 3}
+    sceneAsset: {fileID: 102900000, guid: 2dd0d3e5d7a5f8b499ba337d242263f8, type: 3}
     required: 1
     buildIndex: 5

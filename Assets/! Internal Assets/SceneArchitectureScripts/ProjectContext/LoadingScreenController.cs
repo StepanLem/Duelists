@@ -1,117 +1,72 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using Trisibo;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public static class LoadingScreenController
 {
-    private static readonly List<AsyncOperation> _currentOperations = new();
-    private static readonly List<SceneField> _scenesToLoad = new();
-    private static readonly List<SceneField> _scenesToUnload = new();
-    private static SceneField _sceneToSetActiveNext;
+    private static SceneField _currentScene;
 
     public static event Action<float> OnLoadProgressChange;
 
-    public static void AddSceneToLoadOnNextLoadingScreen(SceneField scene)
+    public static void LoadScene(SceneFieldReference newSceneRef)
     {
-        _scenesToLoad.Add(scene);
+        SceneField newScene = newSceneRef.SceneField;
+        LoadScene(newScene);
     }
 
-    public static void AddSceneToUnloadOnNextLoadingScreen(SceneField scene)
+    public static void LoadScene(SceneField newScene)
     {
-        _scenesToUnload.Add(scene);
+        AsyncProcessor.StartRoutine(LoadSceneRoutine(newScene));
     }
 
-    /// <summary>
-    /// Загружает сцену "LoadingScreenScene". 
-    /// Во время её существования происходят соотвествующие действия со ScenesToLoad и ScenesToUnload
-    /// </summary>
-    /// <param name="sceneToSetActiveNext">Сцена, которую надо сделать активной после LoadingScreenScene</param>
-    public static void InvokeLoadingScreen(SceneField sceneToSetActiveNext)
+    private static IEnumerator LoadSceneRoutine(SceneField newScene)
     {
-        if (sceneToSetActiveNext == null || _scenesToUnload.Contains(sceneToSetActiveNext))
+        Time.timeScale = 0f;
+        yield return LoadNewSceneRoutine(SceneRegistry.LoadingScene);
+        yield return new WaitUntil(() => LoadingScreen.Instance != null);
+        yield return LoadingScreen.Instance.FadeIn(_currentScene == null);
+
+        if (_currentScene != null)
         {
-            Debug.LogError("Ошибка: сцена не может стать активной.");
-            return;
+            yield return UnloadSceneRoutine(_currentScene);
         }
-        _sceneToSetActiveNext = sceneToSetActiveNext;
+        yield return LoadNewSceneRoutine(newScene, true);
 
-        SceneManager.sceneLoaded += OnLoadingSceneLoaded;
+        yield return AsyncProcessor.StartRoutine(LoadingScreen.Instance.FadeOut());
+        yield return UnloadSceneRoutine(SceneRegistry.LoadingScene);
+        Time.timeScale = 1.0f;
 
-        SceneManager.LoadSceneAsync(SceneRegistry.LoadingScene.BuildIndex, LoadSceneMode.Additive);
+        _currentScene = newScene;
     }
 
-    private static void OnLoadingSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    private static IEnumerator LoadNewSceneRoutine(SceneField newScene, bool showLoadingProgress = false)
     {
-        Scene loadingScene = SceneManager.GetSceneByBuildIndex(SceneRegistry.LoadingScene.BuildIndex);
-
-        if (scene != loadingScene)
-            return;
-
-        SceneManager.sceneLoaded -= OnLoadingSceneLoaded;
-
-        SceneManager.SetActiveScene(loadingScene);
-
-        UnloadScenesToUndloadAsync();
-        LoadScenesToLoadAsync();
-
-        AsyncProcessor.StartRoutine(CheckOperationsProgressRoutine());
-    }
-
-    private static readonly WaitForSeconds WaiterBetweenChecks = new(0.2f);
-    private static IEnumerator CheckOperationsProgressRoutine()
-    {
-        //TODO: запретить автоматически включаться сценам, когда их загрузка дошла до 0.9
-        //А то они будут вклиниваться в сцену загрузки.
-
-        var currentOperationsCount = _currentOperations.Count;
-
-        float resultProgress = 0;
-
-        while (resultProgress != 1)//TODO: могу ошибаться, но во время запрета на автовключение максимальный уровень загрузки: 0.9 
+        AsyncOperation loadNewSceneOperation = SceneManager.LoadSceneAsync(newScene.BuildIndex, LoadSceneMode.Additive);
+        if (showLoadingProgress)
         {
-            float summaryProgress = 0;
-            for (int i = 0; i < currentOperationsCount; i++)
-            {
-                summaryProgress += _currentOperations[i].progress;
-            }
-
-            resultProgress = summaryProgress / currentOperationsCount;
-            OnLoadProgressChange?.Invoke(resultProgress);
-
-#if UNITY_EDITOR
-            if (resultProgress > 0.5f)
-                yield return new WaitForSeconds(1f);
-#endif
-
-            yield return WaiterBetweenChecks;
+            yield return ShowLoadingProgressRoutine(loadNewSceneOperation);
         }
-
-        //TODO: когда всё полностью загружено: разрешать показываться сценам;(мб после разрешения надо прождать ещё один кадр)
-
-        _currentOperations.Clear();
-
-        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(_sceneToSetActiveNext.BuildIndex));
-        SceneManager.UnloadSceneAsync(SceneRegistry.LoadingScene.BuildIndex);
+        else
+        {
+            yield return new WaitUntil(() => loadNewSceneOperation.isDone);
+        }
     }
 
-    public static void UnloadScenesToUndloadAsync()
+    private static IEnumerator ShowLoadingProgressRoutine(AsyncOperation loadNewSceneOperation)
     {
-        foreach (var scene in _scenesToUnload)
+        while (!loadNewSceneOperation.isDone)
         {
-            _currentOperations.Add(SceneManager.UnloadSceneAsync(scene.BuildIndex));
+            OnLoadProgressChange?.Invoke(loadNewSceneOperation.progress);
+            yield return new WaitForEndOfFrame();
         }
-        _scenesToUnload.Clear();
+        OnLoadProgressChange?.Invoke(loadNewSceneOperation.progress);
     }
 
-    public static void LoadScenesToLoadAsync()
+    private static IEnumerator UnloadSceneRoutine(SceneField sceneToUnload)
     {
-        foreach (var scene in _scenesToLoad)
-        {
-            _currentOperations.Add(SceneManager.LoadSceneAsync(scene.BuildIndex, LoadSceneMode.Additive));
-        }
-        _scenesToLoad.Clear();
+        AsyncOperation unloadCurrentSceneOperation = SceneManager.UnloadSceneAsync(sceneToUnload.BuildIndex);
+        yield return new WaitUntil(() => unloadCurrentSceneOperation.isDone);
     }
 }

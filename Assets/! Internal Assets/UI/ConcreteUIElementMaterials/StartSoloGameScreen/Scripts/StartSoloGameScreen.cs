@@ -1,19 +1,25 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class StartSoloGameScreen : MonoBehaviour
 {
-    [SerializeField] private SegmentedButton _enemyTypeButton;
-    [SerializeField] private Button _chooseEnemyTypesButton;
+    [SerializeField] private Button[] _levelButtons;
 
-    private void Start()
+    private UISceneRootBinder _uiSceneRootBinder;
+    private MatchManager _matchManager;
+
+    [Inject]
+    public void Construct(UISceneRootBinder uiSceneRootBinder, MatchManager matchManager)
     {
-        _chooseEnemyTypesButton.interactable = _enemyTypeButton.Value == "Manual";
-        _enemyTypeButton.SelectSegment += EnemyTypeButton_SelectSegment;
+        _uiSceneRootBinder = uiSceneRootBinder;
+        _matchManager = matchManager;
     }
 
-    private void EnemyTypeButton_SelectSegment(string value)
+    public void StartMatch(int matchNum)
     {
-        _chooseEnemyTypesButton.interactable = value == "Manual";
+        int matchsCound = _levelButtons.Length;
+        _matchManager.StartMatch(matchNum, matchsCound);
+        _uiSceneRootBinder.LoadScene(SceneRegistry.GameplayScene);
     }
 }
