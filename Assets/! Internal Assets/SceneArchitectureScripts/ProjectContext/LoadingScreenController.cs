@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public static class LoadingScreenController
 {
     private static SceneField _currentScene;
-    private static AsyncOperation _loadNewSceneOperation;
 
     public static event Action<float> OnLoadProgressChange;
 
@@ -24,20 +23,20 @@ public static class LoadingScreenController
 
     private static IEnumerator LoadSceneRoutine(SceneField newScene)
     {
-        yield return AsyncProcessor.StartRoutine(LoadNewSceneRoutine(SceneRegistry.LoadingScene));
+        Time.timeScale = 0f;
+        yield return LoadNewSceneRoutine(SceneRegistry.LoadingScene);
         yield return new WaitUntil(() => LoadingScreen.Instance != null);
-        yield return AsyncProcessor.StartRoutine(LoadingScreen.Instance.FadeIn(_currentScene == null));
+        yield return LoadingScreen.Instance.FadeIn(_currentScene == null);
 
         if (_currentScene != null)
         {
-            yield return AsyncProcessor.StartRoutine(UnloadSceneRoutine(_currentScene));
+            yield return UnloadSceneRoutine(_currentScene);
         }
-        yield return AsyncProcessor.StartRoutine(LoadNewSceneRoutine(newScene, true));
-        _loadNewSceneOperation.allowSceneActivation = false;
+        yield return LoadNewSceneRoutine(newScene, true);
 
         yield return AsyncProcessor.StartRoutine(LoadingScreen.Instance.FadeOut());
-        yield return AsyncProcessor.StartRoutine(UnloadSceneRoutine(SceneRegistry.LoadingScene));
-        yield return new WaitForSecondsRealtime(1f);
+        yield return UnloadSceneRoutine(SceneRegistry.LoadingScene);
+        Time.timeScale = 1.0f;
 
         _currentScene = newScene;
     }
@@ -45,10 +44,9 @@ public static class LoadingScreenController
     private static IEnumerator LoadNewSceneRoutine(SceneField newScene, bool showLoadingProgress = false)
     {
         AsyncOperation loadNewSceneOperation = SceneManager.LoadSceneAsync(newScene.BuildIndex, LoadSceneMode.Additive);
-        _loadNewSceneOperation = loadNewSceneOperation;
         if (showLoadingProgress)
         {
-            yield return AsyncProcessor.StartRoutine(ShowLoadingProgressRoutine(loadNewSceneOperation));
+            yield return ShowLoadingProgressRoutine(loadNewSceneOperation);
         }
         else
         {
