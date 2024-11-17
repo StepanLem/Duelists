@@ -12,8 +12,6 @@ public class UISceneRootBinder : MonoBehaviour
 
     public void LoadScene(SceneField nextScene)
     {
-        LoadingScreenController.AddSceneToLoadOnNextLoadingScreen(nextScene);
-        LoadingScreenController.AddSceneToUnloadOnNextLoadingScreen(SceneManager.GetActiveScene().buildIndex);
-        LoadingScreenController.InvokeLoadingScreen(nextScene);
+        LoadingScreenController.LoadScene(nextScene);
     }
 }
