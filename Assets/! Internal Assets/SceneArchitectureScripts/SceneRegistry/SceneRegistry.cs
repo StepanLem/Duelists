@@ -1,6 +1,6 @@
+using System;
 using Trisibo;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class SceneRegistry
 {
@@ -25,5 +25,34 @@ public class SceneRegistry
         GameplayScene = initParams.GameplayScene;
 
         Resources.UnloadAsset(initParams);
+    }
+
+    public static SceneField GetSceneFieldByBuildIndex(int buildIndex)
+    {
+        if (PlayerVRScene.BuildIndex == buildIndex)
+        {
+            return PlayerVRScene;
+        }
+        if (PlayerFlatScene.BuildIndex == buildIndex)
+        {
+            return PlayerFlatScene;
+        }
+        if (BootstrapScene.BuildIndex == buildIndex)
+        {
+            return BootstrapScene;
+        }
+        if (MainMenuScene.BuildIndex == buildIndex)
+        {
+            return MainMenuScene;
+        }
+        if (LoadingScene.BuildIndex == buildIndex)
+        {
+            return LoadingScene;
+        }
+        if (GameplayScene.BuildIndex == buildIndex)
+        {
+            return GameplayScene;
+        }
+        throw new NotImplementedException();
     }
 }

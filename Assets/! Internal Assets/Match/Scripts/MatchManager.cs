@@ -1,39 +1,37 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
-using Zenject;
 
 public class MatchManager : MonoBehaviour
 {
-    public UnityEvent OnVictory;
-    public UnityEvent OnDefeat;
+    [SerializeField] private Enemy[] _enemies;
 
-    private Enemy _enemy;
+    private int _currentMatch;
+    private int _matchsCount;
 
-    [Inject]
-    public void Construct(Enemy enemy)
+    public int MatchNum => _currentMatch;
+    public bool IsLastLevel => _currentMatch == _matchsCount - 1;
+    public Enemy Enemy => _enemies[_currentMatch];
+
+    public void StartMatch(int matchNum, Enemy[] enemies)
     {
-        _enemy = enemy;
+        _enemies = enemies;
+        _matchsCount = enemies.Length;
+        StartMatch(matchNum);
     }
 
-    private void OnEnable()
+    public void StartMatch(int matchNum, int matchsCount)
     {
-        _enemy.OnDeath += HandleEnemyDeath;
+        _matchsCount = matchsCount;
+        StartMatch(matchNum);
     }
 
-    private void OnDisable()
+    private void StartMatch(int matchNum)
     {
-        _enemy.OnDeath -= HandleEnemyDeath;
+        _currentMatch = matchNum;
     }
 
-    public void HandleEnemyDeath()
+    public void StartNextMatch()
     {
-        if (_enemy.IsStartedAttacking)
-        {
-            OnVictory?.Invoke();
-        }
-        else
-        {
-            OnDefeat?.Invoke();
-        }
+        _currentMatch++;
     }
 }

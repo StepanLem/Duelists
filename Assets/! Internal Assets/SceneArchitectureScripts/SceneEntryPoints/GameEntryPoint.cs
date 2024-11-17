@@ -27,8 +27,7 @@ public class GameEntryPoint : MonoBehaviour
         else
             SceneManager.LoadScene(SceneRegistry.PlayerFlatScene.BuildIndex);
 
-        LoadingScreenController.AddSceneToLoadOnNextLoadingScreen(SceneRegistry.MainMenuScene);
-        LoadingScreenController.InvokeLoadingScreen(SceneRegistry.MainMenuScene);
+        LoadingScreenController.LoadScene(SceneRegistry.MainMenuScene);
     }
 }
 

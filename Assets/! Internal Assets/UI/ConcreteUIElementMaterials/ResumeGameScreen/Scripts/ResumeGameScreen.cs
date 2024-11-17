@@ -20,10 +20,14 @@ public class ResumeGameScreen : MonoBehaviour
     {
         for (int i = 0; i < _delay; i++) 
         { 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSecondsRealtime(1);
             _delayText.text = (_delay - i - 1).ToString();
         }
-
         _afterDelay?.Invoke();
+    }
+
+    private void OnDisable()
+    {
+        Time.timeScale = 1f;
     }
 }
