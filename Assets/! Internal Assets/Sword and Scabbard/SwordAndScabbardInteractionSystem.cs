@@ -2,13 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// 
-/// </summary>
-///
-//TODO: keyframe.fillamount может быть 0 только у 0-ого элемента. Если в инспекторе это не так, должно сразу выводить ошибку в консоль.(+ если филамаунты равны тоже)
-
-
 public class SwordAndScabbardInteractionSystem : MonoBehaviour
 {
     public const string SwordEndTag = "SwordEnd";
@@ -16,25 +9,23 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
     [Range(0.0f, 1.0f)]
     public float FillAmount;
 
+    [SerializeField] private float _exitFillAmount;
+
     public List<SwordInScabbardKeyframe> Keyframes;
 
-    private SwordInScabbardKeyframe previousKeyframe;
-    private SwordInScabbardKeyframe currentKeyframe;
-    private SwordInScabbardKeyframe nextKeyframe;
-
-    private int currentKeyframeIndex;
-
-    public Collider[] scabbardColliders;
+    private SwordInScabbardKeyframe _currentKeyframe;
+    private int _currentKeyframeIndex;
 
     private Sword _swordComponent;
 
-    public OnTriggerComponent OnTriggerExitChecker;
+    //Mouth - устье ножен (aka место, куда заходит острие меча в самом начале)
+    public OnTriggerComponent MouthTriggerChecker;
 
     [SerializeField] private Transform _scabbardStart;
     [SerializeField] private Transform _scabbardEnd;
 
     [SerializeField] private ConfigurableJoint _jointScabbardEndCosplayer;
-    [SerializeField] private ConfigurableJoint _jointScabbardSidesCosplayer;//это может быть дочерний кинематик. Так что не обязательно родителю это вешать.
+    [SerializeField] private ConfigurableJoint _jointScabbardSidesCosplayer;
 
     public bool IsSwordInside => _swordComponent == null;
     private bool isSwordFullyInside;
@@ -44,39 +35,30 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
     /// </summary>
     public Transform SwordTransformForKeyframes;
 
+    public Collider[] scabbardColliders;
+
     //все позиции local
-    private Vector3 _currentSwordPositionRelativeToFirstPosition;
     private Vector3 _firstSwordPosition;
     private Vector3 _lastSwordPosition;
-    private Vector3 _lastSwordPositionRelativeToFirstPosition;
 
     public void Awake()
     {
-        OnTriggerExitChecker.OnEnter += OnScabbardExitTriggerEnter;
+        MouthTriggerChecker.OnEnter += OnMouthTriggerEnter;
 
         _firstSwordPosition = Keyframes[0].SwordPosition;
         _lastSwordPosition = Keyframes[^1].SwordPosition;
-        _lastSwordPositionRelativeToFirstPosition = _lastSwordPosition - _firstSwordPosition;
     }
 
-    private void OnScabbardExitTriggerEnter(Collider collider)
+    private void OnMouthTriggerEnter(Collider collider)
     {
         if (!collider.CompareTag(SwordEndTag))
             return;
 
-        Sword swordComponent;
-        if (!collider.transform.parent.parent.TryGetComponent<Sword>(out swordComponent))
+        if (!collider.transform.parent.parent.TryGetComponent<Sword>(out Sword swordComponent))
             return;
 
         if (_swordComponent == null)
-        {
-            StartEnteringInScabbard(swordComponent); 
-        }
-        else
-        {
-            if (_swordComponent == swordComponent)
-                SwordExitScabbard();
-        }
+            StartEnteringInScabbard(swordComponent);
     }
 
     [ContextMenu("MakeKeyframe")]
@@ -124,8 +106,10 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
 
         _swordComponent.transform.SetParent(this.transform, true);
 
+        _swordComponent.transform.localRotation = Keyframes[0].SwordRotation;//если будет плохо при кручении, то мб тут нужен InverseTransform
 
-        SetCurrentKeyframe(0);
+        _currentKeyframeIndex = 0;
+        _currentKeyframe = Keyframes[_currentKeyframeIndex];
 
         SetupScabbardEndJoint();
         SetupScabbardSidesJoint();
@@ -182,59 +166,88 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
         {
             UpdateFillAmount();
 
-            //if (FillAmount < 0) { SwordExitScabbard(); return; }
+            Debug.Log(FillAmount);
 
-            TrySwitchKeyframe();
+            if (FillAmount < _exitFillAmount)
+            {
+                SwordExitScabbard();
+                yield break;
+            }
+            else if (FillAmount > 1)
+            {
+                FillAmount = 1;
+                //TrySetFullyInsideState();//это состояние фиксирует позицию полностью в ножнах.
+            }
 
-            if (nextKeyframe != null)
-                LerpConfigurationBetweenKeyframes(currentKeyframe, nextKeyframe);
+            UpdateCurrentKeyframe();
+
+            if (_currentKeyframeIndex != Keyframes.Count - 1)
+                LerpConfigurationBetweenKeyframes(_currentKeyframe, Keyframes[_currentKeyframeIndex + 1]);
 
             yield return null;
         }
     }
 
-    public void SetCurrentKeyframe(int keyframeIndex)
-    {
-        currentKeyframeIndex = keyframeIndex;
-        currentKeyframe = Keyframes[keyframeIndex];
-
-        if (currentKeyframeIndex != 0)
-            previousKeyframe = Keyframes[currentKeyframeIndex - 1];
-        else
-            previousKeyframe = null; // Или какое-то по другому это помечать
-
-        if (currentKeyframeIndex != Keyframes.Count - 1)
-            nextKeyframe = Keyframes[currentKeyframeIndex + 1];
-        else
-            nextKeyframe = null; // Или какое-то по другому это помечать
-    }
-
-    private void UpdateFillAmount()
-    {
-        //вместо этого может лучше делать проекцию на прямую?
-        _currentSwordPositionRelativeToFirstPosition = _swordComponent.transform.localPosition - _firstSwordPosition;
-        FillAmount = Vector3.Magnitude(_currentSwordPositionRelativeToFirstPosition) / Vector3.Magnitude(_lastSwordPositionRelativeToFirstPosition);
-    }
-
-    public void TrySwitchKeyframe()
+    private void UpdateCurrentKeyframe()
     {
         while (true)
         {
-            if (previousKeyframe != null && FillAmount < currentKeyframe.FillAmount)
+            var wasSwitched = false;
+
+            if (_currentKeyframeIndex != 0)
             {
-                SetCurrentKeyframe(currentKeyframeIndex - 1);
+                if (FillAmount < _currentKeyframe.FillAmount)
+                {
+                    _currentKeyframeIndex--;
+                    _currentKeyframe = Keyframes[_currentKeyframeIndex];
+                    wasSwitched = true;
+                }
             }
-            else if (nextKeyframe != null && FillAmount >= nextKeyframe.FillAmount)
+
+            if (_currentKeyframeIndex != Keyframes.Count - 1)
             {
-                SetCurrentKeyframe(currentKeyframeIndex + 1);
+                if (FillAmount >= Keyframes[_currentKeyframeIndex + 1].FillAmount)
+                {
+                    _currentKeyframeIndex++;
+                    _currentKeyframe = Keyframes[_currentKeyframeIndex];
+                    wasSwitched = true;
+                }
             }
-            else break;
+
+            if (!wasSwitched)
+                return;
         }
+    }
+
+    /// <summary>
+    /// Обновляет FillAmount.
+    /// Устанавливает значение newValue < 0, если меч вышел из ножен.
+    /// 0 <= newValue <= 1, если в пределах ножен
+    /// newValue > 1, если за ножнами.
+    /// </summary>
+    private void UpdateFillAmount()
+    {
+        Vector3 localSwordPosition = transform.InverseTransformPoint(_swordComponent.transform.position);
+
+        Vector3 StartToEnd = _lastSwordPosition - _firstSwordPosition;
+        Vector3 StartToPoint = localSwordPosition - _firstSwordPosition;
+
+        // Проекция вектора StartToPoint на прямую StartToEnd
+        float projectionLength = Vector3.Dot(StartToPoint, StartToEnd.normalized);
+
+        FillAmount = projectionLength / StartToEnd.magnitude;
     }
 
     private void LerpConfigurationBetweenKeyframes(in SwordInScabbardKeyframe currentKeyframe, in SwordInScabbardKeyframe nextKeyframe)
     {
         var distanceBetweenCurrentFillAmountAndCurrentKeyframeStartFillAmount = FillAmount - currentKeyframe.FillAmount;
+
+        if (distanceBetweenCurrentFillAmountAndCurrentKeyframeStartFillAmount < 0)
+        {
+            _jointScabbardSidesCosplayer.transform.localPosition = Keyframes[0].SwordPosition;
+            return;
+        }
+
         var distanceBetweenKeyframesFillAmount = nextKeyframe.FillAmount - currentKeyframe.FillAmount;
         var stepBetweenKeyframes = distanceBetweenCurrentFillAmountAndCurrentKeyframeStartFillAmount / distanceBetweenKeyframesFillAmount;
 
@@ -245,20 +258,20 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
 
     private void SwordExitScabbard()
     {
-        _swordComponent = null;
-        _jointScabbardEndCosplayer.connectedBody = null;
-
-        //включаем коллизии между мечом и ножнами
         foreach (Collider swordCollider in _swordComponent.swordColliders)
         {
             foreach (Collider scabbardCollider in scabbardColliders)
                 Physics.IgnoreCollision(swordCollider, scabbardCollider, false);
         }
+
+        _swordComponent = null;
+        _jointScabbardEndCosplayer.connectedBody = null;
+        _jointScabbardSidesCosplayer.connectedBody = null;
     }
 }
 
 [System.Serializable]
-public class SwordInScabbardKeyframe
+public struct SwordInScabbardKeyframe
 {
     /// <summary>
     /// С какого значения заполнения начинают учитываться параметры этого ключегого кадра. 0 - меч не зашёл в ножны. 1 - меч полностью в ножнах
