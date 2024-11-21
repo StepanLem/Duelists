@@ -6,7 +6,7 @@ public class Sword : MonoBehaviour
 {
     public Collider[] swordColliders;
 
-    public Transform EndSwordPointTransform;
+    public Transform SwordTipTransform;
 
     public SphereCollider EndSwordTrigger;//for test
 

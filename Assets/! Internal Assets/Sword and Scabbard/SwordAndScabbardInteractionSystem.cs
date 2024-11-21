@@ -27,26 +27,26 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
     [SerializeField] private ConfigurableJoint _jointScabbardEndCosplayer;
     [SerializeField] private ConfigurableJoint _jointScabbardSidesCosplayer;
 
-    public bool IsSwordInside => _swordComponent == null;
-    private bool isSwordFullyInside;
+    public Transform holderTransform;
+    public ConfigurableJoint holderJoint;
 
     /// <summary>
     /// Объект с которого списываются кейфрэймы меча в ножнах. Должен быть напрямую дочерним объектом ножен.
     /// </summary>
-    public Transform SwordTransformForKeyframes;
+    public Sword SwordComponentForKeyframes;
 
     public Collider[] scabbardColliders;
 
     //все позиции local
-    private Vector3 _firstSwordPosition;
-    private Vector3 _lastSwordPosition;
+    private Vector3 _firstSwordTipPosition;
+    private Vector3 _lastSwordTipPosition;
 
     public void Awake()
     {
         MouthTriggerChecker.OnEnter += OnMouthTriggerEnter;
 
-        _firstSwordPosition = Keyframes[0].SwordPosition;
-        _lastSwordPosition = Keyframes[^1].SwordPosition;
+        _firstSwordTipPosition = Keyframes[0].SwordTipPosition;
+        _lastSwordTipPosition = Keyframes[^1].SwordTipPosition;
     }
 
     private void OnMouthTriggerEnter(Collider collider)
@@ -71,14 +71,21 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
         else if (Keyframes.Count == 1) fillAmount = 1f;
         else
         {
-            var currentSwordPositionRelativeToFirstPosition = SwordTransformForKeyframes.localPosition - Keyframes[0].SwordPosition;
-            fillAmount = Vector3.Magnitude(currentSwordPositionRelativeToFirstPosition) / Vector3.Magnitude(Keyframes[^1].SwordPosition - Keyframes[0].SwordPosition);
+            Vector3 localSwordPosition = this.transform.InverseTransformPoint(SwordComponentForKeyframes.SwordTipTransform.position);
+
+            Vector3 StartToEnd = Keyframes[^1].SwordTipPosition - Keyframes[0].SwordTipPosition;
+            Vector3 StartToPoint = localSwordPosition - Keyframes[0].SwordTipPosition;
+
+            // Проекция вектора StartToPoint на прямую StartToEnd
+            float projectionLength = Vector3.Dot(StartToPoint, StartToEnd.normalized);
+
+            fillAmount = projectionLength / StartToEnd.magnitude;
         }
 
         SwordInScabbardKeyframe newKeyframe = new()
         {
-            SwordPosition = SwordTransformForKeyframes.localPosition,
-            SwordRotation = SwordTransformForKeyframes.localRotation,
+            SwordTipPosition = this.transform.InverseTransformPoint(SwordComponentForKeyframes.SwordTipTransform.position),
+            SwordTipRotation = Quaternion.Inverse(this.transform.rotation) * SwordComponentForKeyframes.SwordTipTransform.rotation,
             FillAmount = fillAmount
         };
 
@@ -106,7 +113,14 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
 
         _swordComponent.transform.SetParent(this.transform, true);
 
-        _swordComponent.transform.localRotation = Keyframes[0].SwordRotation;//если будет плохо при кручении, то мб тут нужен InverseTransform
+        //Устанавливаем для меча начальный угол поворота.
+        // Вычисляем целевое вращение для меча, чтобы кончик оказался на запомненном относительном вращении к ножнам
+        Quaternion targetRotation = this.transform.rotation * Keyframes[0].SwordTipRotation;
+        // Корректируем вращение _swordComponent так, чтобы его кончик занял запомненное положение
+        Quaternion swordTipOffset = Quaternion.Inverse(_swordComponent.SwordTipTransform.rotation) * targetRotation;
+        _swordComponent.transform.rotation = _swordComponent.transform.rotation * swordTipOffset;
+
+        //Мб отключать поворот меча за контроллером в XRGrabInteractable. На время пока он в ножнах. Чтобы при поворотах руки он не вылетал из ножен.
 
         _currentKeyframeIndex = 0;
         _currentKeyframe = Keyframes[_currentKeyframeIndex];
@@ -124,7 +138,7 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
     private void SetupScabbardEndJoint()
     {
         //Прикрепляем джоинт к концу меча.
-        _jointScabbardEndCosplayer.connectedAnchor = _swordComponent.transform.InverseTransformPoint(_swordComponent.EndSwordPointTransform.position);
+        _jointScabbardEndCosplayer.connectedAnchor = _swordComponent.transform.InverseTransformPoint(_swordComponent.SwordTipTransform.position);
         //TODO:Мб лимитировать надо тоже здась? потому что если лимитировать изначально, то с XY плохо получается, а это почему-то норм.
 
         //TODO: эту часть можно делать не в рантайме, а заранее. Надо только дать автоматизированную настройку.
@@ -146,7 +160,7 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
     {
         _jointScabbardSidesCosplayer.anchor = Vector3.zero;
 
-        _jointScabbardSidesCosplayer.connectedAnchor = _swordComponent.transform.InverseTransformPoint(_swordComponent.EndSwordPointTransform.position);
+        _jointScabbardSidesCosplayer.connectedAnchor = _swordComponent.transform.InverseTransformPoint(_swordComponent.SwordTipTransform.position);
 
         //нужные значения делать Limited и изменять интерполированно.
         _jointScabbardSidesCosplayer.xMotion = ConfigurableJointMotion.Locked;
@@ -227,10 +241,10 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
     /// </summary>
     private void UpdateFillAmount()
     {
-        Vector3 localSwordPosition = transform.InverseTransformPoint(_swordComponent.transform.position);
+        Vector3 localSwordTipPosition = this.transform.InverseTransformPoint(_swordComponent.SwordTipTransform.position);
 
-        Vector3 StartToEnd = _lastSwordPosition - _firstSwordPosition;
-        Vector3 StartToPoint = localSwordPosition - _firstSwordPosition;
+        Vector3 StartToEnd = _lastSwordTipPosition - _firstSwordTipPosition;
+        Vector3 StartToPoint = localSwordTipPosition - _firstSwordTipPosition;
 
         // Проекция вектора StartToPoint на прямую StartToEnd
         float projectionLength = Vector3.Dot(StartToPoint, StartToEnd.normalized);
@@ -244,16 +258,25 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
 
         if (distanceBetweenCurrentFillAmountAndCurrentKeyframeStartFillAmount < 0)
         {
-            _jointScabbardSidesCosplayer.transform.localPosition = Keyframes[0].SwordPosition;
+            _jointScabbardSidesCosplayer.transform.localPosition = Keyframes[0].SwordTipPosition;
             return;
         }
 
         var distanceBetweenKeyframesFillAmount = nextKeyframe.FillAmount - currentKeyframe.FillAmount;
         var stepBetweenKeyframes = distanceBetweenCurrentFillAmountAndCurrentKeyframeStartFillAmount / distanceBetweenKeyframesFillAmount;
 
-        _jointScabbardSidesCosplayer.transform.localPosition = Vector3.Lerp(currentKeyframe.SwordPosition, nextKeyframe.SwordPosition, stepBetweenKeyframes);
-        //Почему не работает? Записанные значения не выставляются корректно. Надо отдебажить.
-        //_jointScabbardSidesCosplayer.transform.localRotation = Quaternion.Lerp(currentKeyframe.SwordRotation, nextKeyframe.SwordRotation, stepBetweenKeyframes);
+        //Way 1: joints. Work;
+        _jointScabbardSidesCosplayer.transform.localPosition = Vector3.Lerp(currentKeyframe.SwordTipPosition, nextKeyframe.SwordTipPosition, stepBetweenKeyframes);
+
+        //Если джоинт нельзя настроить идеально, возможно придётся делать всё через rb.MovePosition и rb.MoveRotation.
+        /*//Way 2: rb.MovePosition with Arm counting
+        var holderPosition = holderTransform.position;
+        var newPosition = Vector3.Lerp(currentKeyframe.SwordTipPosition, nextKeyframe.SwordTipPosition, stepBetweenKeyframes);
+        Vector3 targetTipWorldPosition = this.transform.TransformPoint(newPosition);
+        // Вычисляем смещение, необходимое для перемещения наконечника в целевую позицию
+        Vector3 offset = targetTipWorldPosition - _swordComponent.SwordTipTransform.position;
+        // Применяем это смещение к позиции корневого объекта меча
+        _swordComponent.Rigidbody.position += offset;*/
     }
 
     private void SwordExitScabbard()
@@ -279,12 +302,9 @@ public struct SwordInScabbardKeyframe
     [Range(0.0f, 1.0f)]
     public float FillAmount;
 
-
-    //relative to scabbard;
-    public Vector3 SwordPosition;
-
-    //relative to scabbard;
-    public Quaternion SwordRotation;
+    //позиция и поворот конца меча относительно ножен
+    public Vector3 SwordTipPosition;
+    public Quaternion SwordTipRotation;
 
     //public JointConfiguration JointConfiguration;
 }
