@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
-    public Collider[] swordColliders;
+    public Collider[] Colliders;
 
     public Transform SwordTipTransform;
 
