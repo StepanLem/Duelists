@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2218527342589468448}
   - component: {fileID: 8446359812808735455}
   - component: {fileID: 8022829393117176390}
+  - component: {fileID: 7260653658226195751}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -65,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041F\u0440\u0438\u043C\u0435\u043D\u0438\u0442\u044C"
+  m_text: asdasdasd
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5a60797c816990c4e8851e2feb2750dc, type: 2}
   m_sharedMaterial: {fileID: 528665969188879678, guid: 5a60797c816990c4e8851e2feb2750dc,
@@ -135,6 +136,46 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7260653658226195751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2886768750250370921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrackedObjects:
+  - rid: 4776341262014873998
+  references:
+    version: 2
+    RefIds:
+    - rid: 4776341262014873998
+      type: {class: TrackedUGuiGraphic, ns: UnityEngine.Localization.PropertyVariants.TrackedObjects,
+        asm: Unity.Localization}
+      data:
+        m_Target: {fileID: 8022829393117176390}
+        m_TrackedProperties:
+          items:
+          - rid: 4776341262014873999
+        m_UpdateType: 0
+    - rid: 4776341262014873999
+      type: {class: LocalizedStringProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties,
+        asm: Unity.Localization}
+      data:
+        m_Localized:
+          m_TableReference:
+            m_TableCollectionName: GUID:4fded5d2e33e42440af0b22080e4c6d5
+          m_TableEntryReference:
+            m_KeyId: 35111708819456
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
+        m_PropertyPath: m_text
 --- !u!1 &5743666424013058585
 GameObject:
   m_ObjectHideFlags: 0

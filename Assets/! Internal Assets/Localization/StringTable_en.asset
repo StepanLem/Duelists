@@ -92,6 +92,66 @@ MonoBehaviour:
       4'
     m_Metadata:
       m_Items: []
+  - m_Id: 33222346833920
+    m_Localized: Choose enemies
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33367427809280
+    m_Localized: Create lobby
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33618926665728
+    m_Localized: Game mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33735981301760
+    m_Localized: Lobby mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33857960050688
+    m_Localized: Number of rounds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34108519383040
+    m_Localized: Duel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34200638881792
+    m_Localized: Tournament
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34541027622912
+    m_Localized: Open
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34660875665408
+    m_Localized: Closed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35020088442880
+    m_Localized: Create
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35111708819456
+    m_Localized: Apply
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35522683502592
+    m_Localized: Round 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35777399390208
+    m_Localized: Round 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35929086394368
+    m_Localized: Roun 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35992319721472
+    m_Localized: Round 3
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

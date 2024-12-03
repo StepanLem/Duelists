@@ -658,6 +658,7 @@ GameObject:
   - component: {fileID: 2641334914164324850}
   - component: {fileID: 428562025488399347}
   - component: {fileID: 2740954159837345811}
+  - component: {fileID: 768010660395084364}
   m_Layer: 5
   m_Name: Header
   m_TagString: Untagged
@@ -712,7 +713,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0420\u0430\u0443\u043D\u0434 1"
+  m_text: asdasd
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5a60797c816990c4e8851e2feb2750dc, type: 2}
   m_sharedMaterial: {fileID: 528665969188879678, guid: 5a60797c816990c4e8851e2feb2750dc,
@@ -782,3 +783,43 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &768010660395084364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8645547695922872883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrackedObjects:
+  - rid: 4776341262014874002
+  references:
+    version: 2
+    RefIds:
+    - rid: 4776341262014874002
+      type: {class: TrackedUGuiGraphic, ns: UnityEngine.Localization.PropertyVariants.TrackedObjects,
+        asm: Unity.Localization}
+      data:
+        m_Target: {fileID: 2740954159837345811}
+        m_TrackedProperties:
+          items:
+          - rid: 4776341262014874003
+        m_UpdateType: 0
+    - rid: 4776341262014874003
+      type: {class: LocalizedStringProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties,
+        asm: Unity.Localization}
+      data:
+        m_Localized:
+          m_TableReference:
+            m_TableCollectionName: GUID:4fded5d2e33e42440af0b22080e4c6d5
+          m_TableEntryReference:
+            m_KeyId: 35777399390208
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
+        m_PropertyPath: m_text

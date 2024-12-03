@@ -77,6 +77,72 @@ MonoBehaviour:
     m_Key: MainMenu/Canvas/StartSoloGameScreen/Buttons/PrimaryButtons/Level4Button/Text
     m_Metadata:
       m_Items: []
+  - m_Id: 33222346833920
+    m_Key: MainMenu/Canvas/SelectEnemyTypesScreen/Container/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33367427809280
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33618926665728
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Content/GameMode/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33735981301760
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Content/LobbyMode/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33857960050688
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Content/RoundsCount/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34108519383040
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Content/GameMode/SegmentedButton/FirstSegment/Text
+      (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34200638881792
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Content/GameMode/SegmentedButton/LastSegment/Text
+      (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34541027622912
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Content/LobbyMode/SegmentedButton/FirstSegment/Text
+      (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34660875665408
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Content/LobbyMode/SegmentedButton/LastSegment/Text
+      (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35020088442880
+    m_Key: LargeDefaultButton/Canvas (Environment)/LargeDefaultButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35111708819456
+    m_Key: SmallDefaultButton/Canvas (Environment)/SmallDefaultButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35522683502592
+    m_Key: MainMenu/Canvas/SelectEnemyTypesScreen/Container/Content/FirstLine/Card/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35777399390208
+    m_Key: CardBig/Canvas (Environment)/CardBig/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35929086394368
+    m_Key: MainMenu/Canvas/SelectEnemyTypesScreen/Container/Content/FirstLine/Card
+      (1)/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35992319721472
+    m_Key: MainMenu/Canvas/SelectEnemyTypesScreen/Container/Content/FirstLine/Card
+      (2)/Header
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
