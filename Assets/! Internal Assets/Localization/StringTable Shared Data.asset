@@ -143,6 +143,14 @@ MonoBehaviour:
       (2)/Header
     m_Metadata:
       m_Items: []
+  - m_Id: 36537562464256
+    m_Key: MainMenu/Canvas/OnlineConnectScreen/Buttons/PrimaryButtons/FastConnectButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36634975174656
+    m_Key: MainMenu/Canvas/OnlineConnectScreen/Buttons/PrimaryButtons/DirectConnectButton/Text
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

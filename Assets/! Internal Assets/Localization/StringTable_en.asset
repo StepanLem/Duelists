@@ -152,6 +152,18 @@ MonoBehaviour:
     m_Localized: Round 3
     m_Metadata:
       m_Items: []
+  - m_Id: 36537562464256
+    m_Localized: 'Fast
+
+      Connect'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36634975174656
+    m_Localized: 'Direct
+
+      Connect'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
