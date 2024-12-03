@@ -41,6 +41,22 @@ MonoBehaviour:
     m_Key: MainMenu/Canvas/SettingsScreen/Container/Header
     m_Metadata:
       m_Items: []
+  - m_Id: 2775160094720
+    m_Key: MainMenu/Canvas/MainMenuScreen/Buttons/PrimaryButtons/StartGameSoloButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2886875381760
+    m_Key: MainMenu/Canvas/MainMenuScreen/Buttons/PrimaryButtons/HostGameButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000679432192
+    m_Key: MainMenu/Canvas/MainMenuScreen/Buttons/PrimaryButtons/ConnectToGameButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3123090194432
+    m_Key: MainMenu/Canvas/MainMenuScreen/Buttons/PrimaryButtons/TrainingButton/Text
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -42,6 +42,28 @@ MonoBehaviour:
     m_Localized: Settings
     m_Metadata:
       m_Items: []
+  - m_Id: 2775160094720
+    m_Localized: 'Solo
+
+      Game'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2886875381760
+    m_Localized: 'Online:
+
+      Host'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000679432192
+    m_Localized: 'Online:
+
+      Connect'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3123090194432
+    m_Localized: Training
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
