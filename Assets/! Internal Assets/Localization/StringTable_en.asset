@@ -133,7 +133,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 35111708819456
-    m_Localized: Apply
+    m_Localized: Connect
     m_Metadata:
       m_Items: []
   - m_Id: 35522683502592
@@ -162,6 +162,14 @@ MonoBehaviour:
     m_Localized: 'Direct
 
       Connect'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36921236422656
+    m_Localized: Enter access code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37294495924224
+    m_Localized: Acess code
     m_Metadata:
       m_Items: []
   references:

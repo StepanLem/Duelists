@@ -151,6 +151,14 @@ MonoBehaviour:
     m_Key: MainMenu/Canvas/OnlineConnectScreen/Buttons/PrimaryButtons/DirectConnectButton/Text
     m_Metadata:
       m_Items: []
+  - m_Id: 36921236422656
+    m_Key: MainMenu/Canvas/OnlineDirectConnectScreen/Container/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37294495924224
+    m_Key: MainMenu/Canvas/OnlineDirectConnectScreen/Container/InputField /Text Area/Placeholder
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
