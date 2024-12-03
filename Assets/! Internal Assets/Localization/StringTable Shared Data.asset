@@ -57,6 +57,26 @@ MonoBehaviour:
     m_Key: MainMenu/Canvas/MainMenuScreen/Buttons/PrimaryButtons/TrainingButton/Text
     m_Metadata:
       m_Items: []
+  - m_Id: 3479077552128
+    m_Key: MainMenu/Canvas/StartSoloGameScreen/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3714419949568
+    m_Key: MainMenu/Canvas/StartSoloGameScreen/Buttons/PrimaryButtons/Level1Button/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3968053706752
+    m_Key: MainMenu/Canvas/StartSoloGameScreen/Buttons/PrimaryButtons/Level2Button/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3997275422720
+    m_Key: MainMenu/Canvas/StartSoloGameScreen/Buttons/PrimaryButtons/Level3Button/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4086492463104
+    m_Key: MainMenu/Canvas/StartSoloGameScreen/Buttons/PrimaryButtons/Level4Button/Text
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

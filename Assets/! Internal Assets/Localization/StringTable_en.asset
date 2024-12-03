@@ -64,6 +64,34 @@ MonoBehaviour:
     m_Localized: Training
     m_Metadata:
       m_Items: []
+  - m_Id: 3479077552128
+    m_Localized: Solo Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3714419949568
+    m_Localized: 'Level
+
+      1'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3968053706752
+    m_Localized: 'Level
+
+      2'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3997275422720
+    m_Localized: 'Level
+
+      3'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4086492463104
+    m_Localized: 'Level
+
+      4'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
