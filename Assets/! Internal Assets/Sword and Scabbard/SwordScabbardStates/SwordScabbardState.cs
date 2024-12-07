@@ -1,4 +1,4 @@
-using System.Collections;
+п»їusing System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -12,7 +12,6 @@ public abstract class SwordScabbardState
     }
     public abstract void EnterState();
     public abstract void ExitState();
-    public abstract void UpdateState();
 
 
     protected void SwitchStateToNotHolding(SelectEnterEventArgs arg0)
@@ -33,11 +32,11 @@ public abstract class SwordScabbardState
     }
     protected void SwitchStateToOnlyScabbardHolded(SelectEnterEventArgs arg0)
     {
-        _context.SwitchState(_context._onlySсabbardHolded);
+        _context.SwitchState(_context._onlyScabbardHolded);
     }
     protected void SwitchStateToOnlyScabbardHolded(SelectExitEventArgs arg0)
     {
-        _context.SwitchState(_context._onlySсabbardHolded);
+        _context.SwitchState(_context._onlyScabbardHolded);
     }
     protected void SwitchStateToOnlySwordHolded(SelectEnterEventArgs arg0)
     {
@@ -47,19 +46,6 @@ public abstract class SwordScabbardState
     {
         _context.SwitchState(_context._onlySwordHolded);
     }
-
-    /*private IEnumerator ReturnToStartPositionSmoothly(XRGrabInteractable grabbable)
-    {
-        //Мб здесь тогда надо просто фиксировать. fillAmount. А не через замедление работать
-        //grabbable.angularVelocityScale = 0.05f; // Установить замедление
-        grabbable.TryGetComponent<Rigidbody>(out var rb);
-        rb.maxLinearVelocity = 0.1f;
-        rb.maxAngularVelocity = 0.1f;
-        yield return new WaitForSeconds(2f);
-        rb.maxLinearVelocity = 35f;
-        rb.maxAngularVelocity = 35f;
-        //grabbable.angularVelocityScale = 1f; // Вернуть нормальную скорость
-    }*/
 }
 
 
@@ -76,14 +62,8 @@ public class OnlySwordHolded : SwordScabbardState
         _context._xrGrabInteractable.selectEntered.AddListener(SwitchStateToBothAreHolded);
         _context._sword.XRGrabInteractable.selectExited.AddListener(SwitchStateToNotHolding);
 
-        _context._sword.XRGrabInteractable.trackRotation = false;//временно для теста.
-        //_returnToStartPositionRoutine = _context.StartCoroutine(AAA());
+        _context._sword.XRGrabInteractable.trackRotation = false;//РІСЂРµРјРµРЅРЅРѕ РґР»СЏ С‚РµСЃС‚Р°.
     }
-
-    /*public IEnumerator AAA()
-    {
-        
-    }*/
 
     public override void ExitState()
     {
@@ -92,17 +72,12 @@ public class OnlySwordHolded : SwordScabbardState
 
         _context._sword.XRGrabInteractable.trackRotation = true;
 
-        if (_returnToStartPositionRoutine != null)//А она здесь точно null?
+        if (_returnToStartPositionRoutine != null)
         {
             _context.StopCoroutine(_returnToStartPositionRoutine);
             _context._sword.Rigidbody.maxLinearVelocity = 35f;
             _context._sword.Rigidbody.maxAngularVelocity = 35f;
         }
-    }
-
-    public override void UpdateState()
-    {
-        throw new System.NotImplementedException();
     }
 }
 
@@ -127,7 +102,7 @@ public class OnlySkabbardHolded : SwordScabbardState
     {
         fixedJoint = _context.gameObject.AddComponent<FixedJoint>();
         fixedJoint.connectedBody = _context._sword.Rigidbody;
-        //вернуть ножны в руку плавно
+        //РІРµСЂРЅСѓС‚СЊ РЅРѕР¶РЅС‹ РІ СЂСѓРєСѓ РїР»Р°РІРЅРѕ
         /*_context._rigidody.maxLinearVelocity = 5f;
         _context._rigidody.maxAngularVelocity = 5f;*/
         /*_context._sword.Rigidbody.maxLinearVelocity = 5f;
@@ -144,7 +119,7 @@ public class OnlySkabbardHolded : SwordScabbardState
         _context._sword.XRGrabInteractable.selectEntered.RemoveListener(SwitchStateToBothAreHolded);
         _context._xrGrabInteractable.selectExited.RemoveListener(SwitchStateToNotHolding);
 
-        if (_returnToStartPositionRoutine != null)//А она здесь точно null?
+        if (_returnToStartPositionRoutine != null)
         {
             _context.StopCoroutine(_returnToStartPositionRoutine);
             if (fixedJoint != null)
@@ -152,11 +127,6 @@ public class OnlySkabbardHolded : SwordScabbardState
             _context._rigidody.maxLinearVelocity = 35f;
             _context._rigidody.maxAngularVelocity = 35f;
         }
-    }
-
-    public override void UpdateState()
-    {
-
     }
 }
 
@@ -182,11 +152,6 @@ public class BothAreHolded : SwordScabbardState
 
         _context._sword.XRGrabInteractable.trackRotation = true;
     }
-
-    public override void UpdateState()
-    {
-        throw new System.NotImplementedException();
-    }
 }
 
 public class BothNotHolded : SwordScabbardState
@@ -206,11 +171,6 @@ public class BothNotHolded : SwordScabbardState
         _context._sword.XRGrabInteractable.selectEntered.RemoveListener(SwitchStateToOnlySwordHolded);
         _context._xrGrabInteractable.selectEntered.RemoveListener(SwitchStateToOnlyScabbardHolded);
     }
-
-    public override void UpdateState()
-    {
-        throw new System.NotImplementedException();
-    }
 }
 
 public class NoSwordInside : SwordScabbardState
@@ -227,10 +187,5 @@ public class NoSwordInside : SwordScabbardState
     public override void ExitState()
     {
 
-    }
-
-    public override void UpdateState()
-    {
-        throw new System.NotImplementedException();
     }
 }

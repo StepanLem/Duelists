@@ -54,14 +54,14 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
 
     private SwordScabbardState _currentState;
     internal OnlySwordHolded _onlySwordHolded;
-    internal OnlySkabbardHolded _onlySсabbardHolded;
+    internal OnlySkabbardHolded _onlyScabbardHolded;
     internal BothAreHolded _bothAreHolded;
     internal BothNotHolded _bothNotHolded;
 
     public void Awake()
     {
         _onlySwordHolded = new(this);
-        _onlySсabbardHolded = new(this);
+        _onlyScabbardHolded = new(this);
         _bothAreHolded = new(this);
         _bothNotHolded = new(this);
 
@@ -121,11 +121,6 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
                 Physics.IgnoreCollision(swordCollider, scabbardCollider);
         }
 
-        //Повороты в зависимости от способа хватания надо занулять. Но тогда хуйня какая-то
-        /*_sword.XRGrabInteractable.trackRotation = false;
-        this._xrGrabInteractable.trackRotation = false;*/
-
-
         //Устанавливаем для меча начальный угол поворота.
         // Вычисляем целевое вращение для меча, чтобы кончик оказался на запомненном относительном Origin
         Quaternion targetRotation = _origin.rotation * Keyframes[0].SwordTipRotation;
@@ -142,7 +137,7 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
         if (_xrGrabInteractable.isSelected && _sword.XRGrabInteractable.isSelected)
             _currentState = _bothAreHolded;
         else if (_xrGrabInteractable.isSelected)
-            _currentState = _onlySсabbardHolded;
+            _currentState = _onlyScabbardHolded;
         else if (_sword.XRGrabInteractable.isSelected)
             _currentState = _onlySwordHolded;
         else
@@ -197,6 +192,11 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
 
         _jointScabbardSidesCosplayer.projectionDistance = .001f;
 
+        /*// Устанавливаем основную ось (переставляем Y вместо X)
+        _jointScabbardSidesCosplayer.axis = Vector3.up; // Локальная ось Y становится осью X для джойнта
+        // Устанавливаем вторичную ось (X вместо Y)
+        _jointScabbardSidesCosplayer.secondaryAxis = Vector3.right; // Локальная ось X становится осью Y для джойнта*/
+
         //нужные значения делать Limited и изменять интерполированно.
         _jointScabbardSidesCosplayer.xMotion = ConfigurableJointMotion.Locked;
         _jointScabbardSidesCosplayer.yMotion = ConfigurableJointMotion.Locked;
@@ -222,7 +222,7 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
             else if (FillAmount > 1)
             {
                 FillAmount = 1;
-                //TrySetFullyInsideState();//это состояние фиксирует позицию полностью в ножнах.
+                //SetFullyInsideState();//это состояние фиксирует позицию полностью в ножнах.
             }
 
             UpdateCurrentKeyframe();
@@ -230,8 +230,8 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
             if (_currentKeyframeIndex != Keyframes.Count - 1)
                 LerpConfigurationBetweenKeyframes(_currentKeyframe, Keyframes[_currentKeyframeIndex + 1]);
 
-            //yield return new WaitForFixedUpdate();
-            yield return null;
+            yield return new WaitForFixedUpdate();
+            //yield return null;
         }
     }
 
@@ -285,46 +285,33 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
     private void LerpConfigurationBetweenKeyframes(in SwordInScabbardKeyframe currentKeyframe, in SwordInScabbardKeyframe nextKeyframe)
     {
         var distanceBetweenCurrentFillAmountAndCurrentKeyframeStartFillAmount = FillAmount - currentKeyframe.FillAmount;
-
-        Vector3 targetWorldPosition;
-        if (distanceBetweenCurrentFillAmountAndCurrentKeyframeStartFillAmount < 0)//если меч перед нулевым кадром
-        {
-            targetWorldPosition = _origin.TransformPoint(Keyframes[0].SwordTipPosition);
-            _jointScabbardSidesCosplayer.anchor = this.transform.InverseTransformPoint(targetWorldPosition);
-            return;
-        }
+        
 
         var distanceBetweenKeyframesFillAmount = nextKeyframe.FillAmount - currentKeyframe.FillAmount;
         var stepBetweenKeyframes = distanceBetweenCurrentFillAmountAndCurrentKeyframeStartFillAmount / distanceBetweenKeyframesFillAmount;
 
+        if (stepBetweenKeyframes < 0)//если меч перед нулевым кадром
+            stepBetweenKeyframes = 0;
+
+
         //Position
         var localRememberedSwordTipPosition = Vector3.Lerp(currentKeyframe.SwordTipPosition, nextKeyframe.SwordTipPosition, stepBetweenKeyframes);
-        targetWorldPosition = _origin.TransformPoint(localRememberedSwordTipPosition);
+        var targetWorldPosition = _origin.TransformPoint(localRememberedSwordTipPosition);
         _jointScabbardSidesCosplayer.anchor = this.transform.InverseTransformPoint(targetWorldPosition);
 
+
         //Rotation limits
-
-        // Интерполируем углы
-        Vector3 interpolatedAngularLimits = new Vector3(
-            Mathf.Lerp(currentKeyframe.AngularLimits.x, nextKeyframe.AngularLimits.x, stepBetweenKeyframes),
-            Mathf.Lerp(currentKeyframe.AngularLimits.y, nextKeyframe.AngularLimits.y, stepBetweenKeyframes),
-            Mathf.Lerp(currentKeyframe.AngularLimits.z, nextKeyframe.AngularLimits.z, stepBetweenKeyframes)
-        );
-
         SoftJointLimit limit = new();
 
         // Ограничение углов по оси X
-        limit.limit = interpolatedAngularLimits.x;
+        limit.limit = FloatLerp(currentKeyframe.minX, nextKeyframe.minX, stepBetweenKeyframes);
         _jointScabbardSidesCosplayer.lowAngularXLimit = limit;
+        limit.limit = FloatLerp(currentKeyframe.maxX, nextKeyframe.maxX, stepBetweenKeyframes);
         _jointScabbardSidesCosplayer.highAngularXLimit = limit;
 
         // Ограничение углов по оси Y
-        limit.limit = interpolatedAngularLimits.y;
+        limit.limit = FloatLerp(currentKeyframe.Y, nextKeyframe.Y, stepBetweenKeyframes);
         _jointScabbardSidesCosplayer.angularYLimit = limit;
-
-        // Ограничение углов по оси Z
-        limit.limit = interpolatedAngularLimits.z;
-        _jointScabbardSidesCosplayer.angularZLimit = limit;
     }
 
     private void SwordExitScabbard()
@@ -333,6 +320,8 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
 
         _sword.XRGrabInteractable.trackRotation = true;
         this._xrGrabInteractable.trackRotation = true;
+
+        StartCoroutine(SmoothlyGoToArm());
 
         foreach (Collider swordCollider in _sword.Colliders)
         {
@@ -346,11 +335,36 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
         Destroy(_jointScabbardSidesCosplayer);
     }
 
+    public IEnumerator SmoothlyGoToArm()
+    {
+        var grabbable = _sword.XRGrabInteractable;
+        var remembered = grabbable.angularVelocityScale;
+        grabbable.angularVelocityScale = 0.1f;//TODO: сделать настройку в инспекторе
+
+        yield return new WaitForSeconds(0.2f);//TODO: сделать настройку в инспекторе
+
+        grabbable.angularVelocityScale = remembered;
+    }
+
+    private float FloatLerp(float a, float b, float t)
+    {
+        return a + (b - a) * t;
+    }
+
 #if UNITY_EDITOR
     /// <summary>
     /// Объект с которого списываются кейфрэймы меча в ножнах. Должен быть напрямую дочерним объектом ножен.
     /// </summary>
+    [Space]
+    [Header("Keyframes Editor")]
+
     [SerializeField] private Sword _swordComponentForKeyframesCreation;
+
+    [SerializeField] private int _editorKeyframeIndex;
+
+    [SerializeField] private Sword _swordForAngleLimits_MinX;
+    [SerializeField] private Sword _swordForAngleLimits_MaxX;
+    [SerializeField] private Sword _swordForAngleLimits_Y;
 
     [ContextMenu("MakeKeyframe")]
     public void MakeKeyframe()
@@ -363,16 +377,27 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
         else fillAmount = СalculateFillAmount(_swordComponentForKeyframesCreation, Keyframes[0].SwordTipPosition, Keyframes[^1].SwordTipPosition);
 
         //Устанавливаем лимиты с меча для лимитов.
-        Quaternion currentRotation_editorAngleLimitsSword = Quaternion.Inverse(_origin.rotation) * _swordForAngleLimits.Tip.rotation;
-        Quaternion deviation = Quaternion.Inverse(_defaultSwordTipRotation) * currentRotation_editorAngleLimitsSword;
-        var angularLimits = NormalizeAngles(deviation.eulerAngles);
+        //MinX
+        Quaternion currentRotation_MinX = Quaternion.Inverse(_origin.rotation) * _swordForAngleLimits_MinX.Tip.rotation;
+        Quaternion deviation_MinX = Quaternion.Inverse(_defaultSwordTipRotation) * currentRotation_MinX;
+        var angularLimit_MinX = NormalizeAngles(deviation_MinX.eulerAngles);
+        //MaxX
+        Quaternion currentRotation_MaxX = Quaternion.Inverse(_origin.rotation) * _swordForAngleLimits_MaxX.Tip.rotation;
+        Quaternion deviation_MaxX = Quaternion.Inverse(_defaultSwordTipRotation) * currentRotation_MaxX;
+        var angularLimit_MaxX = NormalizeAngles(deviation_MaxX.eulerAngles);
+        //Y
+        Quaternion currentRotation_Y = Quaternion.Inverse(_origin.rotation) * _swordForAngleLimits_Y.Tip.rotation;
+        Quaternion deviation_Y = Quaternion.Inverse(_defaultSwordTipRotation) * currentRotation_Y;
+        var angularLimit_Y = NormalizeAngles(deviation_Y.eulerAngles);
 
         SwordInScabbardKeyframe newKeyframe = new()
         {
             SwordTipPosition = _origin.InverseTransformPoint(_swordComponentForKeyframesCreation.Tip.position),
             SwordTipRotation = Quaternion.Inverse(_origin.rotation) * _swordComponentForKeyframesCreation.Tip.rotation,
             FillAmount = fillAmount,
-            AngularLimits = angularLimits
+            minX = Math.Abs(angularLimit_MinX.y),
+            maxX = Math.Abs(angularLimit_MaxX.y),
+            Y = Math.Abs(angularLimit_Y.x),
         };
 
         Keyframes.Add(newKeyframe);
@@ -393,17 +418,13 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
         {
             var kf = Keyframes[i];
 
-            kf.AngularLimits = new Vector3(
-            Mathf.Max(0, kf.AngularLimits.x),
-            Mathf.Max(0, kf.AngularLimits.y),
-            Mathf.Max(0, kf.AngularLimits.z));
+            if (kf.maxX < 0) kf.maxX = 0;
+            if (kf.minX < 0) kf.minX = 0;
+            if (kf.Y < 0) kf.Y = 0;
 
             Keyframes[i] = kf;
         }
     }
-
-    [SerializeField] private int _editorKeyframeIndex;
-    [SerializeField] private Sword _swordForAngleLimits;
 
     [ContextMenu("SetKeyframeDataToEditingSword")]
     public void SetKeyframeDataToEditingSword()
@@ -417,20 +438,6 @@ public class SwordAndScabbardInteractionSystem : MonoBehaviour
         Quaternion targetSwordTipRotation = _origin.rotation * Keyframes[_editorKeyframeIndex].SwordTipRotation;
         Quaternion swordTipToTargetOffset = Quaternion.Inverse(_swordComponentForKeyframesCreation.Tip.rotation) * targetSwordTipRotation;
         _swordComponentForKeyframesCreation.transform.rotation = _swordComponentForKeyframesCreation.transform.rotation * swordTipToTargetOffset;
-    }
-
-    [ContextMenu("UpdateAngularLimitsForKeyframe")]
-    public void UpdateAngularLimitsForKeyframe()
-    {
-        Quaternion currentRotation = Quaternion.Inverse(_origin.rotation) * _swordForAngleLimits.Tip.rotation;
-        Quaternion deviation = Quaternion.Inverse(_defaultSwordTipRotation) * currentRotation;
-
-        // Преобразуем к углам Эйлера
-        var angularLimits = NormalizeAngles(deviation.eulerAngles);
-
-        var keyframe = Keyframes[_editorKeyframeIndex];
-        keyframe.AngularLimits = angularLimits;
-        Keyframes[_editorKeyframeIndex] = keyframe;
     }
 
     // Нормализация углов в диапазон [-180, 180]
@@ -464,5 +471,7 @@ public struct SwordInScabbardKeyframe
     public Quaternion SwordTipRotation;
 
     [Tooltip("Максимальное отклонение угла в градусах.")]
-    public Vector3 AngularLimits;
+    public float minX;
+    public float maxX;
+    public float Y;
 }
