@@ -19,9 +19,10 @@ public class Segment : MonoBehaviour
     {
         _container = GetComponent<Image>();
         _button = GetComponent<Button>();
+        Setup();
     }
 
-    private void Start()
+    private void Setup()
     {
         if (transform.parent.TryGetComponent(out SegmentedButton segmentedButton))
         {

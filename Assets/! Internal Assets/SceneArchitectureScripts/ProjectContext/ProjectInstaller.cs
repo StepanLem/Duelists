@@ -8,5 +8,8 @@ public class ProjectInstaller : MonoInstaller
             .Bind<MatchManager>()
             .FromComponentInNewPrefabResource(nameof(MatchManager))
             .AsSingle();
+        Container
+            .Bind<LocalizationManager>()
+            .AsSingle();
     }
 }
