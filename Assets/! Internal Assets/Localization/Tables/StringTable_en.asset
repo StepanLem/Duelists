@@ -169,7 +169,43 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 37294495924224
-    m_Localized: Acess code
+    m_Localized: Access code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4324971896053760
+    m_Localized: Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4325052615434240
+    m_Localized: Not Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354002032992256
+    m_Localized: Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354583124451328
+    m_Localized: Lobby
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354688686694400
+    m_Localized: 'Game mode:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354769301217280
+    m_Localized: Duel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354882530648064
+    m_Localized: 'Lobby mode:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354935055917056
+    m_Localized: Open
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4355076982775808
+    m_Localized: 'Number of rounds:'
     m_Metadata:
       m_Items: []
   references:

@@ -159,6 +159,42 @@ MonoBehaviour:
     m_Key: MainMenu/Canvas/OnlineDirectConnectScreen/Container/InputField /Text Area/Placeholder
     m_Metadata:
       m_Items: []
+  - m_Id: 4324971896053760
+    m_Key: PlayerLine_Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4325052615434240
+    m_Key: PlayerLine_Not_Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354002032992256
+    m_Key: MainMenu/Canvas/LobbyScreen/LobbyInfo/Buttons/SmallDefaultButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354583124451328
+    m_Key: MainMenu/Canvas/LobbyScreen/LobbyInfo/Header/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354688686694400
+    m_Key: MainMenu/Canvas/LobbyScreen/LobbyInfo/Container/GameMode/GameModeHeader
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354769301217280
+    m_Key: MainMenu/Canvas/LobbyScreen/LobbyInfo/Container/GameMode/GameModeValue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354882530648064
+    m_Key: MainMenu/Canvas/LobbyScreen/LobbyInfo/Container/LobbyMode/LobbyModeHeader
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354935055917056
+    m_Key: MainMenu/Canvas/LobbyScreen/LobbyInfo/Container/LobbyMode/LobbyModeValue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4355076982775808
+    m_Key: MainMenu/Canvas/LobbyScreen/LobbyInfo/Container/RoundCount/RoundsCountHeader
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
