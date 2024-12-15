@@ -195,6 +195,82 @@ MonoBehaviour:
     m_Key: MainMenu/Canvas/LobbyScreen/LobbyInfo/Container/RoundCount/RoundsCountHeader
     m_Metadata:
       m_Items: []
+  - m_Id: 4356196731920384
+    m_Key: Gameplay/Canvas/InGameScreen/Attack/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4356338872688640
+    m_Key: Gameplay/Canvas/EnemyPauseScreen/Container/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4356510637826048
+    m_Key: Gameplay/Canvas/EnemyPauseScreen/Container/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4356980282433536
+    m_Key: Gameplay/Canvas/PlayerPauseScreen/Container/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357107231432704
+    m_Key: Gameplay/Canvas/PlayerPauseScreen/Container/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357650171502592
+    m_Key: Gameplay/Canvas/PlayerPauseScreen/Container/Buttons/SmallDefaultButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357736809046016
+    m_Key: Gameplay/Canvas/PlayerPauseScreen/Container/SettingsButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357883563548672
+    m_Key: Gameplay/Canvas/EnemyPauseScreen/Container/ OpenPauseButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4358552253046784
+    m_Key: Gameplay/Canvas/ResumeGameScreen/Container/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359299833208832
+    m_Key: SoloGameResultScreen/WinResultText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359399460511744
+    m_Key: SoloGameResultScreen/LoseResultText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359431072980992
+    m_Key: SoloGameResultScreen/ContinueButtonDefaultText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359444725440512
+    m_Key: SoloGameResultScreen/ContinueButtonReloadText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359459443253248
+    m_Key: SoloGameResultScreen/ContinueButtonLastLevelText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4362236521291776
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Buttons/DefaultButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4362703926140928
+    m_Key: MainMenu/Canvas/OnlineDirectConnectScreen/Container/Buttons/SmallDefaultButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4362936504492032
+    m_Key: MainMenu/Canvas/LobbyScreen/Players/Button/DefaultButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4363177626640384
+    m_Key: PlayerLine/Canvas (Environment)/PlayerLine/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4363727655084032
+    m_Key: PlayerLine/Canvas (Environment)/PlayerLine/Container/State
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

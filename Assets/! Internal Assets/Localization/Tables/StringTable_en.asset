@@ -129,11 +129,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 35020088442880
-    m_Localized: Create
+    m_Localized: Continue
     m_Metadata:
       m_Items: []
   - m_Id: 35111708819456
-    m_Localized: Connect
+    m_Localized: Settings
     m_Metadata:
       m_Items: []
   - m_Id: 35522683502592
@@ -206,6 +206,82 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 4355076982775808
     m_Localized: 'Number of rounds:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4356196731920384
+    m_Localized: Attack!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4356338872688640
+    m_Localized: Pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4356510637826048
+    m_Localized: The other player paused the game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4356980282433536
+    m_Localized: Pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357107231432704
+    m_Localized: You paused the game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357650171502592
+    m_Localized: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357736809046016
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357883563548672
+    m_Localized: Pause the game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4358552253046784
+    m_Localized: The game will start in
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359299833208832
+    m_Localized: You Win!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359399460511744
+    m_Localized: You Lose!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359431072980992
+    m_Localized: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359444725440512
+    m_Localized: Reload
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359459443253248
+    m_Localized: Finish
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4362236521291776
+    m_Localized: Create
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4362703926140928
+    m_Localized: Connect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4362936504492032
+    m_Localized: Start game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4363177626640384
+    m_Localized: Invite
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4363727655084032
+    m_Localized: Not Ready
     m_Metadata:
       m_Items: []
   references:
