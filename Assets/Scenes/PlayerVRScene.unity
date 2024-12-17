@@ -606,26 +606,14 @@ GameObject:
   m_Component:
   - component: {fileID: 306506211}
   - component: {fileID: 306506210}
-  - component: {fileID: 306506209}
+  - component: {fileID: 306506212}
   m_Layer: 0
   m_Name: SceneContext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &306506209
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 306506208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 149bbb12935f3b643a526e40768e8615, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_IsActive: 1
 --- !u!114 &306506210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -640,7 +628,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
   _monoInstallers:
-  - {fileID: 306506209}
+  - {fileID: 306506212}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -656,7 +644,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _parentNewObjectsUnderSceneContext: 0
-  _contractNames: []
+  _contractNames:
+  - PlayerData
   _parentContractNames: []
 --- !u!4 &306506211
 Transform:
@@ -673,6 +662,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &306506212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306506208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890f60a438ba25f49a4156a5ecb19015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerDataProvider: {fileID: 1323517803}
 --- !u!1 &307192157
 GameObject:
   m_ObjectHideFlags: 0
@@ -3223,6 +3225,7 @@ GameObject:
   - component: {fileID: 1323517801}
   - component: {fileID: 1323517800}
   - component: {fileID: 1323517799}
+  - component: {fileID: 1323517803}
   m_Layer: 6
   m_Name: XR Origin (XR Rig)
   m_TagString: Untagged
@@ -3305,6 +3308,21 @@ Transform:
   - {fileID: 683066636}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1323517803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1323517798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: febb26949a285e54a9c36eff7fdcffff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LeftHand: {fileID: 26902180}
+  RightHand: {fileID: 732414062}
+  Head: {fileID: 1023919733}
 --- !u!1 &1384374769
 GameObject:
   m_ObjectHideFlags: 0
