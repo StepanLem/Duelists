@@ -16,18 +16,18 @@ public class SegmentedButton : MonoBehaviour
 
     public string Value { get; private set; }
 
-    public event Action<string> SelectSegment;
+    public event Action<string> OnSelectSegment;
 
-    public void OnSelectSegment(string segmentValue)
+    public void SelectSegment(string segmentValue)
     {
         Value = segmentValue;
-        SelectSegment?.Invoke(segmentValue);
+        OnSelectSegment?.Invoke(segmentValue);
 
         Debug.Log(Value);
     }
 
     private void Awake()
     {
-        OnSelectSegment(GetComponentsInChildren<Segment>()[_selectedSegmentIndex].Value);
+        SelectSegment(GetComponentsInChildren<Segment>()[_selectedSegmentIndex].Value);
     }
 }

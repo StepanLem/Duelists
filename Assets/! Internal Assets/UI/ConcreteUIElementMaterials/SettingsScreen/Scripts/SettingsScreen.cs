@@ -15,8 +15,8 @@ public class SettingsScreen : MonoBehaviour
 
     private void Start()
     {
-        _languageButton.OnSelectSegment(_localizationManager.GetSelectedLocale());
-        _languageButton.SelectSegment += LanguageButton_SelectSegment;
+        _languageButton.SelectSegment(_localizationManager.GetSelectedLocale());
+        _languageButton.OnSelectSegment += LanguageButton_SelectSegment;
     }
 
     private void LanguageButton_SelectSegment(string languageCode)
@@ -26,6 +26,6 @@ public class SettingsScreen : MonoBehaviour
 
     private void OnEnable()
     {
-        _languageButton.OnSelectSegment(_localizationManager.GetSelectedLocale());
+        _languageButton.SelectSegment(_localizationManager.GetSelectedLocale());
     }
 }
