@@ -1,9 +1,9 @@
 using UnityEngine;
 using Zenject;
 
-public class SettingsScreen : MonoBehaviour
+public class SetLanguageSegmentedButton : MonoBehaviour
 {
-    [SerializeField] private SegmentedButton _languageButton;
+    private SegmentedButton _button;
 
     private LocalizationManager _localizationManager;
 
@@ -13,10 +13,15 @@ public class SettingsScreen : MonoBehaviour
         _localizationManager = localizationManager;
     }
 
+    private void Awake()
+    {
+        _button = GetComponent<SegmentedButton>();
+    }
+
     private void Start()
     {
-        _languageButton.SelectSegment(_localizationManager.GetSelectedLocale());
-        _languageButton.OnSelectSegment += LanguageButton_SelectSegment;
+        _button.SelectSegment(_localizationManager.GetSelectedLocale());
+        _button.OnSelectSegment += LanguageButton_SelectSegment;
     }
 
     private void LanguageButton_SelectSegment(string languageCode)
@@ -26,6 +31,6 @@ public class SettingsScreen : MonoBehaviour
 
     private void OnEnable()
     {
-        _languageButton.SelectSegment(_localizationManager.GetSelectedLocale());
+        _button.SelectSegment(_localizationManager.GetSelectedLocale());
     }
 }
