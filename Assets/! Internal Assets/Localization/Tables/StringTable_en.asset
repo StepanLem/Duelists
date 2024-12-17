@@ -1,0 +1,289 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: StringTable_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 4fded5d2e33e42440af0b22080e4c6d5, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 946166726656
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1482853089280
+    m_Localized: Katana position
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1585181523968
+    m_Localized: Left
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1972965900288
+    m_Localized: Right
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2088883879936
+    m_Localized: Volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2216935981056
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2775160094720
+    m_Localized: 'Solo
+
+      Game'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2886875381760
+    m_Localized: 'Online:
+
+      Host'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000679432192
+    m_Localized: 'Online:
+
+      Connect'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3123090194432
+    m_Localized: Training
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3479077552128
+    m_Localized: Solo Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3714419949568
+    m_Localized: 'Level
+
+      1'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3968053706752
+    m_Localized: 'Level
+
+      2'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3997275422720
+    m_Localized: 'Level
+
+      3'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4086492463104
+    m_Localized: 'Level
+
+      4'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33222346833920
+    m_Localized: Choose enemies
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33367427809280
+    m_Localized: Create lobby
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33618926665728
+    m_Localized: Game mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33735981301760
+    m_Localized: Lobby mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33857960050688
+    m_Localized: Number of rounds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34108519383040
+    m_Localized: Duel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34200638881792
+    m_Localized: Tournament
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34541027622912
+    m_Localized: Open
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34660875665408
+    m_Localized: Closed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35020088442880
+    m_Localized: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35111708819456
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35522683502592
+    m_Localized: Round 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35777399390208
+    m_Localized: Round 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35929086394368
+    m_Localized: Roun 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35992319721472
+    m_Localized: Round 3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36537562464256
+    m_Localized: 'Fast
+
+      Connect'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36634975174656
+    m_Localized: 'Direct
+
+      Connect'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36921236422656
+    m_Localized: Enter access code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37294495924224
+    m_Localized: Access code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4324971896053760
+    m_Localized: Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4325052615434240
+    m_Localized: Not Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354002032992256
+    m_Localized: Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354583124451328
+    m_Localized: Lobby
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354688686694400
+    m_Localized: 'Game mode:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354769301217280
+    m_Localized: Duel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354882530648064
+    m_Localized: 'Lobby mode:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354935055917056
+    m_Localized: Open
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4355076982775808
+    m_Localized: 'Number of rounds:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4356196731920384
+    m_Localized: Attack!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4356338872688640
+    m_Localized: Pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4356510637826048
+    m_Localized: The other player paused the game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4356980282433536
+    m_Localized: Pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357107231432704
+    m_Localized: You paused the game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357650171502592
+    m_Localized: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357736809046016
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357883563548672
+    m_Localized: Pause the game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4358552253046784
+    m_Localized: The game will start in
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359299833208832
+    m_Localized: You Win!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359399460511744
+    m_Localized: You Lose!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359431072980992
+    m_Localized: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359444725440512
+    m_Localized: Reload
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359459443253248
+    m_Localized: Finish
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4362236521291776
+    m_Localized: Create
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4362703926140928
+    m_Localized: Connect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4362936504492032
+    m_Localized: Start game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4363177626640384
+    m_Localized: Invite
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4363727655084032
+    m_Localized: Not Ready
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

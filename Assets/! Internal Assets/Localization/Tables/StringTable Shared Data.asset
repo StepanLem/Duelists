@@ -1,0 +1,285 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: StringTable Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: StringTable
+  m_TableCollectionNameGuidString: 4fded5d2e33e42440af0b22080e4c6d5
+  m_Entries:
+  - m_Id: 946166726656
+    m_Key: MainMenu/Canvas/SettingsScreen/Container/Content/LocalizationField/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1482853089280
+    m_Key: MainMenu/Canvas/SettingsScreen/Container/Content/SwordPositionField/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1585181523968
+    m_Key: MainMenu/Canvas/SettingsScreen/Container/Content/SwordPositionField/SegmentedButton/FirstSegment/Text
+      (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1972965900288
+    m_Key: MainMenu/Canvas/SettingsScreen/Container/Content/SwordPositionField/SegmentedButton/LastSegment/Text
+      (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2088883879936
+    m_Key: MainMenu/Canvas/SettingsScreen/Container/Content/VolumeField/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2216935981056
+    m_Key: MainMenu/Canvas/SettingsScreen/Container/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2775160094720
+    m_Key: MainMenu/Canvas/MainMenuScreen/Buttons/PrimaryButtons/StartGameSoloButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2886875381760
+    m_Key: MainMenu/Canvas/MainMenuScreen/Buttons/PrimaryButtons/HostGameButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3000679432192
+    m_Key: MainMenu/Canvas/MainMenuScreen/Buttons/PrimaryButtons/ConnectToGameButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3123090194432
+    m_Key: MainMenu/Canvas/MainMenuScreen/Buttons/PrimaryButtons/TrainingButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3479077552128
+    m_Key: MainMenu/Canvas/StartSoloGameScreen/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3714419949568
+    m_Key: MainMenu/Canvas/StartSoloGameScreen/Buttons/PrimaryButtons/Level1Button/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3968053706752
+    m_Key: MainMenu/Canvas/StartSoloGameScreen/Buttons/PrimaryButtons/Level2Button/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3997275422720
+    m_Key: MainMenu/Canvas/StartSoloGameScreen/Buttons/PrimaryButtons/Level3Button/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4086492463104
+    m_Key: MainMenu/Canvas/StartSoloGameScreen/Buttons/PrimaryButtons/Level4Button/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33222346833920
+    m_Key: MainMenu/Canvas/SelectEnemyTypesScreen/Container/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33367427809280
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33618926665728
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Content/GameMode/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33735981301760
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Content/LobbyMode/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33857960050688
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Content/RoundsCount/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34108519383040
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Content/GameMode/SegmentedButton/FirstSegment/Text
+      (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34200638881792
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Content/GameMode/SegmentedButton/LastSegment/Text
+      (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34541027622912
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Content/LobbyMode/SegmentedButton/FirstSegment/Text
+      (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34660875665408
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Content/LobbyMode/SegmentedButton/LastSegment/Text
+      (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35020088442880
+    m_Key: LargeDefaultButton/Canvas (Environment)/LargeDefaultButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35111708819456
+    m_Key: SmallDefaultButton/Canvas (Environment)/SmallDefaultButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35522683502592
+    m_Key: MainMenu/Canvas/SelectEnemyTypesScreen/Container/Content/FirstLine/Card/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35777399390208
+    m_Key: CardBig/Canvas (Environment)/CardBig/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35929086394368
+    m_Key: MainMenu/Canvas/SelectEnemyTypesScreen/Container/Content/FirstLine/Card
+      (1)/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35992319721472
+    m_Key: MainMenu/Canvas/SelectEnemyTypesScreen/Container/Content/FirstLine/Card
+      (2)/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36537562464256
+    m_Key: MainMenu/Canvas/OnlineConnectScreen/Buttons/PrimaryButtons/FastConnectButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36634975174656
+    m_Key: MainMenu/Canvas/OnlineConnectScreen/Buttons/PrimaryButtons/DirectConnectButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36921236422656
+    m_Key: MainMenu/Canvas/OnlineDirectConnectScreen/Container/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37294495924224
+    m_Key: MainMenu/Canvas/OnlineDirectConnectScreen/Container/InputField /Text Area/Placeholder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4324971896053760
+    m_Key: PlayerLine_Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4325052615434240
+    m_Key: PlayerLine_Not_Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354002032992256
+    m_Key: MainMenu/Canvas/LobbyScreen/LobbyInfo/Buttons/SmallDefaultButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354583124451328
+    m_Key: MainMenu/Canvas/LobbyScreen/LobbyInfo/Header/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354688686694400
+    m_Key: MainMenu/Canvas/LobbyScreen/LobbyInfo/Container/GameMode/GameModeHeader
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354769301217280
+    m_Key: MainMenu/Canvas/LobbyScreen/LobbyInfo/Container/GameMode/GameModeValue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354882530648064
+    m_Key: MainMenu/Canvas/LobbyScreen/LobbyInfo/Container/LobbyMode/LobbyModeHeader
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4354935055917056
+    m_Key: MainMenu/Canvas/LobbyScreen/LobbyInfo/Container/LobbyMode/LobbyModeValue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4355076982775808
+    m_Key: MainMenu/Canvas/LobbyScreen/LobbyInfo/Container/RoundCount/RoundsCountHeader
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4356196731920384
+    m_Key: Gameplay/Canvas/InGameScreen/Attack/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4356338872688640
+    m_Key: Gameplay/Canvas/EnemyPauseScreen/Container/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4356510637826048
+    m_Key: Gameplay/Canvas/EnemyPauseScreen/Container/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4356980282433536
+    m_Key: Gameplay/Canvas/PlayerPauseScreen/Container/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357107231432704
+    m_Key: Gameplay/Canvas/PlayerPauseScreen/Container/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357650171502592
+    m_Key: Gameplay/Canvas/PlayerPauseScreen/Container/Buttons/SmallDefaultButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357736809046016
+    m_Key: Gameplay/Canvas/PlayerPauseScreen/Container/SettingsButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4357883563548672
+    m_Key: Gameplay/Canvas/EnemyPauseScreen/Container/ OpenPauseButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4358552253046784
+    m_Key: Gameplay/Canvas/ResumeGameScreen/Container/Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359299833208832
+    m_Key: SoloGameResultScreen/WinResultText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359399460511744
+    m_Key: SoloGameResultScreen/LoseResultText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359431072980992
+    m_Key: SoloGameResultScreen/ContinueButtonDefaultText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359444725440512
+    m_Key: SoloGameResultScreen/ContinueButtonReloadText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4359459443253248
+    m_Key: SoloGameResultScreen/ContinueButtonLastLevelText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4362236521291776
+    m_Key: MainMenu/Canvas/HostGameScreen/Container/Buttons/DefaultButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4362703926140928
+    m_Key: MainMenu/Canvas/OnlineDirectConnectScreen/Container/Buttons/SmallDefaultButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4362936504492032
+    m_Key: MainMenu/Canvas/LobbyScreen/Players/Button/DefaultButton/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4363177626640384
+    m_Key: PlayerLine/Canvas (Environment)/PlayerLine/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4363727655084032
+    m_Key: PlayerLine/Canvas (Environment)/PlayerLine/Container/State
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 4776341262014873625
+  references:
+    version: 2
+    RefIds:
+    - rid: 4776341262014873625
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables,
+        asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1733225699756

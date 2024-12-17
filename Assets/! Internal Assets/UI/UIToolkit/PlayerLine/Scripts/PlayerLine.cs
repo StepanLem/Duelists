@@ -1,7 +1,9 @@
 using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
+using Zenject;
 
 public class PlayerLine : MonoBehaviour
 {
@@ -27,19 +29,25 @@ public class PlayerLine : MonoBehaviour
 
     private PlayerLineState _state;
 
-    private const string IsReadyText = "Готов";
-    private const string NotReadyText = "Не готов";
+    private string _playerNickname;
+    private bool _isHost;
+    private bool _isReady;
+
+    private LocalizationManager _localizationManager;
+
+    private const string ReadyLocale = "PlayerLine_Ready";
+    private const string NotReadyLocale = "PlayerLine_Not_Ready";
 
     [ContextMenu(nameof(SetPlayer))]
     public void SetPlayer()
     {
-        SetPlayer("D9eka", true, false);
+        SetPlayer("Player1", true, false);
     }
 
     [ContextMenu(nameof(SetAnotherPlayer))]
     public void SetAnotherPlayer()
     {
-        SetPlayer("whoiman", false, true);
+        SetPlayer("Player2", false, true);
     }
 
     [ContextMenu(nameof(RemovePlayer))]
@@ -48,11 +56,26 @@ public class PlayerLine : MonoBehaviour
         SetState(PlayerLineState.WithoutPlayer);
     }
 
+    [Inject]
+    public void Cunstruct(LocalizationManager localizationManager)
+    {
+        _localizationManager = localizationManager;
+    }
+
     public void SetPlayer(string nickname, bool isHost, bool isReady)
     {
-        _nicknameText.text = nickname;
-        _readyText.text = isReady ? IsReadyText : NotReadyText;
-        _hostIcon.gameObject.SetActive(isHost);
+        _playerNickname = nickname;
+        _isHost = isHost;
+        _isReady = isReady;
+
+        SetPlayerVisual();
+    }
+
+    private void SetPlayerVisual()
+    {
+        _nicknameText.text = _playerNickname;
+        _readyText.text = _localizationManager.GetField(_isReady ? ReadyLocale : NotReadyLocale);
+        _hostIcon.gameObject.SetActive(_isHost);
 
         SetState(PlayerLineState.WithPlayer);
     }
@@ -64,12 +87,18 @@ public class PlayerLine : MonoBehaviour
             return;
         }
 
-        _readyText.text = isReady ? IsReadyText : NotReadyText;
+        _readyText.text = isReady ? ReadyLocale : NotReadyLocale;
     }
 
     private void Awake()
     {
         SetState(_initialState);
+        LocalizationSettings.SelectedLocaleChanged += LocalizationSettings_SelectedLocaleChanged;
+    }
+
+    private void LocalizationSettings_SelectedLocaleChanged(UnityEngine.Localization.Locale locale)
+    {
+        SetPlayerVisual();
     }
 
     private void SetState(PlayerLineState state)

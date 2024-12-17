@@ -19,9 +19,10 @@ public class Segment : MonoBehaviour
     {
         _container = GetComponent<Image>();
         _button = GetComponent<Button>();
+        Setup();
     }
 
-    private void Start()
+    private void Setup()
     {
         if (transform.parent.TryGetComponent(out SegmentedButton segmentedButton))
         {
@@ -33,9 +34,9 @@ public class Segment : MonoBehaviour
         }
 
         _button.onClick.RemoveAllListeners();
-        _button.onClick.AddListener(() => _segmentedButton.OnSelectSegment(_value));
+        _button.onClick.AddListener(() => _segmentedButton.SelectSegment(_value));
 
-        _segmentedButton.SelectSegment += SegmentedButton_SelectSegment;
+        _segmentedButton.OnSelectSegment += SegmentedButton_SelectSegment;
     }
 
     private void SegmentedButton_SelectSegment(string segmentValue)

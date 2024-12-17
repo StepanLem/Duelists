@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,20 +17,23 @@ public class SoloGameResultScreen : MonoBehaviour
     private UISceneRootBinder _uiSceneRootBinder;
     private Match _match;
     private MatchManager _matchManager;
+    private LocalizationManager _localizationManager;
 
-    private const string WinResultText = "Вы выиграли!";
-    private const string LoseResultText = "Вы проиграли!";
+    private const string WinResultText = "SoloGameResultScreen/WinResultText";
+    private const string LoseResultText = "SoloGameResultScreen/LoseResultText";
 
-    private const string ContinueButtonDefaultText = "Продолжить";
-    private const string ContinueButtonReloadText = "Перезагрузить";
-    private const string ContinueButtonLastLevelText = "Завершить";
+    private const string ContinueButtonDefaultText = "SoloGameResultScreen/ContinueButtonDefaultText";
+    private const string ContinueButtonReloadText = "SoloGameResultScreen/ContinueButtonReloadText";
+    private const string ContinueButtonLastLevelText = "SoloGameResultScreen/ContinueButtonLastLevelText";
 
     [Inject]
-    public void Construct(UISceneRootBinder uiSceneRootBinder, Match match, MatchManager matchManager)
+    public void Construct(UISceneRootBinder uiSceneRootBinder, Match match, 
+                          MatchManager matchManager, LocalizationManager localizationManager)
     {
         _uiSceneRootBinder = uiSceneRootBinder;
         _match = match;
         _matchManager = matchManager;
+        _localizationManager = localizationManager;
     }
 
     private void Start()
@@ -47,7 +49,7 @@ public class SoloGameResultScreen : MonoBehaviour
     private void Setup(bool isPlayerWin)
     {
         bool isLastLevel = _matchManager.IsLastLevel;
-        _resultText.text = isPlayerWin ? WinResultText : LoseResultText;
+        _resultText.text = _localizationManager.GetField(isPlayerWin ? WinResultText : LoseResultText);
 
         SetupButton(_exitButton, !(isPlayerWin && isLastLevel), 
             () => _uiSceneRootBinder.LoadScene(SceneRegistry.MainMenuScene));
@@ -76,19 +78,19 @@ public class SoloGameResultScreen : MonoBehaviour
         {
             if (isLastLevel)
             {
-                continueButtonText.text = ContinueButtonLastLevelText;
+                continueButtonText.text = _localizationManager.GetField(ContinueButtonLastLevelText);
                 _continueButton.onClick.AddListener(() => _uiSceneRootBinder.LoadScene(SceneRegistry.MainMenuScene));
             }
             else
             {
-                continueButtonText.text = ContinueButtonDefaultText;
+                continueButtonText.text = _localizationManager.GetField(ContinueButtonDefaultText);
                 _continueButton.onClick.AddListener(() => _matchManager.StartNextMatch());
                 _continueButton.onClick.AddListener(() => _uiSceneRootBinder.LoadScene(SceneRegistry.GameplayScene));
             }
         }
         else
         {
-            continueButtonText.text = ContinueButtonReloadText;
+            continueButtonText.text = _localizationManager.GetField(ContinueButtonReloadText);
             _continueButton.onClick.AddListener(() => _uiSceneRootBinder.LoadScene(SceneRegistry.GameplayScene));
         }
     }
